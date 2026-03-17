@@ -1,0 +1,44 @@
+# =====================================================================
+# ByteClans - Roles Configuration
+# =====================================================================
+# Defines all roles available for clan members.
+# Roles are global and apply to all clans on the server.
+# =====================================================================
+# Available actions:
+#  - ALL            : Grants every available action.
+#  - INVITE_MEMBERS : Can invite players to the clan.
+#  - KICK_MEMBERS   : Can kick members from the clan.
+#  - PROMOTE_MEMBER : Can promote/demote members.
+#  - MANAGE_SETTINGS: Can modify clan settings.
+#  - DISBAND_CLAN   : Can disband the clan.
+#  - DEPOSIT_BANK   : Can deposit money to the clan bank.
+#  - WITHDRAW_BANK  : Can withdraw money from the clan bank.
+# =====================================================================
+# Notes:
+#  - priority: Higher value = more permissions. Used to prevent
+#              lower roles from kicking/promoting higher ones.
+#  - default: Only one role can be set as default. This role is
+#             assigned to new members when they join a clan.
+# =====================================================================
+
+roles:
+  owner:
+    display-name: "<red>Owner"
+    priority: 100               # Highest priority, cannot be kicked or demoted.
+    actions: ADMINISTRATOR      # ALL grants every available action.
+
+  co-owner:
+    display-name: "<gold>Co-Owner"
+    priority: 50
+    actions:
+      - INVITE_MEMBERS
+      - KICK_MEMBERS
+      - PROMOTE_MEMBER
+      - MANAGE_SETTINGS
+
+  member:
+    display-name: "<gray>Member"
+    priority: 1
+    default: true               # Assigned to new members by default.
+    actions:
+      - INVITE_MEMBERS

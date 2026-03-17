@@ -1,0 +1,14 @@
+include(
+    "api",
+    "spi",
+    "core",
+    "infrastructure:configuration",
+    "infrastructure:bootstrap",
+    "infrastructure:adventure",
+    "providers:storage:sql",
+    "providers:storage:sql:h2",
+    "providers:storage:sql:mysql",
+    "platform:paper",
+    "platform:bukkit-api",
+    "platform:common-bukkit"
+)

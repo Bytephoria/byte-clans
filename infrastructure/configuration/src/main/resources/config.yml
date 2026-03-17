@@ -1,0 +1,76 @@
+# =====================================================================
+# ByteClans - Main Configuration
+# =====================================================================
+# Defines how clans are stored, managed, and configured.
+# All sections are organized for readability and easy modification.
+# =====================================================================
+
+storage:
+  # Database type currently in use.
+  # Options:
+  #  - H2
+  #  - MYSQL
+  type: H2
+
+  # Connection pool configuration for the database.
+  pool:
+    connection-timeout: 5000    # Maximum time (ms) to wait for a connection before failing.
+    max-lifetime: 1800000       # Maximum lifetime (ms) of a database connection.
+    max-pool-size: 10           # Maximum number of active connections.
+    min-idle: 1                 # Minimum number of idle connections kept ready.
+
+  # -----------------------------------------------------------
+  # Credentials used by external SQL engines (MySQL, PostgreSQL).
+  # Ignored when using embedded H2 storage.
+  # -----------------------------------------------------------
+  credentials:
+    host: localhost              # Database host or IP address.
+    port: 3306                   # Default port (MySQL: 3306, PostgreSQL: 5432).
+    database: "sa"               # Database name.
+    username: ""                 # Database username.
+    password: ""                 # Database password.
+    use-ssl: "false"             # Whether to use SSL/TLS for the connection.
+
+  # H2 database configuration (used for local file-based storage).
+  h2:
+    file: storage/data         # Path where the H2 database file is stored.
+
+# -----------------------------------------------------------
+# Global plugin configuration that affects all features.
+# -----------------------------------------------------------
+settings:
+  # Defines the format engine for messages (chat and console).
+  # Options:
+  #  - MINI_MESSAGE       : <gray>, <gradient:...>, etc.
+  #  - LEGACY_AMPERSAND   : &a, &l, etc.
+  serializer: MINI_MESSAGE
+
+# -----------------------------------------------------------
+# Clan-related configuration.
+# -----------------------------------------------------------
+clan:
+  name:
+    # Minimum and maximum allowed characters for clan names.
+    minimum-chars: 3            # Minimum number of characters for a clan name.
+    maximum-chars: 16           # Maximum number of characters for a clan name.
+
+  defaults:
+    # Default settings applied when a clan is created.
+    max-members: 20             # Maximum number of members a clan can have.
+
+    # Options: NO_DAMAGE, SAFE_DAMAGE, FRIENDLY_FIRE
+    pvp-mode: NO_DAMAGE         # PvP mode between clan members.
+
+    # Options: OPENED, CLOSED, INVITE_ONLY
+    invite-state: INVITE_ONLY   # Default invite state for new clans.
+
+  chat:
+    clan-format: "<gray>[<gradient:gold:yellow>Clan</gradient>]</gray> {role_display} <gold>{player}</gold><gray>:</gray> <white>{message}"
+
+# -----------------------------------------------------------
+# Invitation configuration.
+# -----------------------------------------------------------
+invitations:
+  ttl:
+    amount: 1                   # Duration before a pending invitation expires.
+    unit: MINUTES               # Time unit for the TTL. Options: SECONDS, MINUTES, HOURS

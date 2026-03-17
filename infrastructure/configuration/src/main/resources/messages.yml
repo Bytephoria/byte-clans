@@ -1,0 +1,104 @@
+clan:
+  create:
+    success: "<gradient:#00e676:#1de9b6>The clan</gradient> <gold><bold>{clan}</bold></gold> <gradient:#00e676:#1de9b6>has been created successfully.</gradient>"
+    already-in-clan: "<red>You are already in a <bold>clan</bold>.</red>"
+    name-invalid-characters: "<red>Clan name can only contain <bold>letters and numbers</bold>."
+    name-taken: "<red>The clan name <gold><bold>{clan}</bold></gold> is already taken.</red>"
+    name-too-short: "<red>Clan name must be at least <gold><bold>{min}</bold></gold> characters.</red>"
+    name-too-long: "<red>Clan name must be at most <gold><bold>{max}</bold></gold> characters.</red>"
+    cancelled: "<red>Clan creation was cancelled by an external plugin.</red>"
+
+  disband:
+    success: "<gradient:#ff5252:#ff1744>The clan</gradient> <gold><bold>{clan}</bold></gold> <gradient:#ff5252:#ff1744>has been disbanded.</gradient>"
+    not-in-clan: "<red>You are not in a <bold>clan</bold>.</red>"
+    insufficient-role: "<red>You don't have permission to disband the clan.</red>"
+    cancelled: "<red>Clan disband was cancelled by an external plugin.</red>"
+
+  leave:
+    success: "<yellow>You have left <gold><bold>{clan}</bold></gold>.</yellow>"
+    broadcast: "<gold><bold>{player}</bold></gold> <yellow>has left the clan.</yellow>"
+    not-in-clan: "<red>You are not in a <bold>clan</bold>.</red>"
+    owner-cannot-leave: "<red>You cannot leave your own clan. <gold>Transfer ownership first.</gold></red>"
+    cancelled: "<red>You couldn't leave the clan. Cancelled by an external plugin.</red>"
+
+  kick:
+    success: "<gold><bold>{target}</bold></gold> <yellow>has been kicked from the clan.</yellow>"
+    kicked: "<red>You have been kicked from <gold><bold>{clan}</bold></gold>.</red>"
+    broadcast: "<gold><bold>{target}</bold></gold> <red>has been kicked from the clan.</red>"
+    not-in-clan: "<red>You are not in a <bold>clan</bold>.</red>"
+    target-not-in-clan: "<gold><bold>{target}</bold></gold> <red>is not in your clan.</red>"
+    insufficient-role: "<red>You don't have permission to kick members.</red>"
+    cannot-kick-owner: "<red>You cannot kick the <gold><bold>clan owner</bold></gold>.</red>"
+    cannot-kick-higher-role: "<red>You cannot kick a member with a higher role than yours.</red>"
+    cannot-kick-oneself: "<red>You cannot kick yourself.</red>"
+    cancelled: "<red>Kick was cancelled by an external plugin.</red>"
+
+  transfer:
+    success: "<gradient:#00e676:#1de9b6>Clan ownership has been transferred to</gradient> <gold><bold>{target}</bold></gold>."
+    received: "<gradient:#ffd54f:#ffb300>You are now the</gradient> <gold><bold>owner</bold></gold> <gradient:#ffd54f:#ffb300>of</gradient> <gold><bold>{clan}</bold></gold>."
+    broadcast: "<gold><bold>{target}</bold></gold> <yellow>is now the clan owner.</yellow>"
+    not-in-clan: "<red>You are not in a <bold>clan</bold>.</red>"
+    target-not-in-clan: "<gold><bold>{target}</bold></gold> <red>is not in your clan.</red>"
+    insufficient-role: "<red>You don't have permission to transfer ownership.</red>"
+    target-is-already-owner: "<gold><bold>{target}</bold></gold> <red>is already the clan owner.</red>"
+    cancelled: "<red>Ownership transfer was cancelled by an external plugin.</red>"
+
+  promote:
+    success: "<gradient:#00e676:#1de9b6>{target} has been promoted to {role}.</gradient>"
+    received: "<gradient:#00e676:#1de9b6>You have been promoted to {role}.</gradient>"
+    broadcast: "<gold><bold>{target}</bold></gold> <gradient:#00e676:#1de9b6>has been promoted to {role}.</gradient>"
+    not-in-clan: "<red>You are not in a <bold>clan</bold>.</red>"
+    target-not-in-clan: "<gold><bold>{target}</bold></gold> <red>is not in your clan.</red>"
+    insufficient-role: "<red>You don't have permission to promote members.</red>"
+    cannot-promote-higher-or-equal-role: "<red>You cannot promote a member with a higher or equal role than yours.</red>"
+    cannot-promote-to-higher-role: "<red>You cannot promote a member to a role higher or equal than yours.</red>"
+    already-max-role: "<gold><bold>{target}</bold></gold> <red>is already at the maximum role.</red>"
+    cannot-promote-oneself: "<red>You cannot promote yourself.</red>"
+    cancelled: "<red>Promotion was cancelled by an external plugin.</red>"
+
+  demote:
+    success: "<gradient:#ff5252:#ff1744>{target} has been demoted to {role}.</gradient>"
+    received: "<gradient:#ff5252:#ff1744>You have been demoted to {role}.</gradient>"
+    broadcast: "<gold><bold>{target}</bold></gold> <gradient:#ff5252:#ff1744>has been demoted to {role}.</gradient>"
+    not-in-clan: "<red>You are not in a <bold>clan</bold>.</red>"
+    target-not-in-clan: "<gold><bold>{target}</bold></gold> <red>is not in your clan.</red>"
+    insufficient-role: "<red>You don't have permission to demote members.</red>"
+    cannot-demote-higher-or-equal-role: "<red>You cannot demote a member with a higher or equal role than yours.</red>"
+    already-min-role: "<gold><bold>{target}</bold></gold> <red>is already at the minimum role.</red>"
+    cannot-demote-oneself: "<red>You cannot demote yourself.</red>"
+    cancelled: "<red>Demotion was cancelled by an external plugin.</red>"
+
+  chat:
+    invalid-mode: "<red>That chat mode <bold>does not exist</bold>.</red>"
+    already-in-mode: "<red>You are already in that chat mode.</red>"
+    insufficient-online-members: "<red>There are not enough <bold>online clan members</bold>.</red>"
+    clan:
+      switched: "<gradient:gold:yellow>You are now chatting in <bold>clan chat</bold>.</gradient>"
+      switched-back: "<yellow>You are now chatting in <bold>public chat</bold>.</yellow>"
+      not-in-clan: "<red>You are not in a <bold>clan</bold>.</red>"
+
+invite:
+  send:
+    success: "<gradient:#00e676:#1de9b6>Invite sent to</gradient> <gold><bold>{target}</bold></gold>."
+    received: "<gold><bold>{player}</bold></gold> <yellow>invited you to join</yellow> <gold><bold>{clan}</bold></gold>. <green>/clan accept</green> <gray>|</gray> <red>/clan decline</red>"
+    not-in-clan: "<red>You are not in a <bold>clan</bold>.</red>"
+    already-in-clan: "<gold><bold>{target}</bold></gold> <red>is already in a clan.</red>"
+    already-invited: "<gold><bold>{target}</bold></gold> <red>already has a pending invite.</red>"
+    clan-full: "<red>Your clan is full.</red>"
+    insufficient-role: "<red>You don't have permission to invite members.</red>"
+    target-offline: "<gold><bold>{target}</bold></gold> <red>is not online.</red>"
+    cannot-invited-oneself: "<red>You cannot invite yourself.</red>"
+    cancelled: "<red>Invite was cancelled by an external plugin.</red>"
+
+  accept:
+    success: "<gradient:#00e676:#1de9b6>You joined</gradient> <gold><bold>{clan}</bold></gold>!"
+    broadcast: "<gold><bold>{player}</bold></gold> <gradient:#00e676:#1de9b6>has joined the clan.</gradient>"
+    no-pending-invite: "<red>You don't have a pending invite.</red>"
+    already-in-clan: "<red>You are already in a clan.</red>"
+    clan-full: "<red>That clan is full.</red>"
+    cancelled: "<red>Invite accept was cancelled by an external plugin.</red>"
+
+  decline:
+    success: "<yellow>You declined the invite from <gold><bold>{clan}</bold></gold>.</yellow>"
+    notified: "<gold><bold>{player}</bold></gold> <red>declined your clan invite.</red>"
+    no-pending-invite: "<red>You don't have a pending invite.</red>"
