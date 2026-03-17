@@ -54,7 +54,7 @@ The plugin ships with the essentials — clan creation, member management, invit
 
 ## Installation
 
-1. Download the latest **ByteClans** release from the [releases page](https://github.com/Bytephoria/ByteClans/releases).
+1. Download the latest **ByteClans** release from the [releases page](https://github.com/Bytephoria/byte-clans/releases).
 2. Place the JAR inside your server's `plugins/` folder.
 3. Start your Paper server — config files will be generated automatically.
 4. Configure `config.yml`, `messages.yml` and `roles.yml` to your liking.
