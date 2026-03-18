@@ -43,7 +43,7 @@ paper {
     description = rootProject.description
     version = rootProject.version.toString()
     loader = "${rootProject.group}.${rootProject.name.replace("-", "")}.platform.paper.PaperPluginLoader"
-    apiVersion = "1.20"
+    apiVersion = "1.19"
 
     authors = listOf("Bytephoria", "iAmForyy_")
     website = "https://bytephoria.team"
