@@ -88,7 +88,7 @@ tasks {
 
         archiveBaseName.set(getProjectName(rootProject.name))
         archiveVersion.set(rootProject.version.toString())
-        archiveClassifier.set("spigot")
+        archiveClassifier.set(project.name)
 
     }
 

@@ -82,7 +82,7 @@ tasks {
 
         archiveBaseName.set(getProjectName(rootProject.name))
         archiveVersion.set(rootProject.version.toString())
-        archiveClassifier.set("paper")
+        archiveClassifier.set(project.name)
 
     }
 
