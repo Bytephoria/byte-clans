@@ -72,7 +72,7 @@ public final class PaperPlugin extends JavaPlugin {
 
         this.serializerAdapter = ComponentSerializerFactory.create(this.configuration.settings().serializer());
         this.bukkitClanEventBus = new BukkitClanEventBus();
-        this.paperBootstrap = new PaperBootstrap(this, new BootstrapContext(this.getDataPath()));
+        this.paperBootstrap = new PaperBootstrap(this, new BootstrapContext(this.getDataFolder().toPath()));
         this.paperBootstrap.enable();
 
         if (this.getServer().getPluginManager().getPlugin("PlaceholderAPI") != null) {
