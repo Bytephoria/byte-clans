@@ -18,7 +18,6 @@ import org.jetbrains.annotations.NotNull;
 import org.spongepowered.configurate.ConfigurationNode;
 import team.bytephoria.byteclans.api.access.ByteClansProvider;
 import team.bytephoria.byteclans.core.ApplicationFacade;
-import team.bytephoria.byteclans.platform.commonbukkit.concurrent.AsyncExecutor;
 import team.bytephoria.byteclans.infrastructure.adventure.ComponentSerializerAdapter;
 import team.bytephoria.byteclans.infrastructure.adventure.ComponentSerializerFactory;
 import team.bytephoria.byteclans.infrastructure.bootstrap.BootstrapContext;
@@ -26,13 +25,14 @@ import team.bytephoria.byteclans.infrastructure.configuration.ConfigurationLoade
 import team.bytephoria.byteclans.infrastructure.configuration.configuration.Configuration;
 import team.bytephoria.byteclans.infrastructure.configuration.roles.Roles;
 import team.bytephoria.byteclans.platform.commonbukkit.BukkitClanEventBus;
+import team.bytephoria.byteclans.platform.commonbukkit.RoleLoader;
+import team.bytephoria.byteclans.platform.commonbukkit.concurrent.AsyncExecutor;
+import team.bytephoria.byteclans.platform.commonbukkit.listener.PlayerJoinListener;
+import team.bytephoria.byteclans.platform.commonbukkit.listener.PlayerQuitListener;
 import team.bytephoria.byteclans.platform.spigot.command.ClanCommand;
 import team.bytephoria.byteclans.platform.spigot.command.ClanInviteCommand;
 import team.bytephoria.byteclans.platform.spigot.hook.PlaceholderAPIHook;
 import team.bytephoria.byteclans.platform.spigot.listener.AsyncPlayerChatListener;
-import team.bytephoria.byteclans.platform.commonbukkit.listener.PlayerJoinListener;
-import team.bytephoria.byteclans.platform.commonbukkit.listener.PlayerQuitListener;
-import team.bytephoria.byteclans.platform.commonbukkit.RoleLoader;
 import team.bytephoria.byteclans.platform.spigot.listener.v1_20_3.V1_20_3EntityDamageByEntityListener;
 import team.bytephoria.byteclans.platform.spigot.listener.v1_20_3.V1_20_3PlayerDeathListener;
 import team.bytephoria.byteclans.platform.spigot.listener.v1_20_4.V1_20_4EntityDamageByEntityListener;
@@ -60,6 +60,11 @@ public final class SpigotPlugin extends JavaPlugin {
     @Override
     public void onLoad() {
         this.getLogger().info("SpigotPlugin is loading...");
+
+        this.getLogger().info("Loading libraries...");
+        new SpigotLibraryLoader(this).load();
+        this.getLogger().info("The libraries was loaded!");
+
         final ConfigurationLoader configurationLoader = new ConfigurationLoader(
                 this.getDataFolder().toPath(),
                 fileName -> this.saveResource(fileName, false)
