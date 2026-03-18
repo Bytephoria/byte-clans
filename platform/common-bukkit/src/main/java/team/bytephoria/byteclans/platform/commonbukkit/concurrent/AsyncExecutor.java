@@ -1,4 +1,4 @@
-package team.bytephoria.byteclans.platform.paper.concurrent;
+package team.bytephoria.byteclans.platform.commonbukkit.concurrent;
 
 import org.jetbrains.annotations.NotNull;
 

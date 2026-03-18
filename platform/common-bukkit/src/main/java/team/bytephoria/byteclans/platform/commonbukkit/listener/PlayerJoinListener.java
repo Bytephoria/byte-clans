@@ -1,4 +1,4 @@
-package team.bytephoria.byteclans.platform.paper.listener;
+package team.bytephoria.byteclans.platform.commonbukkit.listener;
 
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;

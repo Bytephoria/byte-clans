@@ -1,4 +1,4 @@
-package team.bytephoria.byteclans.platform.spigot.loader;
+package team.bytephoria.byteclans.platform.commonbukkit;
 
 import org.jetbrains.annotations.NotNull;
 import team.bytephoria.byteclans.api.ClanAction;

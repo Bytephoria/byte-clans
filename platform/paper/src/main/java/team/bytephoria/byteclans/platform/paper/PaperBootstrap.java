@@ -12,7 +12,7 @@ import team.bytephoria.byteclans.infrastructure.configuration.configuration.Conf
 import team.bytephoria.byteclans.infrastructure.configuration.configuration.storage.Credentials;
 import team.bytephoria.byteclans.infrastructure.configuration.configuration.storage.Pool;
 import team.bytephoria.byteclans.infrastructure.configuration.configuration.storage.Storage;
-import team.bytephoria.byteclans.platform.paper.concurrent.AsyncExecutor;
+import team.bytephoria.byteclans.platform.commonbukkit.concurrent.AsyncExecutor;
 import team.bytephoria.byteclans.providers.storage.sql.SQLTransactionManager;
 import team.bytephoria.byteclans.providers.storage.sql.config.JdbcCredentials;
 import team.bytephoria.byteclans.providers.storage.sql.config.JdbcPoolConfig;

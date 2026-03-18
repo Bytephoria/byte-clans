@@ -19,7 +19,7 @@ import team.bytephoria.byteclans.api.util.response.context.ResponseContext;
 import team.bytephoria.byteclans.bukkitapi.BukkitClanPlayer;
 import team.bytephoria.byteclans.core.util.IdentityCachedMap;
 import team.bytephoria.byteclans.platform.spigot.SpigotPlugin;
-import team.bytephoria.byteclans.platform.spigot.concurrent.AsyncExecutor;
+import team.bytephoria.byteclans.platform.commonbukkit.concurrent.AsyncExecutor;
 import team.bytephoria.byteclans.platform.spigot.message.Messenger;
 
 import java.util.Arrays;

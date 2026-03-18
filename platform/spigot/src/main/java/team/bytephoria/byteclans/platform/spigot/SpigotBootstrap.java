@@ -12,7 +12,6 @@ import team.bytephoria.byteclans.infrastructure.configuration.configuration.Conf
 import team.bytephoria.byteclans.infrastructure.configuration.configuration.storage.Credentials;
 import team.bytephoria.byteclans.infrastructure.configuration.configuration.storage.Pool;
 import team.bytephoria.byteclans.infrastructure.configuration.configuration.storage.Storage;
-import team.bytephoria.byteclans.platform.spigot.concurrent.AsyncExecutor;
 import team.bytephoria.byteclans.providers.storage.sql.SQLTransactionManager;
 import team.bytephoria.byteclans.providers.storage.sql.config.JdbcCredentials;
 import team.bytephoria.byteclans.providers.storage.sql.config.JdbcPoolConfig;
@@ -22,6 +21,7 @@ import team.bytephoria.byteclans.providers.storage.sql.h2.H2StorageConnection;
 import team.bytephoria.byteclans.providers.storage.sql.h2.H2StorageConnectionData;
 import team.bytephoria.byteclans.providers.storage.sql.mysql.MySQLClanMemberStorage;
 import team.bytephoria.byteclans.providers.storage.sql.mysql.MySQLClanStorage;
+import team.bytephoria.byteclans.platform.commonbukkit.concurrent.AsyncExecutor;
 import team.bytephoria.byteclans.providers.storage.sql.mysql.MySQLStorageConnection;
 import team.bytephoria.byteclans.providers.storage.sql.mysql.MySQLStorageConnectionData;
 import team.bytephoria.byteclans.spi.storage.ClanMemberStorage;
