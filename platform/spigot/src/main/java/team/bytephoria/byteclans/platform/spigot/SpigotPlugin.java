@@ -2,7 +2,6 @@ package team.bytephoria.byteclans.platform.spigot;
 
 import net.kyori.adventure.platform.bukkit.BukkitAudiences;
 import org.bstats.bukkit.Metrics;
-import org.bukkit.Bukkit;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.bukkit.event.HandlerList;
@@ -61,9 +60,11 @@ public final class SpigotPlugin extends JavaPlugin {
     public void onLoad() {
         this.getLogger().info("SpigotPlugin is loading...");
 
-        this.getLogger().info("Loading libraries...");
-        new SpigotLibraryLoader(this).load();
-        this.getLogger().info("The libraries was loaded!");
+        if (!ServerVersion.isAtLeastVersion(1, 16, 5)) {
+            this.getLogger().info("Loading libraries...");
+            new SpigotLibraryLoader(this).load();
+            this.getLogger().info("The libraries was loaded!");
+        }
 
         final ConfigurationLoader configurationLoader = new ConfigurationLoader(
                 this.getDataFolder().toPath(),
@@ -102,12 +103,7 @@ public final class SpigotPlugin extends JavaPlugin {
                 new AsyncPlayerChatListener(this, this.configuration, this.serializerAdapter, applicationFacade.clanMemberCache())
         );
 
-        final boolean isAtLeast1204 = ServerVersion.isAtLeast(
-                Bukkit.getBukkitVersion().split("-")[0],
-                1, 20, 4
-        );
-
-        if (isAtLeast1204) {
+        if (ServerVersion.isAtLeastVersion(1, 20, 4)) {
             this.registerListeners(
                     new V1_20_4EntityDamageByEntityListener(
                             applicationFacade.clanMemberCache(),

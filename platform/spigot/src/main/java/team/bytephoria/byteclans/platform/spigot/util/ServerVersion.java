@@ -1,5 +1,6 @@
 package team.bytephoria.byteclans.platform.spigot.util;
 
+import org.bukkit.Bukkit;
 import org.jetbrains.annotations.NotNull;
 
 public final class ServerVersion {
@@ -8,6 +9,12 @@ public final class ServerVersion {
         throw new UnsupportedOperationException("This class cannot be instantiated.");
     }
 
+    public static boolean isAtLeastVersion(final int major, final int minor, final int patch) {
+        return isAtLeast(
+                Bukkit.getBukkitVersion().split("-")[0],
+                major, minor, patch
+        );
+    }
 
     public static boolean isAtLeast(final @NotNull String version, int major, int minor, int patch) {
         final String[] parts = version.split("\\.");
