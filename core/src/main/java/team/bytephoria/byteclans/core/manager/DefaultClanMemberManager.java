@@ -1,5 +1,6 @@
 package team.bytephoria.byteclans.core.manager;
 
+import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 import org.jspecify.annotations.NonNull;
 import team.bytephoria.byteclans.api.*;
@@ -14,16 +15,20 @@ import team.bytephoria.byteclans.core.util.IdentityCachedMap;
 import team.bytephoria.byteclans.spi.eventbus.ClanEventBus;
 import team.bytephoria.byteclans.spi.storage.ClanMemberStorage;
 import team.bytephoria.byteclans.spi.storage.ClanStorage;
-import team.bytephoria.byteclans.spi.storage.transaction.TransactionManager;
 import team.bytephoria.byteclans.spi.storage.entry.ClanEntry;
 import team.bytephoria.byteclans.spi.storage.entry.ClanMemberEntry;
 import team.bytephoria.byteclans.spi.storage.field.ClanField;
 import team.bytephoria.byteclans.spi.storage.field.ClanMemberField;
+import team.bytephoria.byteclans.spi.storage.transaction.TransactionManager;
+import team.bytephoria.byteclans.spi.storage.view.ClanMemberView;
+import team.bytephoria.byteclans.spi.storage.view.ClanView;
 
 import java.util.Optional;
+import java.util.UUID;
 
 public final class DefaultClanMemberManager implements ClanMemberManager {
 
+    private final IdentityCachedMap<Clan> clanCache;
     private final IdentityCachedMap<ClanMember> memberCache;
     private final ClanGlobalSettings clanGlobalSettings;
 
@@ -36,6 +41,7 @@ public final class DefaultClanMemberManager implements ClanMemberManager {
     private final TransactionManager transactionManager;
 
     public DefaultClanMemberManager(
+            final @NotNull IdentityCachedMap<Clan> clanCache,
             final @NotNull IdentityCachedMap<ClanMember> memberCache,
             final @NotNull ClanGlobalSettings clanGlobalSettings,
             final @NotNull ClanMemberStorage clanMemberStorage,
@@ -46,6 +52,7 @@ public final class DefaultClanMemberManager implements ClanMemberManager {
             final @NotNull TransactionManager transactionManager
 
     ) {
+        this.clanCache = clanCache;
         this.memberCache = memberCache;
         this.clanGlobalSettings = clanGlobalSettings;
         this.clanMemberStorage = clanMemberStorage;
@@ -54,6 +61,144 @@ public final class DefaultClanMemberManager implements ClanMemberManager {
         this.clanEventBus = clanEventBus;
         this.roleRegistry = clanRoleRegistry;
         this.transactionManager = transactionManager;
+    }
+
+    @Contract(value = " -> new", pure = true)
+    @Override
+    public @NotNull Admin admin() {
+        return new Admin() {
+
+            private DefaultClanMemberManager thisInstance() {
+                return DefaultClanMemberManager.this;
+            }
+
+            @Override
+            public Response<ClanKickResult> kick(final @NotNull UUID memberUniqueId) {
+                final ClanMember clanMember = this.thisInstance().memberCache.get(memberUniqueId);
+                if (clanMember != null) {
+                    final Clan clan = clanMember.clan();
+                    if (clan.ownerData().uniqueId().equals(memberUniqueId)) {
+                        return Response.failure(ClanKickResult.CANNOT_KICK_OWNER);
+                    }
+
+                    clan.removeMemberByUniqueId(memberUniqueId);
+                    this.thisInstance().memberCache.remove(memberUniqueId);
+                    this.thisInstance().clanMemberStorage.deleteByUniqueId(memberUniqueId);
+                    return ResponseContext.success(clanMember, ClanKickResult.SUCCESS);
+                }
+
+                final ClanMemberView memberView = this.thisInstance().clanMemberStorage
+                        .findByUniqueId(memberUniqueId)
+                        .orElse(null);
+
+                if (memberView == null) {
+                    return Response.failure(ClanKickResult.TARGET_NOT_IN_CLAN);
+                }
+
+                final ClanView clanView = this.thisInstance().clanStorage
+                        .findByUniqueId(memberView.clanUniqueId())
+                        .orElse(null);
+
+                if (clanView != null && clanView.ownerUniqueId().equals(memberUniqueId)) {
+                    return Response.failure(ClanKickResult.CANNOT_KICK_OWNER);
+                }
+
+                this.thisInstance().clanMemberStorage.deleteByUniqueId(memberUniqueId);
+                return Response.success(ClanKickResult.SUCCESS);
+            }
+
+            @Override
+            public Response<ClanTransferResult> transfer(
+                    final @NotNull UUID clanUniqueId,
+                    final @NotNull UUID newOwnerUniqueId,
+                    final @NotNull String newOwnerName
+            ) {
+                final Clan clan = this.thisInstance().clanCache.get(clanUniqueId);
+                if (clan == null) {
+                    return Response.failure(ClanTransferResult.NOT_IN_CLAN);
+                }
+
+                if (clan.ownerData().uniqueId().equals(newOwnerUniqueId)) {
+                    return Response.failure(ClanTransferResult.TARGET_IS_ALREADY_OWNER);
+                }
+
+                final ClanMember newOwnerMember = this.thisInstance().memberCache.get(newOwnerUniqueId);
+                final boolean newOwnerExistsInDB = newOwnerMember == null &&
+                        this.thisInstance().clanMemberStorage.findByUniqueId(newOwnerUniqueId)
+                                .map(view -> view.clanUniqueId().equals(clanUniqueId))
+                                .orElse(false);
+
+                if (newOwnerMember == null && !newOwnerExistsInDB) {
+                    return Response.failure(ClanTransferResult.TARGET_NOT_IN_CLAN);
+                }
+
+                final ClanMember currentOwner = this.thisInstance().memberCache.get(clan.ownerData().uniqueId());
+                if (currentOwner != null) {
+                    currentOwner.role(this.thisInstance().roleRegistry.getDefaultRole());
+                }
+
+                if (newOwnerMember != null) {
+                    newOwnerMember.role(this.thisInstance().roleRegistry.getOwnerRole());
+                    clan.ownerMember(newOwnerMember);
+                }
+
+                final DefaultClanOwnerData ownerData = new DefaultClanOwnerData(newOwnerName, newOwnerUniqueId);
+                clan.ownerData(ownerData);
+
+                this.thisInstance().transactionManager.execute(() -> {
+                    this.thisInstance().clanStorage.update(ClanEntry.from(clan), ClanField.OWNER_UNIQUE_ID, ClanField.OWNER_NAME);
+                    if (currentOwner != null) {
+                        this.thisInstance().clanMemberStorage.update(ClanMemberEntry.from(currentOwner), ClanMemberField.ROLE_ID);
+                    }
+
+                    if (newOwnerMember != null) {
+                        this.thisInstance().clanMemberStorage.update(ClanMemberEntry.from(newOwnerMember), ClanMemberField.ROLE_ID);
+                    }
+                });
+
+                return Response.success(ClanTransferResult.SUCCESS);
+            }
+
+            @Override
+            public Response<ClanRoleChangeResult> changeRole(
+                    final @NotNull UUID memberUniqueId,
+                    final @NotNull ClanRole clanRole
+            ) {
+                if (clanRole.equals(this.thisInstance().roleRegistry.getOwnerRole())) {
+                    return Response.failure(ClanRoleChangeResult.CANNOT_ASSIGN_OWNER_ROLE);
+                }
+
+                final ClanMember clanMember = this.thisInstance().memberCache.get(memberUniqueId);
+                if (clanMember != null) {
+                    if (clanMember.role().equals(clanRole)) {
+                        return Response.failure(ClanRoleChangeResult.ALREADY_SET);
+                    }
+
+                    clanMember.role(clanRole);
+                    this.thisInstance().clanMemberStorage.update(
+                            ClanMemberEntry.from(clanMember),
+                            ClanMemberField.ROLE_ID
+                    );
+
+                    return Response.success(ClanRoleChangeResult.SUCCESS);
+                }
+
+                final boolean exists = this.thisInstance().clanMemberStorage
+                        .findByUniqueId(memberUniqueId)
+                        .isPresent();
+
+                if (!exists) {
+                    return Response.failure(ClanRoleChangeResult.MEMBER_NOT_FOUND);
+                }
+
+                this.thisInstance().clanMemberStorage.update(
+                        new ClanMemberEntry(memberUniqueId, null, clanRole.id(), null, null, null),
+                        ClanMemberField.ROLE_ID
+                );
+
+                return Response.success(ClanRoleChangeResult.SUCCESS);
+            }
+        };
     }
 
     @Override

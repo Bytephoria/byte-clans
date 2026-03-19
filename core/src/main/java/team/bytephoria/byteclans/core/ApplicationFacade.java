@@ -79,6 +79,7 @@ public final class ApplicationFacade {
         this.clanDisplayNameValidator = new DefaultClanDisplayNameValidator();
 
         this.clanMemberManager = new DefaultClanMemberManager(
+                this.clanCache,
                 this.clanMemberCache,
                 clanGlobalSettings,
                 clanMemberStorage,
@@ -112,9 +113,14 @@ public final class ApplicationFacade {
                 clanEventBus
         );
 
-        this.clanSettingsManager = new DefaultClanSettingsManager(clanStorage, clanEventBus, this.clanDisplayNameValidator);
-        this.combatProcessor = new DefaultClanCombatProcessor(clanEventBus);
+        this.clanSettingsManager = new DefaultClanSettingsManager(
+                this.clanCache,
+                clanStorage,
+                clanEventBus,
+                this.clanDisplayNameValidator
+        );
 
+        this.combatProcessor = new DefaultClanCombatProcessor(clanEventBus);
         this.clanLoader = new DefaultClanLoader(
                 this.clanCache,
                 this.clanMemberCache,

@@ -8,5 +8,6 @@ public enum ClanRenameDisplayResult {
     INVALID_CHARACTERS,
     INSUFFICIENT_ROLE,
     NOT_IN_CLAN,
+    NOT_FOUND
 
 }

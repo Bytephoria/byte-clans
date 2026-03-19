@@ -9,7 +9,30 @@ import team.bytephoria.byteclans.api.result.ClanRenameDisplayResult;
 import team.bytephoria.byteclans.api.result.ClanStatusChangeResult;
 import team.bytephoria.byteclans.api.util.response.Response;
 
+import java.util.UUID;
+
 public interface ClanSettingsManager {
+
+    interface Admin {
+
+        Response<ClanPvPModeChangeResult> changePvPMode(
+                final @NotNull UUID clanUniqueId,
+                final @NotNull ClanPvPMode clanPvPMode
+        );
+
+        Response<ClanStatusChangeResult> changeInviteStatus(
+                final @NotNull UUID clanUniqueId,
+                final @NotNull ClanInviteState clanInviteState
+        );
+
+        Response<ClanRenameDisplayResult> renameDisplay(
+                final @NotNull UUID clanUniqueId,
+                final @NotNull String newDisplayName
+        );
+
+    }
+
+    Admin admin();
 
     Response<ClanPvPModeChangeResult> changePvPMode(
             final @NotNull ClanMember clanMember,

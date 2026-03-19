@@ -9,6 +9,7 @@ public enum ClanTransferResult {
     DISTINCT_CLAN,
     INSUFFICIENT_ROLE,
     TARGET_IS_ALREADY_OWNER,
-    OWNER_NOT_FOUND
+    OWNER_NOT_FOUND,
+    CLAN_NOT_FOUND,
 
 }

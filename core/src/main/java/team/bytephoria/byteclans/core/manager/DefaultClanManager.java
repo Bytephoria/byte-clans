@@ -1,5 +1,6 @@
 package team.bytephoria.byteclans.core.manager;
 
+import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.jspecify.annotations.NonNull;
@@ -15,12 +16,15 @@ import team.bytephoria.byteclans.core.clan.DefaultClanMember;
 import team.bytephoria.byteclans.core.factory.ClanFactory;
 import team.bytephoria.byteclans.core.factory.ClanMemberFactory;
 import team.bytephoria.byteclans.core.registry.DefaultClanRoleRegistry;
+import team.bytephoria.byteclans.core.util.ClanNameUUID;
 import team.bytephoria.byteclans.core.util.IdentityCachedMap;
 import team.bytephoria.byteclans.spi.eventbus.ClanEventBus;
 import team.bytephoria.byteclans.spi.storage.ClanMemberStorage;
 import team.bytephoria.byteclans.spi.storage.ClanStorage;
 import team.bytephoria.byteclans.spi.storage.entry.ClanEntry;
 import team.bytephoria.byteclans.spi.storage.entry.ClanMemberEntry;
+
+import java.util.UUID;
 
 public final class DefaultClanManager implements ClanManager {
 
@@ -60,6 +64,49 @@ public final class DefaultClanManager implements ClanManager {
         this.globalSettings = globalSettings;
         this.roleRegistry = roleRegistry;
         this.clanNameValidator = clanNameValidator;
+    }
+
+    @Contract(value = " -> new", pure = true)
+    @Override
+    public @NonNull Admin admin() {
+        return new Admin() {
+
+            private DefaultClanManager thisInstance() {
+                return DefaultClanManager.this;
+            }
+
+            @Override
+            public ResponseContext<Clan, ClanDisbandResult> disbandClanByName(final @NotNull String clanName) {
+                final UUID clanUniqueId = ClanNameUUID.from(clanName);
+                return this.disband(clanUniqueId);
+            }
+
+            @Override
+            public ResponseContext<Clan, ClanDisbandResult> disbandClanByUniqueId(final @NotNull UUID uniqueId) {
+                return this.disband(uniqueId);
+            }
+
+            private ResponseContext<Clan, ClanDisbandResult> disband(final @NotNull UUID clanUniqueId) {
+                final Clan clan = this.thisInstance().clanCache.get(clanUniqueId);
+                if (clan == null) {
+                    final boolean exists = this.thisInstance().clanStorage.existsByUniqueId(clanUniqueId);
+                    if (!exists) {
+                        return ResponseContext.failure(ClanDisbandResult.NOT_FOUND);
+                    }
+
+                    this.thisInstance().clanStorage.deleteByUniqueId(clanUniqueId);
+                    return ResponseContext.failure(ClanDisbandResult.SUCCESS);
+                }
+
+                clan.allMembers().forEach(member ->
+                        this.thisInstance().memberCache.remove(member.uniqueId())
+                );
+
+                this.thisInstance().clanCache.remove(clanUniqueId);
+                this.thisInstance().clanStorage.deleteByUniqueId(clanUniqueId);
+                return ResponseContext.success(clan, ClanDisbandResult.SUCCESS);
+            }
+        };
     }
 
     @Override
@@ -145,4 +192,5 @@ public final class DefaultClanManager implements ClanManager {
 
         return ResponseContext.success(clan, ClanDisbandResult.SUCCESS);
     }
+
 }

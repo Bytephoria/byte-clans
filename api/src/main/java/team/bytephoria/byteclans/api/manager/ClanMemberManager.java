@@ -6,7 +6,28 @@ import team.bytephoria.byteclans.api.result.*;
 import team.bytephoria.byteclans.api.util.response.Response;
 import team.bytephoria.byteclans.api.util.response.context.ResponseContext;
 
+import java.util.UUID;
+
 public interface ClanMemberManager {
+
+    interface Admin {
+
+        Response<ClanKickResult> kick(final @NotNull UUID memberUniqueId);
+
+        Response<ClanTransferResult> transfer(
+                final @NotNull UUID clanUniqueId,
+                final @NotNull UUID newOwnerUniqueId,
+                final @NotNull String newOwnerName
+        );
+
+        Response<ClanRoleChangeResult> changeRole(
+                final @NotNull UUID memberUniqueId,
+                final @NotNull ClanRole clanRole
+        );
+
+    }
+
+    Admin admin();
 
     ResponseContext<ClanMember, ClanJoinResult> join(
             final @NotNull ClanPlayer clanPlayer,

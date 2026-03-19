@@ -19,7 +19,7 @@ public record ClanMemberEntry(
 
     public ClanMemberEntry {
         Objects.requireNonNull(memberUniqueId);
-        Objects.requireNonNull(clanUniqueId);
+        //Objects.requireNonNull(clanUniqueId);
     }
 
     @Contract("_ -> new")

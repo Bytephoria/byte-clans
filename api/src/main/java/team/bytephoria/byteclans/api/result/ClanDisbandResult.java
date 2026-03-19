@@ -5,6 +5,7 @@ public enum ClanDisbandResult {
     SUCCESS,
     CANCELLED,
     NOT_IN_CLAN,
-    INSUFFICIENT_ROLE
+    INSUFFICIENT_ROLE,
+    NOT_FOUND
 
 }

@@ -7,5 +7,6 @@ public enum ClanStatusChangeResult {
     NOT_IN_CLAN,
     INSUFFICIENT_ROLE,
     ALREADY_SET,
+    NOT_FOUND
 
 }
