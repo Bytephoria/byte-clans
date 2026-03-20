@@ -258,7 +258,6 @@ public final class DefaultClanMemberManager implements ClanMemberManager {
 
         this.memberCache.remove(clanMember);
         this.clanMemberStorage.async().deleteByUniqueId(clanMember.uniqueId());
-        this.clanEventBus.callMemberLeave(clanMember);
         return Response.success(ClanLeaveResult.SUCCESS);
     }
 
