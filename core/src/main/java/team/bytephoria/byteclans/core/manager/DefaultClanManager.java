@@ -145,11 +145,11 @@ public final class DefaultClanManager implements ClanManager {
 
         this.clanCache.add(clan);
         this.memberCache.add(ownerMember);
+        this.clanEventBus.callPostCreateClan(clanPlayer, ownerMember, clan);
 
         this.clanStorage.async().create(ClanEntry.from(clan))
                 .thenCompose(ignored -> this.memberStorage.async().create(ClanMemberEntry.from(ownerMember)));
 
-        this.clanEventBus.callPostCreateClan(clanPlayer, ownerMember, clan);
         return ResponseContext.success(clan, ClanCreateResult.SUCCESS);
     }
 
