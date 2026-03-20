@@ -17,6 +17,9 @@ public final class Defaults {
     @Setting("invite-state")
     private ClanInviteState inviteState = ClanInviteState.INVITE_ONLY;
 
+    @Setting("display")
+    private String display = "{clan}";
+
     public int maxMembers() {
         return this.maxMembers;
     }
@@ -29,4 +32,7 @@ public final class Defaults {
         return this.inviteState;
     }
 
+    public String display() {
+        return this.display;
+    }
 }

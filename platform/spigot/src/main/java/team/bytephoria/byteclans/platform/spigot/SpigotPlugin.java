@@ -26,6 +26,7 @@ import team.bytephoria.byteclans.infrastructure.configuration.roles.Roles;
 import team.bytephoria.byteclans.platform.commonbukkit.BukkitClanEventBus;
 import team.bytephoria.byteclans.platform.commonbukkit.RoleLoader;
 import team.bytephoria.byteclans.platform.commonbukkit.concurrent.AsyncExecutor;
+import team.bytephoria.byteclans.platform.commonbukkit.listener.ClanPostCreateAsyncListener;
 import team.bytephoria.byteclans.platform.commonbukkit.listener.PlayerJoinListener;
 import team.bytephoria.byteclans.platform.commonbukkit.listener.PlayerQuitListener;
 import team.bytephoria.byteclans.platform.spigot.command.ClanAdminCommands;
@@ -101,7 +102,8 @@ public final class SpigotPlugin extends JavaPlugin {
         this.registerListeners(
                 new PlayerJoinListener(applicationFacade.userLoader()),
                 new PlayerQuitListener(applicationFacade.userLoader()),
-                new AsyncPlayerChatListener(this, this.configuration, this.serializerAdapter, applicationFacade.clanMemberCache())
+                new AsyncPlayerChatListener(this, this.configuration, this.serializerAdapter, applicationFacade.clanMemberCache()),
+                new ClanPostCreateAsyncListener(this.configuration)
         );
 
         if (ServerVersion.isAtLeastVersion(1, 20, 4)) {

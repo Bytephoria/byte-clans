@@ -64,6 +64,10 @@ clan:
     # Options: OPENED, CLOSED, INVITE_ONLY
     invite-state: INVITE_ONLY   # Default invite state for new clans.
 
+    # Default display name applied when a clan is created.
+    # Use {clan} as a placeholder for the clan name.
+    display: "<rainbow>{clan}</<rainbow>>"
+
   chat:
     clan-format: "<gray>[<gradient:gold:yellow>Clan</gradient>]</gray> {role_display} <gold>{player}</gold><gray>:</gray> <white>{message}"
 

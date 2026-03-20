@@ -33,6 +33,7 @@ import team.bytephoria.byteclans.platform.paper.command.ClanCommand;
 import team.bytephoria.byteclans.platform.paper.command.ClanInviteCommand;
 import team.bytephoria.byteclans.platform.paper.hook.PlaceholderAPIHook;
 import team.bytephoria.byteclans.platform.paper.listener.AsyncChatEventListener;
+import team.bytephoria.byteclans.platform.commonbukkit.listener.ClanPostCreateAsyncListener;
 import team.bytephoria.byteclans.platform.paper.listener.EntityDamageByEntityListener;
 import team.bytephoria.byteclans.platform.paper.listener.PlayerDeathListener;
 import team.bytephoria.byteclans.platform.commonbukkit.RoleLoader;
@@ -96,7 +97,8 @@ public final class PaperPlugin extends JavaPlugin {
                 new PlayerDeathListener(
                         applicationFacade.clanMemberCache(),
                         applicationFacade.clanStatisticManager()
-                )
+                ),
+                new ClanPostCreateAsyncListener(this.configuration)
         );
 
         final SenderMapper<CommandSender, Player> mapper = SenderMapper.create(
