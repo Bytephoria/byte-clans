@@ -1,8 +1,11 @@
 package team.bytephoria.byteclans.core.util;
 
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.UnmodifiableView;
 import team.bytephoria.byteclans.api.util.Identity;
 
+import java.util.Collection;
+import java.util.Collections;
 import java.util.Map;
 import java.util.UUID;
 
@@ -11,6 +14,10 @@ public final class IdentityCachedMap<V extends Identity> implements CachedMap<UU
     private final Map<UUID, V> map;
     public IdentityCachedMap(final @NotNull Map<UUID, V> map) {
         this.map = map;
+    }
+
+    public @UnmodifiableView @NotNull Collection<V> valuesCopy() {
+        return Collections.unmodifiableCollection(this.map.values());
     }
 
     public V add(final @NotNull V value) {

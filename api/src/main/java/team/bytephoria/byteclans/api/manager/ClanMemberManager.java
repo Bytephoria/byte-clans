@@ -15,6 +15,12 @@ public interface ClanMemberManager {
         Response<ClanKickResult> kick(final @NotNull UUID memberUniqueId);
 
         Response<ClanTransferResult> transfer(
+                final @NotNull String clanName,
+                final @NotNull UUID newOwnerUniqueId,
+                final @NotNull String newOwnerName
+        );
+
+        Response<ClanTransferResult> transfer(
                 final @NotNull UUID clanUniqueId,
                 final @NotNull UUID newOwnerUniqueId,
                 final @NotNull String newOwnerName

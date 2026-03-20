@@ -28,6 +28,7 @@ import team.bytephoria.byteclans.platform.commonbukkit.RoleLoader;
 import team.bytephoria.byteclans.platform.commonbukkit.concurrent.AsyncExecutor;
 import team.bytephoria.byteclans.platform.commonbukkit.listener.PlayerJoinListener;
 import team.bytephoria.byteclans.platform.commonbukkit.listener.PlayerQuitListener;
+import team.bytephoria.byteclans.platform.spigot.command.ClanAdminCommands;
 import team.bytephoria.byteclans.platform.spigot.command.ClanCommand;
 import team.bytephoria.byteclans.platform.spigot.command.ClanInviteCommand;
 import team.bytephoria.byteclans.platform.spigot.hook.PlaceholderAPIHook;
@@ -160,6 +161,19 @@ public final class SpigotPlugin extends JavaPlugin {
                 applicationFacade.clanCache(),
                 applicationFacade.clanMemberCache()
         ));
+
+        annotationParser.parse(
+                new ClanAdminCommands(
+                        this,
+                        applicationFacade.clanMemberCache(),
+                        applicationFacade.clanCache(),
+                        applicationFacade.clanManager(),
+                        applicationFacade.clanMemberManager(),
+                        applicationFacade.clanSettingsManager(),
+                        applicationFacade.clanRoleRegistry(),
+                        this.messenger
+                )
+        );
 
         this.commandManager.exceptionController().registerHandler(
                 InvalidSyntaxException.class,

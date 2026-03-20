@@ -28,6 +28,7 @@ import team.bytephoria.byteclans.platform.commonbukkit.BukkitClanEventBus;
 import team.bytephoria.byteclans.platform.commonbukkit.concurrent.AsyncExecutor;
 import team.bytephoria.byteclans.platform.commonbukkit.listener.PlayerJoinListener;
 import team.bytephoria.byteclans.platform.commonbukkit.listener.PlayerQuitListener;
+import team.bytephoria.byteclans.platform.paper.command.ClanAdminCommands;
 import team.bytephoria.byteclans.platform.paper.command.ClanCommand;
 import team.bytephoria.byteclans.platform.paper.command.ClanInviteCommand;
 import team.bytephoria.byteclans.platform.paper.hook.PlaceholderAPIHook;
@@ -127,6 +128,19 @@ public final class PaperPlugin extends JavaPlugin {
                 applicationFacade.clanCache(),
                 applicationFacade.clanMemberCache()
         ));
+
+        annotationParser.parse(
+                new ClanAdminCommands(
+                        this,
+                        applicationFacade.clanMemberCache(),
+                        applicationFacade.clanCache(),
+                        applicationFacade.clanManager(),
+                        applicationFacade.clanMemberManager(),
+                        applicationFacade.clanSettingsManager(),
+                        applicationFacade.clanRoleRegistry(),
+                        this.messenger
+                )
+        );
 
         this.commandManager.exceptionController().registerHandler(
                 InvalidSyntaxException.class,

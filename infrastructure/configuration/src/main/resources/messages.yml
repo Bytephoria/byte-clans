@@ -1,4 +1,45 @@
 clan:
+  admin:
+    disband:
+      success: "<gradient:#ff5252:#ff1744>Clan</gradient> <gold><bold>{clan}</bold></gold> <gradient:#ff5252:#ff1744>has been disbanded.</gradient>"
+      not-found: "<red>Clan <gold><bold>{clan}</bold></gold> was not found.</red>"
+
+    transfer:
+      success: "<gradient:#00e676:#1de9b6>Clan</gradient> <gold><bold>{clan}</bold></gold> <gradient:#00e676:#1de9b6>ownership has been transferred to</gradient> <gold><bold>{target}</bold></gold>."
+      not-found: "<red>Clan <gold><bold>{clan}</bold></gold> was not found.</red>"
+      target-not-in-clan: "<gold><bold>{target}</bold></gold> <red>is not a member of that clan.</red>"
+      target-is-already-owner: "<gold><bold>{target}</bold></gold> <red>is already the clan owner.</red>"
+
+    kick:
+      success: "<gold><bold>{target}</bold></gold> <red>has been kicked from their clan.</red>"
+      target-not-in-clan: "<gold><bold>{target}</bold></gold> <red>is not in a clan.</red>"
+      cannot-kick-owner: "<red>You cannot kick the <gold><bold>clan owner</bold></gold>.</red>"
+
+    role:
+      success: "<gradient:#00e676:#1de9b6>Role of</gradient> <gold><bold>{target}</bold></gold> <gradient:#00e676:#1de9b6>has been changed to <bold>{role}</bold>.</gradient>"
+      member-not-found: "<gold><bold>{target}</bold></gold> <red>is not in a clan.</red>"
+      already-set: "<gold><bold>{target}</bold></gold> <red>already has that role.</red>"
+      cannot-assign-owner-role: "<red>You cannot assign the <gold><bold>owner</bold></gold> role directly.</red>"
+      not-found: "<red>That role does not exist.</red>"
+
+    display:
+      success: "<gradient:#00e676:#1de9b6>Display name changed to</gradient> {display}."
+      not-found: "<red>Clan <gold><bold>{clan}</bold></gold> was not found.</red>"
+      invalid-content: "<red>Display name content does not match the original clan name.</red>"
+      invalid-characters: "<red>Display name contains <bold>invalid characters</bold>.</red>"
+
+    pvp-mode:
+      success: "<gradient:#00e676:#1de9b6>PvP mode of clan</gradient> <gold><bold>{clan}</bold></gold> <gradient:#00e676:#1de9b6>has been set to <bold>{mode}</bold>.</gradient>"
+      not-found: "<red>Clan <gold><bold>{clan}</bold></gold> was not found.</red>"
+      already-in-mode: "<red>That clan is already in that PvP mode.</red>"
+      invalid: "<red>That PvP mode does not exist.</red>"
+
+    invite-state:
+      success: "<gradient:#00e676:#1de9b6>Invite state of clan</gradient> <gold><bold>{clan}</bold></gold> <gradient:#00e676:#1de9b6>has been set to <bold>{state}</bold>.</gradient>"
+      not-found: "<red>Clan <gold><bold>{clan}</bold></gold> was not found.</red>"
+      already-set: "<red>That clan is already in that invite state.</red>"
+      invalid: "<red>That invite state does not exist.</red>"
+
   create:
     success: "<gradient:#00e676:#1de9b6>The clan</gradient> <gold><bold>{clan}</bold></gold> <gradient:#00e676:#1de9b6>has been created successfully.</gradient>"
     already-in-clan: "<red>You are already in a <bold>clan</bold>.</red>"

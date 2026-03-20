@@ -11,6 +11,7 @@ import team.bytephoria.byteclans.api.util.response.context.ResponseContext;
 import team.bytephoria.byteclans.core.clan.DefaultClanOwnerData;
 import team.bytephoria.byteclans.core.factory.ClanMemberFactory;
 import team.bytephoria.byteclans.core.registry.DefaultClanRoleRegistry;
+import team.bytephoria.byteclans.core.util.ClanNameUUID;
 import team.bytephoria.byteclans.core.util.IdentityCachedMap;
 import team.bytephoria.byteclans.spi.eventbus.ClanEventBus;
 import team.bytephoria.byteclans.spi.storage.ClanMemberStorage;
@@ -105,6 +106,16 @@ public final class DefaultClanMemberManager implements ClanMemberManager {
 
                 this.thisInstance().clanMemberStorage.deleteByUniqueId(memberUniqueId);
                 return Response.success(ClanKickResult.SUCCESS);
+            }
+
+            @Override
+            public Response<ClanTransferResult> transfer(
+                    final @NotNull String clanName,
+                    final @NotNull UUID newOwnerUniqueId,
+                    final @NotNull String newOwnerName
+            ) {
+                final UUID clanUniqueId = ClanNameUUID.from(clanName);
+                return this.transfer(clanUniqueId, newOwnerUniqueId, newOwnerName);
             }
 
             @Override
