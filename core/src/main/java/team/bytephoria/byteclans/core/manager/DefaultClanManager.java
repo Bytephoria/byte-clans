@@ -91,7 +91,7 @@ public final class DefaultClanManager implements ClanManager {
                 if (clan == null) {
                     final boolean exists = this.thisInstance().clanStorage.existsByUniqueId(clanUniqueId);
                     if (!exists) {
-                        return ResponseContext.failure(ClanDisbandResult.NOT_FOUND);
+                        return ResponseContext.failure(ClanDisbandResult.NOT_EXISTS);
                     }
 
                     this.thisInstance().clanStorage.deleteByUniqueId(clanUniqueId);

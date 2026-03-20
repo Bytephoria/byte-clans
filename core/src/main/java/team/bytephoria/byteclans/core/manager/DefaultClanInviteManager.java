@@ -55,7 +55,7 @@ public final class DefaultClanInviteManager implements ClanInviteManager {
 
         final Clan targetClan = this.clanCache.get(clanInvitation.clanUniqueId());
         if (targetClan == null) {
-            return ResponseContext.failure(ClanInviteAcceptResult.CLAN_NOT_EXISTS);
+            return ResponseContext.failure(ClanInviteAcceptResult.NOT_EXISTS);
         }
 
         if (!this.clanEventBus.callPreInviteAccept(clanPlayer, clanInvitation, targetClan)) {

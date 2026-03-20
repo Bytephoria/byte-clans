@@ -6,6 +6,6 @@ public enum ClanDisbandResult {
     CANCELLED,
     NOT_IN_CLAN,
     INSUFFICIENT_ROLE,
-    NOT_FOUND
+    NOT_EXISTS
 
 }

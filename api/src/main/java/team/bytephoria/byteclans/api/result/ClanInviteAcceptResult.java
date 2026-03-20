@@ -7,6 +7,6 @@ public enum ClanInviteAcceptResult {
     NO_PENDING_INVITE,
     ALREADY_IN_CLAN,
     CLAN_FULL,
-    CLAN_NOT_EXISTS
+    NOT_EXISTS
 
 }

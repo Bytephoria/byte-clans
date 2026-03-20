@@ -70,8 +70,7 @@ public final class ClanAdminCommands {
 
             this.paperPlugin.runMainThread(() -> {
                 switch (result) {
-                    case SUCCESS -> this.messenger.sendPathMessage(player, path, Map.of("clan", clanName));
-                    case NOT_FOUND -> this.messenger.sendPathMessage(player, path, Map.of("clan", clanName));
+                    case SUCCESS, NOT_EXISTS -> this.messenger.sendPathMessage(player, path, Map.of("clan", clanName));
                 }
             });
         });
@@ -96,7 +95,7 @@ public final class ClanAdminCommands {
 
             this.paperPlugin.runMainThread(() -> {
                 switch (result) {
-                    case SUCCESS, CLAN_NOT_FOUND, NOT_IN_CLAN, TARGET_IS_ALREADY_OWNER -> this.messenger.sendPathMessage(
+                    case SUCCESS, NOT_FOUND, NOT_IN_CLAN, TARGET_IS_ALREADY_OWNER -> this.messenger.sendPathMessage(
                             player,
                             path,
                             Map.of("clan", clanName, "target", targetPlayer.getName())
