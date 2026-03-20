@@ -99,9 +99,9 @@ tasks {
         relocate("org.spongepowered.configurate", "$librariesPackage.configurate")
         relocate("io.leangen.geantyref", "$librariesPackage.geantyref")
 
-        archiveBaseName.set(getProjectName(rootProject.name))
+        archiveBaseName.set("${getProjectName(rootProject.name)}-${project.name}")
         archiveVersion.set(rootProject.version.toString())
-        archiveClassifier.set(project.name)
+        archiveClassifier.set("")
 
         minimize()
     }

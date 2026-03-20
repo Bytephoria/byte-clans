@@ -80,9 +80,9 @@ tasks {
 
         relocate("org.bstats", "${rootProject.group}.${rootProject.name.replace("-", "")}.platform.paper.bstats")
 
-        archiveBaseName.set(getProjectName(rootProject.name))
+        archiveBaseName.set("${getProjectName(rootProject.name)}-${project.name}")
         archiveVersion.set(rootProject.version.toString())
-        archiveClassifier.set(project.name)
+        archiveClassifier.set("")
 
     }
 
