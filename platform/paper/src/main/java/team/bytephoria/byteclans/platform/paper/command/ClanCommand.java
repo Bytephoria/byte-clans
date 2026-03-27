@@ -451,7 +451,7 @@ public final class ClanCommand {
         switch (result) {
             case SUCCESS -> {
                 final String path = switch (clanChatType) {
-                    case CLAN -> "clan.chat.clan.switched";
+                    case CLAN, ALLY -> "clan.chat.clan.switched";
                     case PUBLIC -> "clan.chat.clan.switched-back";
                 };
 

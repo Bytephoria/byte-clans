@@ -9,7 +9,14 @@ public final class Chat {
     @Setting("clan-format")
     private String clanFormat = "";
 
+    @Setting("ally-format")
+    private String allyFormat = "";
+
     public String clanFormat() {
         return this.clanFormat;
+    }
+
+    public String allyFormat() {
+        return this.allyFormat;
     }
 }

@@ -103,7 +103,13 @@ public final class SpigotPlugin extends JavaPlugin {
         this.registerListeners(
                 new PlayerJoinListener(applicationFacade.userLoader()),
                 new PlayerQuitListener(applicationFacade.userLoader()),
-                new AsyncPlayerChatListener(this, this.configuration, this.serializerAdapter, applicationFacade.clanMemberCache()),
+                new AsyncPlayerChatListener(
+                        this,
+                        this.configuration,
+                        this.serializerAdapter,
+                        applicationFacade.clanMemberCache(),
+                        applicationFacade.clanCache()
+                ),
                 new ClanPostCreateAsyncListener(this.configuration)
         );
 

@@ -95,7 +95,12 @@ public final class PaperPlugin extends JavaPlugin {
                         applicationFacade.clanMemberCache(),
                         applicationFacade.combatProcessor()
                 ),
-                new AsyncChatEventListener(this.configuration, this.serializerAdapter, applicationFacade.clanMemberCache()),
+                new AsyncChatEventListener(
+                        this.configuration,
+                        this.serializerAdapter,
+                        applicationFacade.clanMemberCache(),
+                        applicationFacade.clanCache()
+                ),
                 new PlayerDeathListener(
                         applicationFacade.clanMemberCache(),
                         applicationFacade.clanStatisticManager()

@@ -319,8 +319,10 @@ public final class DefaultClanMemberManager implements ClanMemberManager {
             return Response.failure(ClanChangeChatModeResult.ALREADY_IN_MODE);
         }
 
-        if (clanMember.clan().allMembers().size() == 1) {
+        if (chatType == ClanChatType.CLAN && clanMember.clan().allMembers().size() == 1) {
             return Response.failure(ClanChangeChatModeResult.INSUFFICIENT_ONLINE_MEMBERS);
+        } else if (chatType == ClanChatType.ALLY && clanMember.clan().relations().allies().isEmpty()) {
+            return Response.failure(ClanChangeChatModeResult.INSUFFICIENT_ONLINE_ALLIES);
         }
 
         clanMember.chatType(chatType);

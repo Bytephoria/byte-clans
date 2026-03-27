@@ -70,6 +70,7 @@ clan:
 
   chat:
     clan-format: "<gray>[<gradient:gold:yellow>Clan</gradient>]</gray> {role_display} <gold>{player}</gold><gray>:</gray> <white>{message}"
+    ally-format: "<gray>[<gradient:gold:yellow>Ally</gradient>]</gray> {clan_display} <gold>{player}</gold><gray>:</gray> <white>{message}"
 
 # -----------------------------------------------------------
 # Invitation configuration.
