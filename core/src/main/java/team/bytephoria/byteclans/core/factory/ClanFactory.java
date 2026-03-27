@@ -30,7 +30,9 @@ public final class ClanFactory {
                         globalSettings.defaultPvPMode(),
                         globalSettings.defaultInviteState()
                 ),
-                DefaultClanStatistics.allZero());
+                DefaultClanStatistics.allZero(),
+                new DefaultClanRelations()
+        );
     }
 
     public @NotNull Clan create(final @NotNull ClanView clanView) {
@@ -40,7 +42,9 @@ public final class ClanFactory {
                 null,
                 new DefaultClanData(clanView.clanName(), clanView.clanDisplayName(), clanView.createdAt()),
                 new DefaultClanSettings(clanView.maxMembers(), clanView.clanPvPMode(), clanView.clanInviteState()),
-                new DefaultClanStatistics(clanView.kills(), clanView.deaths(), clanView.killsStreak()));
+                new DefaultClanStatistics(clanView.kills(), clanView.deaths(), clanView.killsStreak()),
+                new DefaultClanRelations()
+        );
     }
 
 }

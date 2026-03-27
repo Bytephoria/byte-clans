@@ -285,6 +285,7 @@ public final class MySQLClanStorage extends AbstractSQLClanStorage {
             public @NotNull CompletableFuture<Optional<ClanView>> findByUniqueId(final @NotNull UUID uniqueId) {
                 return CompletableFuture.supplyAsync(() -> this.instance().findByUniqueId(uniqueId), this.instance().executorService);
             }
+
         };
     }
 }

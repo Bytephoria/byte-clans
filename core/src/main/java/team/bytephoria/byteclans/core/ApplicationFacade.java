@@ -9,22 +9,22 @@ import team.bytephoria.byteclans.api.manager.*;
 import team.bytephoria.byteclans.api.validator.ClanDisplayNameValidator;
 import team.bytephoria.byteclans.api.validator.ClanNameValidator;
 import team.bytephoria.byteclans.core.cache.ClanInvitationCache;
+import team.bytephoria.byteclans.core.cache.ClanRelationAllyRequestCache;
 import team.bytephoria.byteclans.core.factory.ClanFactory;
 import team.bytephoria.byteclans.core.factory.ClanMemberFactory;
 import team.bytephoria.byteclans.core.loader.DefaultClanLoader;
 import team.bytephoria.byteclans.core.loader.DefaultUserLoader;
 import team.bytephoria.byteclans.core.manager.*;
 import team.bytephoria.byteclans.core.processor.DefaultClanCombatProcessor;
-import team.bytephoria.byteclans.core.validator.DefaultClanDisplayNameValidator;
-import team.bytephoria.byteclans.core.validator.DefaultClanNameValidator;
 import team.bytephoria.byteclans.core.registry.DefaultClanRoleRegistry;
 import team.bytephoria.byteclans.core.util.IdentityCachedMap;
+import team.bytephoria.byteclans.core.validator.DefaultClanDisplayNameValidator;
+import team.bytephoria.byteclans.core.validator.DefaultClanNameValidator;
 import team.bytephoria.byteclans.spi.eventbus.ClanEventBus;
 import team.bytephoria.byteclans.spi.loader.ClanLoader;
 import team.bytephoria.byteclans.spi.loader.UserLoader;
 import team.bytephoria.byteclans.spi.processors.ClanCombatProcessor;
-import team.bytephoria.byteclans.spi.storage.ClanMemberStorage;
-import team.bytephoria.byteclans.spi.storage.ClanStorage;
+import team.bytephoria.byteclans.spi.storage.*;
 import team.bytephoria.byteclans.spi.storage.transaction.TransactionManager;
 
 import java.util.concurrent.ConcurrentHashMap;
@@ -37,6 +37,8 @@ public final class ApplicationFacade {
     private final DefaultClanRoleRegistry clanRoleRegistry;
 
     private final ClanInvitationCache clanInvitationCache;
+    private final ClanRelationAllyRequestCache clanRelationAllyRequestCache;
+
     private final ClanGlobalSettings clanGlobalSettings;
 
     private final ClanManager clanManager;
@@ -44,6 +46,8 @@ public final class ApplicationFacade {
     private final ClanInviteManager clanInviteManager;
     private final ClanSettingsManager clanSettingsManager;
     private final ClanStatisticManager clanStatisticManager;
+    private final ClanRelationManager clanRelationManager;
+    private final ClanRelationAllyRequestManager clanRelationAllyRequestManager;
 
     private final ClanCombatProcessor combatProcessor;
 
@@ -62,7 +66,9 @@ public final class ApplicationFacade {
             final @NotNull ClanMemberStorage clanMemberStorage,
             final @NotNull ClanEventBus clanEventBus,
             final @Nullable ClanInvitationCache clanInvitationCache,
-            final @NotNull TransactionManager transactionManager
+            final @NotNull TransactionManager transactionManager,
+            final @NotNull ClanAllyStorage clanAllyStorage,
+            final @NotNull ClanEnemyStorage clanEnemyStorage
     ) {
 
         this.clanCache = new IdentityCachedMap<>(new ConcurrentHashMap<>());
@@ -73,6 +79,7 @@ public final class ApplicationFacade {
         this.clanMemberFactory = new ClanMemberFactory();
 
         this.clanInvitationCache = clanInvitationCache != null ? clanInvitationCache : new ClanInvitationCache();
+        this.clanRelationAllyRequestCache = new ClanRelationAllyRequestCache();
         this.clanGlobalSettings = clanGlobalSettings;
 
         this.clanNameValidator = new DefaultClanNameValidator(clanGlobalSettings, clanStorage);
@@ -120,12 +127,29 @@ public final class ApplicationFacade {
                 this.clanDisplayNameValidator
         );
 
+        this.clanRelationManager = new DefaultClanRelationManager(
+                this.clanCache,
+                transactionManager,
+                clanEventBus,
+                clanAllyStorage,
+                clanEnemyStorage
+        );
+
+        this.clanRelationAllyRequestManager = new DefaultClanRelationAllyRequestManager(
+                this.clanRelationAllyRequestCache,
+                this.clanRelationManager,
+                this.clanCache,
+                clanEventBus
+        );
+
         this.combatProcessor = new DefaultClanCombatProcessor(clanEventBus);
         this.clanLoader = new DefaultClanLoader(
                 this.clanCache,
                 this.clanMemberCache,
                 clanStorage,
-                this.clanFactory
+                this.clanFactory,
+                clanAllyStorage,
+                clanEnemyStorage
         );
 
         this.userLoader = new DefaultUserLoader(
@@ -154,6 +178,14 @@ public final class ApplicationFacade {
         return this.clanInvitationCache;
     }
 
+    public ClanRelationAllyRequestCache clanRelationAllyRequestCache() {
+        return this.clanRelationAllyRequestCache;
+    }
+
+    public ClanRelationAllyRequestManager clanRelationAllyRequestManager() {
+        return this.clanRelationAllyRequestManager;
+    }
+
     public ClanGlobalSettings clanGlobalSettings() {
         return this.clanGlobalSettings;
     }
@@ -176,6 +208,10 @@ public final class ApplicationFacade {
 
     public ClanStatisticManager clanStatisticManager() {
         return this.clanStatisticManager;
+    }
+
+    public ClanRelationManager clanRelationManager() {
+        return this.clanRelationManager;
     }
 
     public ClanCombatProcessor combatProcessor() {
@@ -205,4 +241,5 @@ public final class ApplicationFacade {
     public ClanDisplayNameValidator clanDisplayNameProcessor() {
         return this.clanDisplayNameValidator;
     }
+
 }

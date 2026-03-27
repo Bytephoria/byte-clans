@@ -15,18 +15,10 @@ import team.bytephoria.byteclans.infrastructure.configuration.configuration.stor
 import team.bytephoria.byteclans.providers.storage.sql.SQLTransactionManager;
 import team.bytephoria.byteclans.providers.storage.sql.config.JdbcCredentials;
 import team.bytephoria.byteclans.providers.storage.sql.config.JdbcPoolConfig;
-import team.bytephoria.byteclans.providers.storage.sql.h2.H2ClanMemberStorage;
-import team.bytephoria.byteclans.providers.storage.sql.h2.H2ClanStorage;
-import team.bytephoria.byteclans.providers.storage.sql.h2.H2StorageConnection;
-import team.bytephoria.byteclans.providers.storage.sql.h2.H2StorageConnectionData;
-import team.bytephoria.byteclans.providers.storage.sql.mysql.MySQLClanMemberStorage;
-import team.bytephoria.byteclans.providers.storage.sql.mysql.MySQLClanStorage;
+import team.bytephoria.byteclans.providers.storage.sql.h2.*;
+import team.bytephoria.byteclans.providers.storage.sql.mysql.*;
 import team.bytephoria.byteclans.platform.commonbukkit.concurrent.AsyncExecutor;
-import team.bytephoria.byteclans.providers.storage.sql.mysql.MySQLStorageConnection;
-import team.bytephoria.byteclans.providers.storage.sql.mysql.MySQLStorageConnectionData;
-import team.bytephoria.byteclans.spi.storage.ClanMemberStorage;
-import team.bytephoria.byteclans.spi.storage.ClanStorage;
-import team.bytephoria.byteclans.spi.storage.StorageConnection;
+import team.bytephoria.byteclans.spi.storage.*;
 import team.bytephoria.byteclans.spi.storage.transaction.TransactionManager;
 
 import java.io.File;
@@ -39,12 +31,15 @@ public final class SpigotBootstrap implements PluginLifecycle {
 
     private SpigotPlugin spigotPlugin;
     private ClanGlobalSettings clanGlobalSettings;
+
     private StorageConnection storageConnection;
     private ClanStorage clanStorage;
     private ClanMemberStorage clanMemberStorage;
+    private ClanAllyStorage clanAllyStorage;
+    private ClanEnemyStorage clanEnemyStorage;
+
     private TransactionManager transactionManager;
     private ApplicationFacade applicationFacade;
-
     private BootstrapContext bootstrapContext;
 
     public SpigotBootstrap(
@@ -87,7 +82,9 @@ public final class SpigotBootstrap implements PluginLifecycle {
                         configuration.invitations().ttl().amount(),
                         configuration.invitations().ttl().unit()
                 ),
-                this.transactionManager
+                this.transactionManager,
+                this.clanAllyStorage,
+                this.clanEnemyStorage
         );
 
     }
@@ -108,6 +105,14 @@ public final class SpigotBootstrap implements PluginLifecycle {
 
         if (this.clanMemberStorage != null) {
             this.clanMemberStorage = null;
+        }
+
+        if (this.clanEnemyStorage != null) {
+            this.clanEnemyStorage = null;
+        }
+
+        if (this.clanAllyStorage != null) {
+            this.clanAllyStorage = null;
         }
 
         if (this.storageConnection != null) {
@@ -167,6 +172,8 @@ public final class SpigotBootstrap implements PluginLifecycle {
                 this.clanStorage = new H2ClanStorage(h2StorageConnection, logger, executorService);
                 this.clanMemberStorage = new H2ClanMemberStorage(h2StorageConnection, logger, executorService);
                 this.transactionManager = new SQLTransactionManager(h2StorageConnection, executorService);
+                this.clanAllyStorage = new H2ClanAllyStorage(h2StorageConnection, logger, executorService);
+                this.clanEnemyStorage = new H2ClanEnemyStorage(h2StorageConnection, logger, executorService);
             }
 
             case "mysql" -> {
@@ -181,6 +188,8 @@ public final class SpigotBootstrap implements PluginLifecycle {
                 this.clanStorage = new MySQLClanStorage(mySQLStorageConnection, logger, executorService);
                 this.clanMemberStorage = new MySQLClanMemberStorage(mySQLStorageConnection, logger, executorService);
                 this.transactionManager = new SQLTransactionManager(mySQLStorageConnection, executorService);
+                this.clanAllyStorage = new MySQLClanAllyStorage(mySQLStorageConnection, logger, executorService);
+                this.clanEnemyStorage = new MySQLClanEnemyStorage(mySQLStorageConnection, logger, executorService);
             }
 
             default -> throw new IllegalArgumentException("Storage type not supported.");

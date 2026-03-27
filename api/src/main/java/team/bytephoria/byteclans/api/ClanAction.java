@@ -10,7 +10,8 @@ public enum ClanAction {
     DISBAND_CLAN,
     RENAME_DISPLAY,
     CHANGE_PVP_MODE,
-    CHANGE_INVITE_STATE
+    CHANGE_INVITE_STATE,
+    MANAGE_DIPLOMACY
     ;
 
 }

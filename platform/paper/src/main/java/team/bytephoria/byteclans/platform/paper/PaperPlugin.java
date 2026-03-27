@@ -25,18 +25,19 @@ import team.bytephoria.byteclans.infrastructure.configuration.ConfigurationLoade
 import team.bytephoria.byteclans.infrastructure.configuration.configuration.Configuration;
 import team.bytephoria.byteclans.infrastructure.configuration.roles.Roles;
 import team.bytephoria.byteclans.platform.commonbukkit.BukkitClanEventBus;
+import team.bytephoria.byteclans.platform.commonbukkit.RoleLoader;
 import team.bytephoria.byteclans.platform.commonbukkit.concurrent.AsyncExecutor;
+import team.bytephoria.byteclans.platform.commonbukkit.listener.ClanPostCreateAsyncListener;
 import team.bytephoria.byteclans.platform.commonbukkit.listener.PlayerJoinListener;
 import team.bytephoria.byteclans.platform.commonbukkit.listener.PlayerQuitListener;
 import team.bytephoria.byteclans.platform.paper.command.ClanAdminCommands;
 import team.bytephoria.byteclans.platform.paper.command.ClanCommand;
+import team.bytephoria.byteclans.platform.paper.command.ClanDiplomacyCommand;
 import team.bytephoria.byteclans.platform.paper.command.ClanInviteCommand;
 import team.bytephoria.byteclans.platform.paper.hook.PlaceholderAPIHook;
 import team.bytephoria.byteclans.platform.paper.listener.AsyncChatEventListener;
-import team.bytephoria.byteclans.platform.commonbukkit.listener.ClanPostCreateAsyncListener;
 import team.bytephoria.byteclans.platform.paper.listener.EntityDamageByEntityListener;
 import team.bytephoria.byteclans.platform.paper.listener.PlayerDeathListener;
-import team.bytephoria.byteclans.platform.commonbukkit.RoleLoader;
 import team.bytephoria.byteclans.platform.paper.message.Messenger;
 
 public final class PaperPlugin extends JavaPlugin {
@@ -79,6 +80,7 @@ public final class PaperPlugin extends JavaPlugin {
 
         if (this.getServer().getPluginManager().getPlugin("PlaceholderAPI") != null) {
             new PlaceholderAPIHook(this).register();
+            this.getSLF4JLogger().info("[PlaceholderAPI] Placeholders registered.");
         }
 
         this.messenger = new Messenger(this.messages, this.serializerAdapter);
@@ -114,22 +116,26 @@ public final class PaperPlugin extends JavaPlugin {
 
         final AnnotationParser<Player> annotationParser = new AnnotationParser<>(this.commandManager, Player.class);
 
-        annotationParser.parse(new ClanCommand(
-                this,
-                this.messenger,
-                applicationFacade.clanManager(),
-                applicationFacade.clanMemberManager(),
-                applicationFacade.clanGlobalSettings(),
-                applicationFacade.clanCache(),
-                applicationFacade.clanMemberCache()
-        ));
+        annotationParser.parse(
+                new ClanCommand(
+                        this,
+                        this.messenger,
+                        applicationFacade.clanManager(),
+                        applicationFacade.clanMemberManager(),
+                        applicationFacade.clanGlobalSettings(),
+                        applicationFacade.clanCache(),
+                        applicationFacade.clanMemberCache()
+                )
+        );
 
-        annotationParser.parse(new ClanInviteCommand(
-                applicationFacade.clanInviteManager(),
-                this.messenger,
-                applicationFacade.clanCache(),
-                applicationFacade.clanMemberCache()
-        ));
+        annotationParser.parse(
+                new ClanInviteCommand(
+                        applicationFacade.clanInviteManager(),
+                        this.messenger,
+                        applicationFacade.clanCache(),
+                        applicationFacade.clanMemberCache()
+                )
+        );
 
         annotationParser.parse(
                 new ClanAdminCommands(
@@ -141,6 +147,17 @@ public final class PaperPlugin extends JavaPlugin {
                         applicationFacade.clanSettingsManager(),
                         applicationFacade.clanRoleRegistry(),
                         this.messenger
+                )
+        );
+
+        annotationParser.parse(
+                new ClanDiplomacyCommand(
+                        this.messenger,
+                        applicationFacade.clanCache(),
+                        applicationFacade.clanMemberCache(),
+                        applicationFacade.clanRelationManager(),
+                        applicationFacade.clanRelationAllyRequestManager()
+
                 )
         );
 

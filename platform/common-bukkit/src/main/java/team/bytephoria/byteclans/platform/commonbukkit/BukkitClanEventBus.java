@@ -4,15 +4,22 @@ import org.bukkit.Bukkit;
 import org.bukkit.event.Cancellable;
 import org.bukkit.event.Event;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 import team.bytephoria.byteclans.api.*;
 import team.bytephoria.byteclans.bukkitapi.BukkitClanPlayer;
 import team.bytephoria.byteclans.bukkitapi.event.*;
 import team.bytephoria.byteclans.bukkitapi.event.create.ClanPostCreateAsyncEvent;
 import team.bytephoria.byteclans.bukkitapi.event.create.ClanPreCreateAsyncEvent;
+import team.bytephoria.byteclans.bukkitapi.event.diplomacy.*;
+import team.bytephoria.byteclans.bukkitapi.event.diplomacy.request.ClanAllyRequestAcceptEvent;
+import team.bytephoria.byteclans.bukkitapi.event.diplomacy.request.ClanAllyRequestDeclineEvent;
+import team.bytephoria.byteclans.bukkitapi.event.diplomacy.request.ClanAllyRequestSendEvent;
 import team.bytephoria.byteclans.bukkitapi.event.invite.*;
 import team.bytephoria.byteclans.bukkitapi.event.member.*;
 import team.bytephoria.byteclans.bukkitapi.event.settings.*;
 import team.bytephoria.byteclans.spi.eventbus.ClanEventBus;
+
+import java.util.UUID;
 
 public final class BukkitClanEventBus implements ClanEventBus {
 
@@ -181,6 +188,78 @@ public final class BukkitClanEventBus implements ClanEventBus {
             final @NotNull ClanRole nextRole
     ) {
         return this.callEvent(new ClanDemoteEvent(executorMember, targetMember, currentRole, nextRole));
+    }
+
+    @Override
+    public boolean callClanAllyAddEvent(
+            final @NotNull ClanMember executorMember,
+            final @NotNull Clan targetClan
+    ) {
+        return this.callEvent(new ClanllyAddEvent(executorMember, targetClan));
+    }
+
+    @Override
+    public boolean callClanAllyRemoveEvent(
+            final @NotNull ClanMember clanMember,
+            final @NotNull Clan targetClan
+    ) {
+        return this.callEvent(new ClanAllyRemoveEvent(clanMember, targetClan));
+    }
+
+    @Override
+    public boolean callClanEnemyAddEvent(
+            final @NotNull ClanMember clanMember,
+            final @NotNull Clan targetClan
+    ) {
+        return this.callEvent(new ClanEnemyAddEvent(clanMember, targetClan));
+    }
+
+    @Override
+    public boolean callClanEnemyRemoveEvent(
+            final @NotNull ClanMember clanMember,
+            final @NotNull Clan targetClan
+    ) {
+        return this.callEvent(new ClanEnemyRemoveEvent(clanMember, targetClan));
+    }
+
+    @Override
+    public void callClanAllyRequestDeclineEvent(final @NotNull ClanMember clanMember, @NotNull UUID targetClanUniqueId) {
+        this.callEvent(new ClanAllyRequestDeclineEvent(clanMember, targetClanUniqueId));
+    }
+
+    @Override
+    public void callClanAllyRequestAcceptEvent(final @NotNull ClanMember clanMember, final @NotNull Clan targetClan) {
+        this.callEvent(new ClanAllyRequestAcceptEvent(clanMember, targetClan));
+    }
+
+    @Override
+    public void callClanTensionAddEvent(
+            final @NotNull UUID affectedClanUniqueId,
+            final @NotNull String affectedClanName,
+            final @Nullable Clan affectedClan,
+            final @NotNull Clan targetClan,
+            final @NotNull Clan sourceClan
+    ) {
+        this.callEvent(new ClanTensionAddEvent(affectedClanUniqueId, affectedClanName, affectedClan, targetClan, sourceClan));
+    }
+
+    @Override
+    public void callClanTensionRemoveEvent(
+            final @NotNull UUID affectedClanUniqueId,
+            final @NotNull String affectedClanName,
+            final @Nullable Clan affectedClan,
+            final @NotNull Clan targetClan,
+            final @NotNull Clan sourceClan
+    ) {
+        this.callEvent(new ClanTensionRemoveEvent(affectedClanUniqueId, affectedClanName, affectedClan, targetClan, sourceClan));
+    }
+
+    @Override
+    public boolean callClanAllyRequestSendEvent(
+            final @NotNull ClanMember clanMember,
+            final @NotNull Clan targetClan
+    ) {
+        return this.callEvent(new ClanAllyRequestSendEvent(clanMember, targetClan));
     }
 
     BukkitClanPlayer ensureBukkitPlayer(final @NotNull ClanPlayer clanPlayer) {

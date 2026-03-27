@@ -20,6 +20,8 @@ public interface Clan extends Identity {
 
     @NotNull ClanStatistics statistics();
 
+    @NotNull ClanRelations relations();
+
     @UnmodifiableView
     Collection<ClanMember> members();
 

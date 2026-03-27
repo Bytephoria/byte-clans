@@ -25,7 +25,7 @@ public final class DefaultClanCombatProcessor implements ClanCombatProcessor {
         final Clan clan = damagerClanMember.clan();
         final Clan targetClan = damagedClanMember.clan();
 
-        if (clan != targetClan) {
+        if (clan != targetClan && !clan.relations().isAlly(targetClan.uniqueId())) {
             return DamageResult.ALLOW;
         }
 

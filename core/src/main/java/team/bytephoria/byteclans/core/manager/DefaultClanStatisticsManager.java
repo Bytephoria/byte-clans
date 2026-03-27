@@ -20,7 +20,6 @@ public final class DefaultClanStatisticsManager implements ClanStatisticManager 
     public @NotNull Response<Integer> addKills(final @NotNull Clan clan, final int amount) {
         final ClanStatistics clanStatistics = clan.statistics();
         final int finalAmount = clanStatistics.kills() + amount;
-
         clanStatistics.kills(finalAmount);
         this.clanStorage.async().update(ClanEntry.from(clan), ClanField.KILLS);
         return Response.success(finalAmount);

@@ -31,6 +31,7 @@ import team.bytephoria.byteclans.platform.commonbukkit.listener.PlayerJoinListen
 import team.bytephoria.byteclans.platform.commonbukkit.listener.PlayerQuitListener;
 import team.bytephoria.byteclans.platform.spigot.command.ClanAdminCommands;
 import team.bytephoria.byteclans.platform.spigot.command.ClanCommand;
+import team.bytephoria.byteclans.platform.spigot.command.ClanDiplomacyCommand;
 import team.bytephoria.byteclans.platform.spigot.command.ClanInviteCommand;
 import team.bytephoria.byteclans.platform.spigot.hook.PlaceholderAPIHook;
 import team.bytephoria.byteclans.platform.spigot.listener.AsyncPlayerChatListener;
@@ -174,6 +175,17 @@ public final class SpigotPlugin extends JavaPlugin {
                         applicationFacade.clanSettingsManager(),
                         applicationFacade.clanRoleRegistry(),
                         this.messenger
+                )
+        );
+
+        annotationParser.parse(
+                new ClanDiplomacyCommand(
+                        this.messenger,
+                        applicationFacade.clanCache(),
+                        applicationFacade.clanMemberCache(),
+                        applicationFacade.clanRelationManager(),
+                        applicationFacade.clanRelationAllyRequestManager()
+
                 )
         );
 

@@ -118,6 +118,72 @@ clan:
       switched-back: "<yellow>You are now chatting in <bold>public chat</bold>.</yellow>"
       not-in-clan: "<red>You are not in a <bold>clan</bold>.</red>"
 
+  diplomacy:
+    not-in-clan: "<red>You are not in a <bold>clan</bold>.</red>"
+    no-permission: "<red>You don't have permission to manage diplomacy.</red>"
+    target-not-found: "<red>That clan was not found.</red>"
+
+    ally:
+      send:
+        success: "<gradient:#00e676:#1de9b6>Alliance request sent to</gradient> <gold><bold>{clan}</bold></gold>."
+        broadcast: "<gold><bold>{player}</bold></gold> <yellow>sent an alliance request to</yellow> <gold><bold>{clan}</bold></gold>."
+        received: "<gold><bold>{player}</bold></gold> <yellow>from</yellow> <gold><bold>{clan}</bold></gold> <yellow>sent you an alliance request.</yellow> <green>/clan ally accept</green> <gray>|</gray> <red>/clan ally decline</red>"
+
+        same-clan: "<red>You cannot send an alliance request to your own clan.</red>"
+        already-allies: "<gold><bold>{clan}</bold></gold> <red>is already your ally.</red>"
+        already-requested: "<red>You already have a pending alliance request with <gold><bold>{clan}</bold></gold>.</red>"
+        in-tension: "<red>You cannot ally a clan you are in tension with.</red>"
+        is-enemy: "<gold><bold>{clan}</bold></gold> <red>is your enemy. Remove them first.</red>"
+        target-has-clan-as-enemy: "<gold><bold>{clan}</bold></gold> <red>has marked your clan as enemy.</red>"
+        insufficient-role: "<red>You don't have permission to manage diplomacy.</red>"
+        cancelled: "<red>Alliance request was cancelled by an external plugin.</red>"
+
+      accept:
+        success: "<gradient:#00e676:#1de9b6>Alliance accepted!</gradient>"
+        broadcast: "<gradient:#00e676:#1de9b6>Your clan is now allied with</gradient> <gold><bold>{clan}</bold></gold>."
+        notified: "<gradient:#00e676:#1de9b6>Your clan is now allied with</gradient> <gold><bold>{clan}</bold></gold>."
+
+        not-requested: "<red>You don't have a pending alliance request.</red>"
+        target-clan-offline: "<red>The clan that sent the request is no longer online.</red>"
+        cancelled: "<red>Alliance accept was cancelled by an external plugin.</red>"
+
+      decline:
+        success: "<yellow>Alliance request declined.</yellow>"
+        broadcast: "<yellow>Alliance request from <gold><bold>{clan}</bold></gold> was declined.</yellow>"
+        notified: "<gold><bold>{player}</bold></gold> <red>declined your alliance request.</red>"
+
+        not-requested: "<red>You don't have a pending alliance request.</red>"
+
+      remove:
+        success: "<gradient:#ff5252:#ff1744>Alliance with</gradient> <gold><bold>{clan}</bold></gold> <gradient:#ff5252:#ff1744>has been removed.</gradient>"
+        broadcast: "<gradient:#ff5252:#ff1744>Your alliance with</gradient> <gold><bold>{clan}</bold></gold> <gradient:#ff5252:#ff1744>has been removed.</gradient>"
+        notified: "<gradient:#ff5252:#ff1744>Your alliance with</gradient> <gold><bold>{clan}</bold></gold> <gradient:#ff5252:#ff1744>has been removed.</gradient>"
+
+        same-clan: "<red>You cannot do that with your own clan.</red>"
+        not-allies: "<gold><bold>{clan}</bold></gold> <red>is not your ally.</red>"
+        cancelled: "<red>Alliance removal was cancelled by an external plugin.</red>"
+
+    enemy:
+      add:
+        success: "<gold><bold>{clan}</bold></gold> <red>has been marked as enemy.</red>"
+        broadcast: "<gold><bold>{clan}</bold></gold> <red>has been marked as enemy.</red>"
+        notified: "<red>Your clan has been marked as enemy by</red> <gold><bold>{clan}</bold></gold>."
+
+        same-clan: "<red>You cannot do that with your own clan.</red>"
+        already-enemies: "<gold><bold>{clan}</bold></gold> <red>is already your enemy.</red>"
+        is-ally: "<gold><bold>{clan}</bold></gold> <red>is your ally. Remove the alliance first.</red>"
+        in-tension: "<red>You cannot mark a clan you are in tension with as enemy.</red>"
+        cancelled: "<red>Enemy add was cancelled by an external plugin.</red>"
+
+      remove:
+        success: "<gradient:#00e676:#1de9b6>Removed</gradient> <gold><bold>{clan}</bold></gold> <gradient:#00e676:#1de9b6>from enemies.</gradient>"
+        broadcast: "<gradient:#00e676:#1de9b6>Your clan is no longer enemies with</gradient> <gold><bold>{clan}</bold></gold>."
+        notified: "<gradient:#00e676:#1de9b6>Your clan is no longer enemies with</gradient> <gold><bold>{clan}</bold></gold>."
+
+        same-clan: "<red>You cannot do that with your own clan.</red>"
+        not-enemies: "<gold><bold>{clan}</bold></gold> <red>is not your enemy.</red>"
+        cancelled: "<red>Enemy removal was cancelled by an external plugin.</red>"
+
 invite:
   send:
     success: "<gradient:#00e676:#1de9b6>Invite sent to</gradient> <gold><bold>{target}</bold></gold>."

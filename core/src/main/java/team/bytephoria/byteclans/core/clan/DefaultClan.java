@@ -17,6 +17,7 @@ public final class DefaultClan implements Clan {
     private final ClanData clanData;
     private final ClanSettings clanSettings;
     private final ClanStatistics clanStatistics;
+    private final ClanRelations clanRelations;
 
     private ClanOwnerData ownerData;
     private ClanMember owner;
@@ -27,7 +28,8 @@ public final class DefaultClan implements Clan {
             final @Nullable ClanMember ownerClanMember,
             final @NotNull ClanData clanData,
             final @NotNull ClanSettings clanSettings,
-            final @NotNull ClanStatistics clanStatistics
+            final @NotNull ClanStatistics clanStatistics,
+            final @NotNull ClanRelations clanRelations
     ) {
         this.uniqueId = clanUniqueId;
         this.ownerData = ownerData;
@@ -36,6 +38,7 @@ public final class DefaultClan implements Clan {
         this.clanSettings = clanSettings;
         this.clanStatistics = clanStatistics;
         this.members = new HashMap<>();
+        this.clanRelations = clanRelations;
     }
 
     @Override
@@ -66,6 +69,11 @@ public final class DefaultClan implements Clan {
     @Override
     public @NonNull ClanStatistics statistics() {
         return this.clanStatistics;
+    }
+
+    @Override
+    public @NotNull ClanRelations relations() {
+        return this.clanRelations;
     }
 
     @Override

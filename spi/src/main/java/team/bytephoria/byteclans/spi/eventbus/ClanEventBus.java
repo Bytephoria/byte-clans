@@ -1,6 +1,7 @@
 package team.bytephoria.byteclans.spi.eventbus;
 
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 import team.bytephoria.byteclans.api.Clan;
 import team.bytephoria.byteclans.api.ClanInvitation;
 import team.bytephoria.byteclans.api.ClanMember;
@@ -8,6 +9,8 @@ import team.bytephoria.byteclans.api.ClanPlayer;
 import team.bytephoria.byteclans.api.ClanInviteState;
 import team.bytephoria.byteclans.api.ClanPvPMode;
 import team.bytephoria.byteclans.api.ClanRole;
+
+import java.util.UUID;
 
 public interface ClanEventBus {
 
@@ -147,5 +150,66 @@ public interface ClanEventBus {
     ) {
         return true;
     }
+
+    default boolean callClanAllyAddEvent(
+            final @NotNull ClanMember executorMember,
+            final @NotNull Clan targetClan
+    ) {
+        return true;
+    }
+
+    default boolean callClanAllyRemoveEvent(
+            final @NotNull ClanMember clanMember,
+            final @NotNull Clan targetClan
+    ) {
+        return true;
+    }
+
+    default boolean callClanEnemyAddEvent(
+            final @NotNull ClanMember clanMember,
+            final @NotNull Clan targetClan
+    ) {
+        return true;
+    }
+
+    default boolean callClanEnemyRemoveEvent(
+            final @NotNull ClanMember clanMember,
+            final @NotNull Clan targetClan
+    ) {
+        return true;
+    }
+
+    default boolean callClanAllyRequestSendEvent(
+            final @NotNull ClanMember clanMember,
+            final @NotNull Clan targetClan
+    ) {
+        return true;
+    }
+
+    void callClanAllyRequestDeclineEvent(
+            final @NotNull ClanMember clanMember,
+            final @NotNull UUID targetClanUniqueId
+    );
+
+    void callClanAllyRequestAcceptEvent(
+            final @NotNull ClanMember clanMember,
+            final @NotNull Clan targetClan
+    );
+
+    void callClanTensionAddEvent(
+            final @NotNull UUID affectedClanUniqueId,
+            final @NotNull String affectedClanName,
+            final @Nullable Clan affectedClan,
+            final @NotNull Clan targetClan,
+            final @NotNull Clan sourceClan
+    );
+
+    void callClanTensionRemoveEvent(
+            final @NotNull UUID affectedClanUniqueId,
+            final @NotNull String affectedClanName,
+            final @Nullable Clan affectedClan,
+            final @NotNull Clan targetClan,
+            final @NotNull Clan sourceClan
+    );
 
 }

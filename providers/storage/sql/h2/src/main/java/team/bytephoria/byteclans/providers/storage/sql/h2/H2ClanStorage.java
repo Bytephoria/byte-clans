@@ -6,8 +6,8 @@ import team.bytephoria.byteclans.api.ClanInviteState;
 import team.bytephoria.byteclans.api.ClanPvPMode;
 import team.bytephoria.byteclans.providers.storage.sql.AbstractSQLClanStorage;
 import team.bytephoria.byteclans.providers.storage.sql.AbstractSQLStorageConnection;
-import team.bytephoria.byteclans.spi.storage.field.ClanField;
 import team.bytephoria.byteclans.spi.storage.entry.ClanEntry;
+import team.bytephoria.byteclans.spi.storage.field.ClanField;
 import team.bytephoria.byteclans.spi.storage.view.ClanView;
 
 import java.sql.*;
@@ -286,6 +286,7 @@ public final class H2ClanStorage extends AbstractSQLClanStorage {
             public @NotNull CompletableFuture<Optional<ClanView>> findByUniqueId(final @NotNull UUID uniqueId) {
                 return CompletableFuture.supplyAsync(() -> this.instance().findByUniqueId(uniqueId), this.instance().executorService);
             }
+
         };
     }
 }
