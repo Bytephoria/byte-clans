@@ -113,6 +113,7 @@ clan:
     invalid-mode: "<red>That chat mode <bold>does not exist</bold>.</red>"
     already-in-mode: "<red>You are already in that chat mode.</red>"
     insufficient-online-members: "<red>There are not enough <bold>online clan members</bold>.</red>"
+    insufficient-online-allies: "<red>There are not enough <bold>online clan allies</bold>.</red>"
     clan:
       switched: "<gradient:gold:yellow>You are now chatting in <bold>clan chat</bold>.</gradient>"
       switched-back: "<yellow>You are now chatting in <bold>public chat</bold>.</yellow>"

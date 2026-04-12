@@ -24,6 +24,7 @@ import team.bytephoria.byteclans.spi.storage.transaction.TransactionManager;
 import team.bytephoria.byteclans.spi.storage.view.ClanMemberView;
 import team.bytephoria.byteclans.spi.storage.view.ClanView;
 
+import java.util.Collection;
 import java.util.Optional;
 import java.util.UUID;
 
@@ -321,8 +322,20 @@ public final class DefaultClanMemberManager implements ClanMemberManager {
 
         if (chatType == ClanChatType.CLAN && clanMember.clan().allMembers().size() == 1) {
             return Response.failure(ClanChangeChatModeResult.INSUFFICIENT_ONLINE_MEMBERS);
-        } else if (chatType == ClanChatType.ALLY && clanMember.clan().relations().allies().isEmpty()) {
-            return Response.failure(ClanChangeChatModeResult.INSUFFICIENT_ONLINE_ALLIES);
+        } else if (chatType == ClanChatType.ALLY) {
+            final ClanRelations clanRelations = clanMember.clan().relations();
+            final Collection<ClanRelation> allies = clanRelations.allies();
+            if (allies.isEmpty()) {
+                return Response.failure(ClanChangeChatModeResult.NOT_HAVE_ALLIES);
+            } else {
+                final boolean hasAtLeastOne = allies.stream().anyMatch(
+                        clanRelation -> this.clanCache.get(clanRelation.clanUniqueId()) != null
+                );
+
+                if (!hasAtLeastOne) {
+                    return Response.failure(ClanChangeChatModeResult.INSUFFICIENT_ONLINE_ALLIES);
+                }
+            }
         }
 
         clanMember.chatType(chatType);
