@@ -158,6 +158,7 @@ public final class SpigotPlugin extends JavaPlugin {
                 this,
                 this.messenger,
                 applicationFacade.clanManager(),
+                applicationFacade.clanSettingsManager(),
                 applicationFacade.clanMemberManager(),
                 applicationFacade.clanGlobalSettings(),
                 applicationFacade.clanCache(),

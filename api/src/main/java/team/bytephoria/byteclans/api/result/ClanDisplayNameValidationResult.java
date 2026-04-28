@@ -4,6 +4,7 @@ public enum ClanDisplayNameValidationResult {
 
     VALID,
     INVALID_CONTENT,
-    INVALID_CHARACTERS
+    INVALID_CHARACTERS,
+    INVALID_FORMAT,
 
 }

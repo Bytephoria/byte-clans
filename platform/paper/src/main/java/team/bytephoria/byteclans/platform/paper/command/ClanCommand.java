@@ -13,13 +13,15 @@ import org.jspecify.annotations.NonNull;
 import team.bytephoria.byteclans.api.*;
 import team.bytephoria.byteclans.api.manager.ClanManager;
 import team.bytephoria.byteclans.api.manager.ClanMemberManager;
+import team.bytephoria.byteclans.api.manager.ClanSettingsManager;
 import team.bytephoria.byteclans.api.result.*;
 import team.bytephoria.byteclans.api.util.response.Response;
 import team.bytephoria.byteclans.api.util.response.context.ResponseContext;
 import team.bytephoria.byteclans.bukkitapi.BukkitClanPlayer;
+import team.bytephoria.byteclans.bukkitapi.FeaturePermissions;
 import team.bytephoria.byteclans.core.util.IdentityCachedMap;
-import team.bytephoria.byteclans.platform.paper.PaperPlugin;
 import team.bytephoria.byteclans.platform.commonbukkit.concurrent.AsyncExecutor;
+import team.bytephoria.byteclans.platform.paper.PaperPlugin;
 import team.bytephoria.byteclans.platform.paper.message.Messenger;
 
 import java.util.Arrays;
@@ -32,6 +34,7 @@ public final class ClanCommand {
     private final PaperPlugin paperPlugin;
     private final Messenger messenger;
     private final ClanManager clanManager;
+    private final ClanSettingsManager clanSettingsManager;
     private final ClanMemberManager clanMemberManager;
     private final ClanGlobalSettings clanGlobalSettings;
 
@@ -42,6 +45,7 @@ public final class ClanCommand {
             final @NotNull PaperPlugin paperPlugin,
             final @NotNull Messenger messenger,
             final @NotNull ClanManager clanManager,
+            final @NotNull ClanSettingsManager clanSettingsManager,
             final @NotNull ClanMemberManager clanMemberManager,
             final @NotNull ClanGlobalSettings clanGlobalSettings,
             final @NotNull IdentityCachedMap<Clan> clanCache,
@@ -50,6 +54,7 @@ public final class ClanCommand {
         this.paperPlugin = paperPlugin;
         this.messenger = messenger;
         this.clanManager = clanManager;
+        this.clanSettingsManager = clanSettingsManager;
         this.clanMemberManager = clanMemberManager;
         this.clanGlobalSettings = clanGlobalSettings;
 
@@ -58,7 +63,7 @@ public final class ClanCommand {
     }
 
     @Command("clan create <name>")
-    @Permission("byteclans.command.create")
+    @Permission(FeaturePermissions.CREATE_CLAN)
     public void createClan(
             final @NotNull Player player,
             final @NotNull @Argument("name") String clanName
@@ -352,6 +357,26 @@ public final class ClanCommand {
                  CANNOT_PROMOTE_HIGHER_OR_EQUAL_ROLE,
                  CANCELLED -> this.messenger.sendPathMessage(player, path, Map.of("target", target.getName()));
         }
+    }
+
+    @Command("clan display <display>")
+    @Permission(FeaturePermissions.DISPLAY_MODIFY)
+    public void changeDisplay(
+            final @NotNull Player player,
+            final @Argument("display") String display
+    ) {
+
+        final ClanMember clanMember = this.clanMemberCache.get(player.getUniqueId());
+        if (clanMember == null) {
+            this.messenger.sendPathMessage(player, "clan.display.not-in-clan");
+            return;
+        }
+
+        final Response<ClanRenameDisplayResult> response = this.clanSettingsManager.renameDisplay(clanMember, display);
+        final ClanRenameDisplayResult result = response.result();
+        final String path = "clan.display." + this.resolveEnumName(result);
+
+        this.messenger.sendPathMessage(player, path, Map.of("current_display", display, "new_display", display));
     }
 
     @Command("clan demote <target>")

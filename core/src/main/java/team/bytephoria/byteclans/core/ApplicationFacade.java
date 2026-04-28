@@ -68,7 +68,8 @@ public final class ApplicationFacade {
             final @Nullable ClanInvitationCache clanInvitationCache,
             final @NotNull TransactionManager transactionManager,
             final @NotNull ClanAllyStorage clanAllyStorage,
-            final @NotNull ClanEnemyStorage clanEnemyStorage
+            final @NotNull ClanEnemyStorage clanEnemyStorage,
+            final @Nullable ClanDisplayNameValidator clanDisplayNameValidator
     ) {
 
         this.clanCache = new IdentityCachedMap<>(new ConcurrentHashMap<>());
@@ -83,7 +84,7 @@ public final class ApplicationFacade {
         this.clanGlobalSettings = clanGlobalSettings;
 
         this.clanNameValidator = new DefaultClanNameValidator(clanGlobalSettings, clanStorage);
-        this.clanDisplayNameValidator = new DefaultClanDisplayNameValidator();
+        this.clanDisplayNameValidator = clanDisplayNameValidator == null ? new DefaultClanDisplayNameValidator() : clanDisplayNameValidator;
 
         this.clanMemberManager = new DefaultClanMemberManager(
                 this.clanCache,

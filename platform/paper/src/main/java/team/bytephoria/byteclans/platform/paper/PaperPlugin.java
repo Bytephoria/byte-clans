@@ -126,6 +126,7 @@ public final class PaperPlugin extends JavaPlugin {
                         this,
                         this.messenger,
                         applicationFacade.clanManager(),
+                        applicationFacade.clanSettingsManager(),
                         applicationFacade.clanMemberManager(),
                         applicationFacade.clanGlobalSettings(),
                         applicationFacade.clanCache(),
