@@ -12,6 +12,9 @@ public final class ClanSettings {
     @Setting("defaults")
     private Defaults defaults = new Defaults();
 
+    @Setting("display")
+    private Display display = new Display();
+
     @Setting("chat")
     private Chat chat = new Chat();
 
@@ -21,6 +24,10 @@ public final class ClanSettings {
 
     public Defaults defaults() {
         return this.defaults;
+    }
+
+    public Display display() {
+        return this.display;
     }
 
     public Chat chat() {

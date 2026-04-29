@@ -19,6 +19,7 @@ public record ClanView(
         int kills,
         int deaths,
         int killsStreak,
+        Instant displayLastChangedAt,
         Instant createdAt
 ) {
 

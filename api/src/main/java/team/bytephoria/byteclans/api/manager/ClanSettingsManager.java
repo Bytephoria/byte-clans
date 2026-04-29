@@ -1,6 +1,7 @@
 package team.bytephoria.byteclans.api.manager;
 
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 import team.bytephoria.byteclans.api.ClanInviteState;
 import team.bytephoria.byteclans.api.ClanMember;
 import team.bytephoria.byteclans.api.ClanPvPMode;
@@ -9,6 +10,7 @@ import team.bytephoria.byteclans.api.result.ClanRenameDisplayResult;
 import team.bytephoria.byteclans.api.result.ClanStatusChangeResult;
 import team.bytephoria.byteclans.api.util.response.Response;
 
+import java.time.Duration;
 import java.util.UUID;
 
 public interface ClanSettingsManager {
@@ -42,6 +44,12 @@ public interface ClanSettingsManager {
     Response<ClanStatusChangeResult> changeInviteStatus(
             final @NotNull ClanMember clanMember,
             final @NotNull ClanInviteState newInviteState
+    );
+
+    Response<ClanRenameDisplayResult> renameDisplay(
+            final @NotNull ClanMember clanMember,
+            final @NotNull String newDisplayName,
+            final @Nullable Duration cooldown
     );
 
     Response<ClanRenameDisplayResult> renameDisplay(

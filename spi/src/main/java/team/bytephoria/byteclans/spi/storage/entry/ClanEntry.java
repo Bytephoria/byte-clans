@@ -22,6 +22,7 @@ public record ClanEntry(
         int kills,
         int deaths,
         int killsStreak,
+        Instant displayLastChangedAt,
         Instant createdAt
 ) {
 
@@ -44,6 +45,7 @@ public record ClanEntry(
                 clan.statistics().kills(),
                 clan.statistics().deaths(),
                 clan.statistics().killsStreak(),
+                clan.data().displayLastChangedAt(),
                 clan.data().createdAt()
         );
     }

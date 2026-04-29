@@ -100,6 +100,7 @@ clan:
   display:
     success: "<green>Display name updated to {new_display}.</green>"
     not-in-clan: "<red>You are not in a clan.</red>"
+    in-cooldown: "<red>Your clan is currently in cooldown to change the display name."
     invalid-content: "<red>Display name content does not match the original clan name.</red>"
     invalid-characters: "<red>Display name contains <bold>invalid characters</bold>.</red>"
     invalid-format: "<red>Display name contains <bold>invalid formatting</bold>.</red>"

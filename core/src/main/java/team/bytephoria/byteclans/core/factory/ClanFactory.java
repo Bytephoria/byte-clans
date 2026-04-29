@@ -24,7 +24,7 @@ public final class ClanFactory {
                 assignedClanId,
                 new DefaultClanOwnerData(owner.name(), owner.uniqueId()),
                 owner,
-                new DefaultClanData(clanName, clanName, Instant.now()),
+                new DefaultClanData(clanName, clanName, null, Instant.now()),
                 new DefaultClanSettings(
                         globalSettings.defaultMaxMembers(),
                         globalSettings.defaultPvPMode(),
@@ -40,7 +40,7 @@ public final class ClanFactory {
                 clanView.clanUniqueId(),
                 new DefaultClanOwnerData(clanView.ownerName(), clanView.ownerUniqueId()),
                 null,
-                new DefaultClanData(clanView.clanName(), clanView.clanDisplayName(), clanView.createdAt()),
+                new DefaultClanData(clanView.clanName(), clanView.clanDisplayName(), clanView.displayLastChangedAt(), clanView.createdAt()),
                 new DefaultClanSettings(clanView.maxMembers(), clanView.clanPvPMode(), clanView.clanInviteState()),
                 new DefaultClanStatistics(clanView.kills(), clanView.deaths(), clanView.killsStreak()),
                 new DefaultClanRelations()

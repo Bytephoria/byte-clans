@@ -68,6 +68,11 @@ clan:
     # Use {clan} as a placeholder for the clan name.
     display: "<rainbow>{clan}</rainbow>"
 
+  display:
+    cooldown:
+      amount: 10                  # Duration before a pending invitation expires.
+      unit: MINUTES               # Time unit for the TTL. Options: SECONDS, MINUTES, HOURS
+
   chat:
     clan-format: "<gray>[<gradient:gold:yellow>Clan</gradient>]</gray> {role_display} <gold>{player}</gold><gray>:</gray> <white>{message}"
     ally-format: "<gray>[<gradient:gold:yellow>Ally</gradient>]</gray> {clan_display} <gold>{player}</gold><gray>:</gray> <white>{message}"

@@ -24,6 +24,7 @@ import team.bytephoria.byteclans.platform.spigot.SpigotPlugin;
 import team.bytephoria.byteclans.platform.commonbukkit.concurrent.AsyncExecutor;
 import team.bytephoria.byteclans.platform.spigot.message.Messenger;
 
+import java.time.Duration;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Locale;
@@ -374,7 +375,8 @@ public final class ClanCommand {
             return;
         }
 
-        final Response<ClanRenameDisplayResult> response = this.clanSettingsManager.renameDisplay(clanMember, display);
+        final Duration duration = this.spigotPlugin.configuration().clan().display().cooldown().toDuration();
+        final Response<ClanRenameDisplayResult> response = this.clanSettingsManager.renameDisplay(clanMember, display, duration);
         final ClanRenameDisplayResult result = response.result();
         final String path = "clan.display." + this.resolveEnumName(result);
 

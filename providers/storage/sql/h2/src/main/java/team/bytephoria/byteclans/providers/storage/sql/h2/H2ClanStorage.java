@@ -44,8 +44,9 @@ public final class H2ClanStorage extends AbstractSQLClanStorage {
                                kills,
                                deaths,
                                kills_streak,
+                               display_last_changed_at,
                                created_at)
-            VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?);
+            VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?);
             """;
 
     private static final String UPDATE_CLAN_QUERY = """
@@ -58,7 +59,8 @@ public final class H2ClanStorage extends AbstractSQLClanStorage {
                 max_members = ?,
                 kills = ?,
                 deaths = ?,
-                kills_streak = ?
+                kills_streak = ?,
+                display_last_changed_at = ?
             WHERE unique_id = ?;
             """;
 
@@ -111,7 +113,8 @@ public final class H2ClanStorage extends AbstractSQLClanStorage {
             preparedStatement.setInt(9, clanEntry.kills());
             preparedStatement.setInt(10, clanEntry.deaths());
             preparedStatement.setInt(11, clanEntry.killsStreak());
-            preparedStatement.setTimestamp(12, Timestamp.from(clanEntry.createdAt()));
+            preparedStatement.setTimestamp(12, Timestamp.from(clanEntry.displayLastChangedAt()));
+            preparedStatement.setTimestamp(13, Timestamp.from(clanEntry.createdAt()));
             preparedStatement.executeUpdate();
 
         } catch (SQLException e) {
@@ -134,7 +137,8 @@ public final class H2ClanStorage extends AbstractSQLClanStorage {
             preparedStatement.setInt(7, clanEntry.kills());
             preparedStatement.setInt(8, clanEntry.deaths());
             preparedStatement.setInt(9, clanEntry.killsStreak());
-            preparedStatement.setObject(10, clanEntry.clanUniqueId(), H2Type.UUID);
+            preparedStatement.setTimestamp(10, Timestamp.from(clanEntry.displayLastChangedAt()));
+            preparedStatement.setObject(11, clanEntry.clanUniqueId(), H2Type.UUID);
             preparedStatement.executeUpdate();
 
         } catch (SQLException e) {
@@ -155,6 +159,7 @@ public final class H2ClanStorage extends AbstractSQLClanStorage {
                     case KILLS ->  "kills = ?";
                     case DEATHS ->  "deaths = ?";
                     case KILLS_STREAK -> "kills_streak = ?";
+                    case DISPLAY_LAST_CHANGED_AT -> "display_last_changed_at = ?";
                 })
                 .collect(Collectors.joining(", "));
 
@@ -177,6 +182,7 @@ public final class H2ClanStorage extends AbstractSQLClanStorage {
                     case KILLS -> preparedStatement.setInt(index++, clanEntry.kills());
                     case DEATHS -> preparedStatement.setInt(index++, clanEntry.deaths());
                     case KILLS_STREAK -> preparedStatement.setInt(index++, clanEntry.killsStreak());
+                    case DISPLAY_LAST_CHANGED_AT -> preparedStatement.setTimestamp(index++, Timestamp.from(clanEntry.displayLastChangedAt()));
                 }
             }
 
@@ -240,6 +246,7 @@ public final class H2ClanStorage extends AbstractSQLClanStorage {
                         resultSet.getInt("kills"),
                         resultSet.getInt("deaths"),
                         resultSet.getInt("kills_streak"),
+                        resultSet.getTimestamp("display_last_changed_at").toInstant(),
                         resultSet.getTimestamp("created_at").toInstant()
                 ));
             }

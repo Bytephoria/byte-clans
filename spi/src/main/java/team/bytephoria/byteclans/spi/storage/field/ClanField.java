@@ -10,6 +10,7 @@ public enum ClanField {
     MAX_MEMBERS,
     KILLS,
     DEATHS,
-    KILLS_STREAK
+    KILLS_STREAK,
+    DISPLAY_LAST_CHANGED_AT
 
 }

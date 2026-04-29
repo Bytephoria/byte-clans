@@ -3,6 +3,7 @@ package team.bytephoria.byteclans.infrastructure.configuration.configuration.inv
 import org.spongepowered.configurate.objectmapping.ConfigSerializable;
 import org.spongepowered.configurate.objectmapping.meta.Setting;
 
+import java.time.Duration;
 import java.util.concurrent.TimeUnit;
 
 @ConfigSerializable
@@ -13,6 +14,10 @@ public final class Ttl {
 
     @Setting("unit")
     private TimeUnit unit = TimeUnit.MINUTES;
+
+    public Duration toDuration() {
+        return Duration.of(this.amount, this.unit.toChronoUnit());
+    }
 
     public int amount() {
         return this.amount;
