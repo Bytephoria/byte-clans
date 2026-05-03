@@ -76,11 +76,12 @@ Please follow the existing code style:
 
 ### Plugin Philosophy
 
-ByteClans is designed to be a **general-purpose** clan plugin that works on any server, regardless of game mode.  
-Pull requests adding features that push the plugin towards a specific game mode — such as clan homes, territory claiming, economy integration, or similar — will be **automatically rejected**.
+ByteClans is designed to be a **general-purpose**  clan plugin that works on any server, regardless of game mode.
+Pull requests that push the plugin toward a specific game mode — such as clan homes, territory claiming, economy integration, or similar — will be automatically rejected.
+If you need those kinds of features, you have two supported paths:
 
-If you need features like those, the right approach is to create an **addon** that depends on ByteClans. The plugin provides a stable API precisely for that purpose.
-
+- **Create an addon** that depends on ByteClans. The plugin provides a stable API specifically for extending functionality without bloating the core.
+- **Fork the project** and adapt it to your needs if your use case requires tighter integration or custom behavior.
 ---
 
 ## License

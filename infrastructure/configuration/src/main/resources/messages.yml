@@ -97,6 +97,15 @@ clan:
     cannot-promote-oneself: "<red>You cannot promote yourself.</red>"
     cancelled: "<red>Promotion was cancelled by an external plugin.</red>"
 
+  display:
+    success: "<green>Display name updated to {new_display}.</green>"
+    not-in-clan: "<red>You are not in a clan.</red>"
+    in-cooldown: "<red>Your clan is currently on cooldown for changing the display name.</red>"
+    invalid-content: "<red>Display name content does not match the original clan name.</red>"
+    invalid-characters: "<red>Display name contains <bold>invalid characters</bold>.</red>"
+    invalid-format: "<red>Display name contains <bold>invalid formatting</bold>.</red>"
+    insufficient-role: "<red>You don't have permission to change the clan display name.</red>"
+
   demote:
     success: "<gradient:#ff5252:#ff1744>{target} has been demoted to {role}.</gradient>"
     received: "<gradient:#ff5252:#ff1744>You have been demoted to {role}.</gradient>"

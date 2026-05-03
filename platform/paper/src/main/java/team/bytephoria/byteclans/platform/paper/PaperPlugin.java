@@ -103,7 +103,9 @@ public final class PaperPlugin extends JavaPlugin {
                 ),
                 new PlayerDeathListener(
                         applicationFacade.clanMemberCache(),
-                        applicationFacade.clanStatisticManager()
+                        applicationFacade.clanManager(),
+                        applicationFacade.clanStatisticManager(),
+                        applicationFacade.clanGlobalSettings()
                 ),
                 new ClanPostCreateAsyncListener(this.configuration)
         );
@@ -126,6 +128,7 @@ public final class PaperPlugin extends JavaPlugin {
                         this,
                         this.messenger,
                         applicationFacade.clanManager(),
+                        applicationFacade.clanSettingsManager(),
                         applicationFacade.clanMemberManager(),
                         applicationFacade.clanGlobalSettings(),
                         applicationFacade.clanCache(),

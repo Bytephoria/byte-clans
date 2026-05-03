@@ -3,9 +3,13 @@ package team.bytephoria.byteclans.platform.spigot;
 import com.zaxxer.hikari.HikariDataSource;
 import org.jetbrains.annotations.NotNull;
 import team.bytephoria.byteclans.api.ClanGlobalSettings;
+import team.bytephoria.byteclans.api.validator.ClanDisplayNameValidator;
+import team.bytephoria.byteclans.bukkitapi.validator.LegacyAmpersandClanDisplayNameValidator;
+import team.bytephoria.byteclans.bukkitapi.validator.MiniMessageClanDisplayNameValidator;
 import team.bytephoria.byteclans.core.ApplicationFacade;
 import team.bytephoria.byteclans.core.DefaultClanGlobalSettings;
 import team.bytephoria.byteclans.core.cache.ClanInvitationCache;
+import team.bytephoria.byteclans.core.validator.DefaultClanDisplayNameValidator;
 import team.bytephoria.byteclans.infrastructure.bootstrap.BootstrapContext;
 import team.bytephoria.byteclans.infrastructure.bootstrap.PluginLifecycle;
 import team.bytephoria.byteclans.infrastructure.configuration.configuration.Configuration;
@@ -37,6 +41,7 @@ public final class SpigotBootstrap implements PluginLifecycle {
     private ClanMemberStorage clanMemberStorage;
     private ClanAllyStorage clanAllyStorage;
     private ClanEnemyStorage clanEnemyStorage;
+    private ClanDisplayNameValidator clanDisplayNameValidator;
 
     private TransactionManager transactionManager;
     private ApplicationFacade applicationFacade;
@@ -62,7 +67,11 @@ public final class SpigotBootstrap implements PluginLifecycle {
                 configuration.clan().defaults().pvpMode(),
                 configuration.clan().defaults().inviteState(),
                 configuration.clan().name().minimumChars(),
-                configuration.clan().name().maximumChars()
+                configuration.clan().name().maximumChars(),
+                configuration.clan().points().limits().minimum(),
+                configuration.clan().points().limits().maximum(),
+                configuration.clan().points().actions().kills(),
+                configuration.clan().points().actions().deaths()
         );
 
         try {
@@ -72,6 +81,12 @@ public final class SpigotBootstrap implements PluginLifecycle {
         }
 
         this.storageConnection.connect();
+
+        this.clanDisplayNameValidator = switch (configuration.settings().serializer().toLowerCase(Locale.ROOT)) {
+            case "mini_message" -> new MiniMessageClanDisplayNameValidator();
+            case "legacy_ampersand"  -> new LegacyAmpersandClanDisplayNameValidator();
+            default -> new DefaultClanDisplayNameValidator();
+        };
 
         this.applicationFacade = new ApplicationFacade(
                 this.clanGlobalSettings,
@@ -84,7 +99,8 @@ public final class SpigotBootstrap implements PluginLifecycle {
                 ),
                 this.transactionManager,
                 this.clanAllyStorage,
-                this.clanEnemyStorage
+                this.clanEnemyStorage,
+                this.clanDisplayNameValidator
         );
 
     }
@@ -123,6 +139,7 @@ public final class SpigotBootstrap implements PluginLifecycle {
             }
         }
 
+        this.clanDisplayNameValidator = null;
         this.storageConnection = null;
         this.clanGlobalSettings = null;
         this.bootstrapContext = null;

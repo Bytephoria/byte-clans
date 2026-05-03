@@ -19,9 +19,11 @@ public record ClanEntry(
         ClanInviteState clanInviteState,
         ClanPvPMode clanPvPMode,
         int maxMembers,
+        int points,
         int kills,
         int deaths,
         int killsStreak,
+        Instant displayLastChangedAt,
         Instant createdAt
 ) {
 
@@ -41,9 +43,11 @@ public record ClanEntry(
                 clan.settings().inviteState(),
                 clan.settings().pvpMode(),
                 clan.settings().maxMembers(),
-                clan.statistics().kills(),
-                clan.statistics().deaths(),
-                clan.statistics().killsStreak(),
+                clan.points().value(),
+                clan.statistics().kills().value(),
+                clan.statistics().deaths().value(),
+                clan.statistics().killsStreak().value(),
+                clan.data().displayLastChangedAt(),
                 clan.data().createdAt()
         );
     }

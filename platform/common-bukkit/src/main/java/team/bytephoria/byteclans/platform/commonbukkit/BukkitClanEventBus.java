@@ -6,6 +6,8 @@ import org.bukkit.event.Event;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import team.bytephoria.byteclans.api.*;
+import team.bytephoria.byteclans.api.statistic.StatisticType;
+import team.bytephoria.byteclans.api.util.Operation;
 import team.bytephoria.byteclans.bukkitapi.BukkitClanPlayer;
 import team.bytephoria.byteclans.bukkitapi.event.*;
 import team.bytephoria.byteclans.bukkitapi.event.create.ClanPostCreateAsyncEvent;
@@ -14,9 +16,14 @@ import team.bytephoria.byteclans.bukkitapi.event.diplomacy.*;
 import team.bytephoria.byteclans.bukkitapi.event.diplomacy.request.ClanAllyRequestAcceptEvent;
 import team.bytephoria.byteclans.bukkitapi.event.diplomacy.request.ClanAllyRequestDeclineEvent;
 import team.bytephoria.byteclans.bukkitapi.event.diplomacy.request.ClanAllyRequestSendEvent;
-import team.bytephoria.byteclans.bukkitapi.event.invite.*;
+import team.bytephoria.byteclans.bukkitapi.event.invite.ClanInviteDeclineEvent;
+import team.bytephoria.byteclans.bukkitapi.event.invite.ClanInviteSendEvent;
+import team.bytephoria.byteclans.bukkitapi.event.invite.ClanPostInviteAcceptEvent;
+import team.bytephoria.byteclans.bukkitapi.event.invite.ClanPreInviteAcceptEvent;
 import team.bytephoria.byteclans.bukkitapi.event.member.*;
-import team.bytephoria.byteclans.bukkitapi.event.settings.*;
+import team.bytephoria.byteclans.bukkitapi.event.settings.ClanInviteStatusChangeEvent;
+import team.bytephoria.byteclans.bukkitapi.event.settings.ClanPvPModeChangeEvent;
+import team.bytephoria.byteclans.bukkitapi.event.settings.ClanRenameDisplayEvent;
 import team.bytephoria.byteclans.spi.eventbus.ClanEventBus;
 
 import java.util.UUID;
@@ -268,6 +275,27 @@ public final class BukkitClanEventBus implements ClanEventBus {
         }
 
         throw new UnsupportedOperationException("ClanPlayer must be an instance of BukkitClanPlayer.");
+    }
+
+    @Override
+    public boolean callClanPointsChangeEvent(
+            final @NotNull Clan clan,
+            final int value,
+            final int oldValue,
+            final int finalValue,
+            final @NotNull Operation operation
+    ) {
+        return this.callEvent(new ClanPointsChangeEvent(clan, value, oldValue, finalValue, operation));
+    }
+
+    @Override
+    public boolean callClanStatisticUpdateEvent(
+            final @NotNull Clan clan,
+            final int value,
+            final @NotNull Operation operation,
+            final @NotNull StatisticType statisticType
+    ) {
+        return this.callEvent(new ClanStatisticChangeEvent(clan, value, operation, statisticType));
     }
 
     boolean callEvent(final @NotNull Event event) {

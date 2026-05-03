@@ -11,6 +11,7 @@ import team.bytephoria.byteclans.spi.storage.field.ClanField;
 import team.bytephoria.byteclans.spi.storage.view.ClanView;
 
 import java.sql.*;
+import java.time.Instant;
 import java.util.Arrays;
 import java.util.Optional;
 import java.util.UUID;
@@ -41,11 +42,13 @@ public final class H2ClanStorage extends AbstractSQLClanStorage {
                                invite_state,
                                pvp_mode,
                                max_members,
+                               points,
                                kills,
                                deaths,
                                kills_streak,
+                               display_last_changed_at,
                                created_at)
-            VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?);
+            VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?);
             """;
 
     private static final String UPDATE_CLAN_QUERY = """
@@ -56,9 +59,11 @@ public final class H2ClanStorage extends AbstractSQLClanStorage {
                 invite_state = ?,
                 pvp_mode = ?,
                 max_members = ?,
+                points = ?,
                 kills = ?,
                 deaths = ?,
-                kills_streak = ?
+                kills_streak = ?,
+                display_last_changed_at = ?
             WHERE unique_id = ?;
             """;
 
@@ -76,11 +81,10 @@ public final class H2ClanStorage extends AbstractSQLClanStorage {
 
     @Override
     public int countClans() {
-        try(
+        try (
                 final Connection connection = this.storageConnection().getConnection();
                 final PreparedStatement preparedStatement = connection.prepareStatement("SELECT COUNT(*) FROM clans");
         ) {
-
             try (final ResultSet resultSet = preparedStatement.executeQuery()) {
                 if (resultSet.next()) {
                     return resultSet.getInt(1);
@@ -88,7 +92,6 @@ public final class H2ClanStorage extends AbstractSQLClanStorage {
 
                 return 0;
             }
-
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
@@ -108,12 +111,20 @@ public final class H2ClanStorage extends AbstractSQLClanStorage {
             preparedStatement.setString(6, clanEntry.clanInviteState().name());
             preparedStatement.setString(7, clanEntry.clanPvPMode().name());
             preparedStatement.setInt(8, clanEntry.maxMembers());
-            preparedStatement.setInt(9, clanEntry.kills());
-            preparedStatement.setInt(10, clanEntry.deaths());
-            preparedStatement.setInt(11, clanEntry.killsStreak());
-            preparedStatement.setTimestamp(12, Timestamp.from(clanEntry.createdAt()));
-            preparedStatement.executeUpdate();
+            preparedStatement.setInt(9, clanEntry.points());
+            preparedStatement.setInt(10, clanEntry.kills());
+            preparedStatement.setInt(11, clanEntry.deaths());
+            preparedStatement.setInt(12, clanEntry.killsStreak());
 
+            final Instant displayLastChangedAt = clanEntry.displayLastChangedAt();
+            if (displayLastChangedAt != null) {
+                preparedStatement.setTimestamp(13, Timestamp.from(displayLastChangedAt));
+            } else {
+                preparedStatement.setNull(13, Types.TIMESTAMP);
+            }
+
+            preparedStatement.setTimestamp(14, Timestamp.from(clanEntry.createdAt()));
+            preparedStatement.executeUpdate();
         } catch (SQLException e) {
             this.logger().log(Level.WARNING, e.getMessage(), e);
         }
@@ -131,12 +142,20 @@ public final class H2ClanStorage extends AbstractSQLClanStorage {
             preparedStatement.setString(4, clanEntry.clanInviteState().name());
             preparedStatement.setString(5, clanEntry.clanPvPMode().name());
             preparedStatement.setInt(6, clanEntry.maxMembers());
-            preparedStatement.setInt(7, clanEntry.kills());
-            preparedStatement.setInt(8, clanEntry.deaths());
-            preparedStatement.setInt(9, clanEntry.killsStreak());
-            preparedStatement.setObject(10, clanEntry.clanUniqueId(), H2Type.UUID);
-            preparedStatement.executeUpdate();
+            preparedStatement.setInt(7, clanEntry.points());
+            preparedStatement.setInt(8, clanEntry.kills());
+            preparedStatement.setInt(9, clanEntry.deaths());
+            preparedStatement.setInt(10, clanEntry.killsStreak());
 
+            final Instant displayLastChangedAt = clanEntry.displayLastChangedAt();
+            if (displayLastChangedAt != null) {
+                preparedStatement.setTimestamp(11, Timestamp.from(displayLastChangedAt));
+            } else {
+                preparedStatement.setNull(11, Types.TIMESTAMP);
+            }
+
+            preparedStatement.setObject(12, clanEntry.clanUniqueId(), H2Type.UUID);
+            preparedStatement.executeUpdate();
         } catch (SQLException e) {
             this.logger().log(Level.WARNING, e.getMessage(), e);
         }
@@ -152,9 +171,11 @@ public final class H2ClanStorage extends AbstractSQLClanStorage {
                     case INVITE_STATE ->  "invite_state = ?";
                     case PVP_MODE -> "pvp_mode = ?";
                     case MAX_MEMBERS -> "max_members = ?";
+                    case POINTS -> "points = ?";
                     case KILLS ->  "kills = ?";
                     case DEATHS ->  "deaths = ?";
                     case KILLS_STREAK -> "kills_streak = ?";
+                    case DISPLAY_LAST_CHANGED_AT -> "display_last_changed_at = ?";
                 })
                 .collect(Collectors.joining(", "));
 
@@ -174,9 +195,11 @@ public final class H2ClanStorage extends AbstractSQLClanStorage {
                     case INVITE_STATE -> preparedStatement.setString(index++, clanEntry.clanInviteState().name());
                     case PVP_MODE -> preparedStatement.setString(index++, clanEntry.clanPvPMode().name());
                     case MAX_MEMBERS -> preparedStatement.setInt(index++, clanEntry.maxMembers());
+                    case POINTS -> preparedStatement.setInt(index++, clanEntry.points());
                     case KILLS -> preparedStatement.setInt(index++, clanEntry.kills());
                     case DEATHS -> preparedStatement.setInt(index++, clanEntry.deaths());
                     case KILLS_STREAK -> preparedStatement.setInt(index++, clanEntry.killsStreak());
+                    case DISPLAY_LAST_CHANGED_AT -> preparedStatement.setTimestamp(index++, Timestamp.from(clanEntry.displayLastChangedAt()));
                 }
             }
 
@@ -194,7 +217,7 @@ public final class H2ClanStorage extends AbstractSQLClanStorage {
                 final PreparedStatement preparedStatement = connection.prepareStatement(DELETE_CLAN_QUERY)
         ) {
             preparedStatement.setObject(1, uniqueId, H2Type.UUID);
-            preparedStatement.executeUpdate();
+            final int rows = preparedStatement.executeUpdate();
         } catch (SQLException e) {
             this.logger().log(Level.WARNING, e.getMessage(), e);
         }
@@ -228,6 +251,7 @@ public final class H2ClanStorage extends AbstractSQLClanStorage {
                     return Optional.empty();
                 }
 
+                final Timestamp displayLastChangedAt = resultSet.getTimestamp("display_last_changed_at");
                 return Optional.of(new ClanView(
                         resultSet.getObject("unique_id", UUID.class),
                         resultSet.getString("owner_name"),
@@ -237,9 +261,11 @@ public final class H2ClanStorage extends AbstractSQLClanStorage {
                         ClanInviteState.valueOf(resultSet.getString("invite_state")),
                         ClanPvPMode.valueOf(resultSet.getString("pvp_mode")),
                         resultSet.getInt("max_members"),
+                        resultSet.getInt("points"),
                         resultSet.getInt("kills"),
                         resultSet.getInt("deaths"),
                         resultSet.getInt("kills_streak"),
+                        displayLastChangedAt != null ? displayLastChangedAt.toInstant() : null,
                         resultSet.getTimestamp("created_at").toInstant()
                 ));
             }

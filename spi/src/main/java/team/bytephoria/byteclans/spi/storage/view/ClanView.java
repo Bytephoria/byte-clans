@@ -16,9 +16,11 @@ public record ClanView(
         ClanInviteState clanInviteState,
         ClanPvPMode clanPvPMode,
         int maxMembers,
+        int points,
         int kills,
         int deaths,
         int killsStreak,
+        Instant displayLastChangedAt,
         Instant createdAt
 ) {
 

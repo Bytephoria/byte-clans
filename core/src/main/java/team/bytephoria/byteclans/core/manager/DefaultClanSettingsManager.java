@@ -2,6 +2,7 @@ package team.bytephoria.byteclans.core.manager;
 
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 import org.jspecify.annotations.NonNull;
 import team.bytephoria.byteclans.api.*;
 import team.bytephoria.byteclans.api.manager.ClanSettingsManager;
@@ -17,6 +18,7 @@ import team.bytephoria.byteclans.spi.storage.ClanStorage;
 import team.bytephoria.byteclans.spi.storage.entry.ClanEntry;
 import team.bytephoria.byteclans.spi.storage.field.ClanField;
 
+import java.time.Duration;
 import java.util.UUID;
 
 public final class DefaultClanSettingsManager implements ClanSettingsManager {
@@ -175,7 +177,8 @@ public final class DefaultClanSettingsManager implements ClanSettingsManager {
     @Override
     public Response<ClanRenameDisplayResult> renameDisplay(
             final @NotNull ClanMember clanMember,
-            final @NotNull String newDisplayName
+            final @NotNull String newDisplayName,
+            final @Nullable Duration cooldown
     ) {
         final Clan clan = clanMember.clan();
         if (clan == null) {
@@ -184,6 +187,10 @@ public final class DefaultClanSettingsManager implements ClanSettingsManager {
 
         if (!clanMember.hasPermission(ClanAction.RENAME_DISPLAY)) {
             return Response.failure(ClanRenameDisplayResult.INSUFFICIENT_ROLE);
+        }
+
+        if (cooldown != null && clan.data().isDisplayInCooldown(cooldown)) {
+            return Response.failure(ClanRenameDisplayResult.IN_COOLDOWN);
         }
 
         final ClanDisplayNameValidationResult result = this.clanDisplayNameValidator.validate(
@@ -201,7 +208,22 @@ public final class DefaultClanSettingsManager implements ClanSettingsManager {
         }
 
         clan.data().displayName(newDisplayName);
-        this.clanStorage.async().update(ClanEntry.from(clan), ClanField.DISPLAY_NAME);
+
+        if (cooldown != null) {
+            clan.data().displayLastChangedAtNow();
+            this.clanStorage.async().update(ClanEntry.from(clan), ClanField.DISPLAY_NAME, ClanField.DISPLAY_LAST_CHANGED_AT);
+        } else {
+            this.clanStorage.async().update(ClanEntry.from(clan), ClanField.DISPLAY_NAME);
+        }
+
         return Response.success(ClanRenameDisplayResult.SUCCESS);
+    }
+
+    @Override
+    public Response<ClanRenameDisplayResult> renameDisplay(
+            final @NotNull ClanMember clanMember,
+            final @NotNull String newDisplayName
+    ) {
+        return this.renameDisplay(clanMember, newDisplayName, null);
     }
 }

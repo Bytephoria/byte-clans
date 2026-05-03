@@ -8,7 +8,7 @@ import java.util.regex.Pattern;
 
 public final class DefaultClanDisplayNameValidator implements ClanDisplayNameValidator {
 
-    private static final Pattern INVALID_CHARS_PATTERN = Pattern.compile("[^a-zA-Z0-9 &:#<>/_\\-!?.]+");
+    private static final Pattern VALID_PATTERN = Pattern.compile("^[a-zA-Z0-9]+$");
 
     @Override
     public ClanDisplayNameValidationResult validate(
@@ -16,16 +16,7 @@ public final class DefaultClanDisplayNameValidator implements ClanDisplayNameVal
             final @NotNull String newDisplayName
     ) {
 
-        if (INVALID_CHARS_PATTERN.matcher(newDisplayName).matches()) {
-            return ClanDisplayNameValidationResult.INVALID_CHARACTERS;
-        }
-
-        final String stripped = newDisplayName
-                .replaceAll("&[0-9a-fk-orA-FK-OR]", "")
-                .replaceAll("&#[0-9a-fA-F]{6}", "")
-                .replaceAll("<[^>]+>", "");
-
-        if (!stripped.equalsIgnoreCase(originalName)) {
+        if (!VALID_PATTERN.matcher(newDisplayName).matches()) {
             return ClanDisplayNameValidationResult.INVALID_CHARACTERS;
         }
 

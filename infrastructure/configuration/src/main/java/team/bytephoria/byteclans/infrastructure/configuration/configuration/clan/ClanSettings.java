@@ -2,6 +2,7 @@ package team.bytephoria.byteclans.infrastructure.configuration.configuration.cla
 
 import org.spongepowered.configurate.objectmapping.ConfigSerializable;
 import org.spongepowered.configurate.objectmapping.meta.Setting;
+import team.bytephoria.byteclans.infrastructure.configuration.configuration.clan.points.Points;
 
 @ConfigSerializable
 public final class ClanSettings {
@@ -12,6 +13,12 @@ public final class ClanSettings {
     @Setting("defaults")
     private Defaults defaults = new Defaults();
 
+    @Setting("display")
+    private Display display = new Display();
+
+    @Setting("points")
+    private Points points = new Points();
+
     @Setting("chat")
     private Chat chat = new Chat();
 
@@ -21,6 +28,14 @@ public final class ClanSettings {
 
     public Defaults defaults() {
         return this.defaults;
+    }
+
+    public Points points() {
+        return this.points;
+    }
+
+    public Display display() {
+        return this.display;
     }
 
     public Chat chat() {

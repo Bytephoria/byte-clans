@@ -6,7 +6,9 @@ public enum ClanRenameDisplayResult {
     CANCELLED,
     INVALID_CONTENT,
     INVALID_CHARACTERS,
+    INVALID_FORMAT,
     INSUFFICIENT_ROLE,
+    IN_COOLDOWN,
     NOT_IN_CLAN,
     NOT_FOUND
 
