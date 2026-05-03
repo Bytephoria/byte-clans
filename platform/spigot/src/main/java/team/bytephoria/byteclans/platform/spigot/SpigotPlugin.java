@@ -121,7 +121,9 @@ public final class SpigotPlugin extends JavaPlugin {
                     ),
                     new V1_20_4PlayerDeathListener(
                             applicationFacade.clanMemberCache(),
-                            applicationFacade.clanStatisticManager()
+                            applicationFacade.clanManager(),
+                            applicationFacade.clanStatisticManager(),
+                            applicationFacade.clanGlobalSettings()
                     )
             );
 
@@ -134,7 +136,9 @@ public final class SpigotPlugin extends JavaPlugin {
                     ),
                     new V1_20_3PlayerDeathListener(
                             applicationFacade.clanMemberCache(),
-                            applicationFacade.clanStatisticManager()
+                            applicationFacade.clanManager(),
+                            applicationFacade.clanStatisticManager(),
+                            applicationFacade.clanGlobalSettings()
                     )
             );
 

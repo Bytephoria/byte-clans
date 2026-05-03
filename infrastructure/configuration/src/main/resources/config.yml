@@ -73,6 +73,22 @@ clan:
       amount: 10                  # Duration before a pending invitation expires.
       unit: MINUTES               # Time unit for the TTL. Options: SECONDS, MINUTES, HOURS
 
+  points:
+    # -----------------------------------------------------------
+    # Global limits for clan points.
+    # -----------------------------------------------------------
+    limits:
+      minimum: 0              # Minimum points a clan can have.
+      maximum: -1             # Maximum points allowed (-1 = unlimited).
+
+    # -----------------------------------------------------------
+    # How points are earned or lost.
+    # All values can be positive or negative.
+    # -----------------------------------------------------------
+    actions:
+      kill: 1              # Points gained per kill.
+      death: -2            # Points lost per death.
+
   chat:
     clan-format: "<gray>[<gradient:gold:yellow>Clan</gradient>]</gray> {role_display} <gold>{player}</gold><gray>:</gray> <white>{message}"
     ally-format: "<gray>[<gradient:gold:yellow>Ally</gradient>]</gray> {clan_display} <gold>{player}</gold><gray>:</gray> <white>{message}"

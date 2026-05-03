@@ -11,6 +11,12 @@ public final class DefaultClanGlobalSettings implements ClanGlobalSettings {
     private final ClanPvPMode defaultClanPvPMode;
     private final ClanInviteState defaultClanInviteState;
 
+    private final int minimumPoints;
+    private final int maximumPoints;
+
+    private final int pointsPerKill;
+    private final int pointsPerDeath;
+
     private final int minimumChars;
     private final int maximumChars;
 
@@ -19,7 +25,11 @@ public final class DefaultClanGlobalSettings implements ClanGlobalSettings {
             final @NotNull ClanPvPMode defaultClanPvPMode,
             final  @NotNull ClanInviteState defaultClanInviteState,
             final int minimumChars,
-            final int maximumChars
+            final int maximumChars,
+            final int minimumPoints,
+            final int maximumPoints,
+            final int pointsPerKill,
+            final int pointsPerDeath
     ) {
         this.defaultMaxMembers = defaultMaxMembers;
 
@@ -28,6 +38,13 @@ public final class DefaultClanGlobalSettings implements ClanGlobalSettings {
 
         this.minimumChars = minimumChars;
         this.maximumChars = maximumChars;
+
+        this.minimumPoints = minimumPoints;
+        this.maximumPoints = maximumPoints;
+
+        this.pointsPerKill = pointsPerKill;
+        this.pointsPerDeath = pointsPerDeath;
+
     }
 
     @Override
@@ -53,5 +70,25 @@ public final class DefaultClanGlobalSettings implements ClanGlobalSettings {
     @Override
     public int maximumNameChars() {
         return this.maximumChars;
+    }
+
+    @Override
+    public int minimumPoints() {
+        return this.minimumPoints;
+    }
+
+    @Override
+    public int maximumPoints() {
+        return this.maximumPoints;
+    }
+
+    @Override
+    public int pointsPerKill() {
+        return this.pointsPerKill;
+    }
+
+    @Override
+    public int pointsPerDeath() {
+        return this.pointsPerDeath;
     }
 }
