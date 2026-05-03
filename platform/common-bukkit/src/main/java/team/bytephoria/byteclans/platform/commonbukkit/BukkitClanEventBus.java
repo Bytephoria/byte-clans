@@ -6,7 +6,7 @@ import org.bukkit.event.Event;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import team.bytephoria.byteclans.api.*;
-import team.bytephoria.byteclans.api.statistic.StatisticType;
+import team.bytephoria.byteclans.api.statistic.StatisticUpdate;
 import team.bytephoria.byteclans.api.util.Operation;
 import team.bytephoria.byteclans.bukkitapi.BukkitClanPlayer;
 import team.bytephoria.byteclans.bukkitapi.event.*;
@@ -289,13 +289,8 @@ public final class BukkitClanEventBus implements ClanEventBus {
     }
 
     @Override
-    public boolean callClanStatisticUpdateEvent(
-            final @NotNull Clan clan,
-            final int value,
-            final @NotNull Operation operation,
-            final @NotNull StatisticType statisticType
-    ) {
-        return this.callEvent(new ClanStatisticChangeEvent(clan, value, operation, statisticType));
+    public boolean callClanStatisticsChangeEvent(final @NotNull Clan clan, final @NotNull StatisticUpdate statisticUpdate) {
+        return this.callEvent(new ClanStatisticChangeEvent(clan, statisticUpdate));
     }
 
     boolean callEvent(final @NotNull Event event) {
