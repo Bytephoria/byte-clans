@@ -67,7 +67,11 @@ public final class SpigotBootstrap implements PluginLifecycle {
                 configuration.clan().defaults().pvpMode(),
                 configuration.clan().defaults().inviteState(),
                 configuration.clan().name().minimumChars(),
-                configuration.clan().name().maximumChars()
+                configuration.clan().name().maximumChars(),
+                configuration.clan().points().limits().minimum(),
+                configuration.clan().points().limits().maximum(),
+                configuration.clan().points().actions().kills(),
+                configuration.clan().points().actions().deaths()
         );
 
         try {

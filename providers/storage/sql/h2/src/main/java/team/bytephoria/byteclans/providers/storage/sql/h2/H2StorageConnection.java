@@ -30,6 +30,7 @@ public final class H2StorageConnection extends AbstractSQLStorageConnection {
                         invite_state VARCHAR(20) NOT NULL,
                         pvp_mode VARCHAR(20) NOT NULL,
                         max_members TINYINT NOT NULL,
+                        points INT NOT NULL,
                         kills INT NOT NULL,
                         deaths INT NOT NULL,
                         kills_streak INT NOT NULL,

@@ -9,6 +9,7 @@ import team.bytephoria.byteclans.api.ClanPlayer;
 import team.bytephoria.byteclans.api.ClanInviteState;
 import team.bytephoria.byteclans.api.ClanPvPMode;
 import team.bytephoria.byteclans.api.ClanRole;
+import team.bytephoria.byteclans.api.util.IntValue;
 
 import java.util.UUID;
 
@@ -211,5 +212,15 @@ public interface ClanEventBus {
             final @NotNull Clan targetClan,
             final @NotNull Clan sourceClan
     );
+
+    default boolean callClanPointsChangeEvent(
+            final @NotNull Clan clan,
+            final int value,
+            final int oldValue,
+            final int finalValue,
+            final @NotNull IntValue.Operation operation
+    ) {
+        return true;
+    }
 
 }
