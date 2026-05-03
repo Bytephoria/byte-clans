@@ -46,7 +46,7 @@ public final class DefaultClanStatisticsManager implements ClanStatisticManager 
             final StatisticType statisticType = statisticUpdate.statisticType();
             final Operation operation = statisticUpdate.operation();
 
-            if (!this.clanEventBus.callClanStatisticUpdateEvent(clan, value, operation, statisticType)) {
+            if (!this.clanEventBus.callClanStatisticsChangeEvent(clan, statisticUpdate)) {
                 continue;
             }
 

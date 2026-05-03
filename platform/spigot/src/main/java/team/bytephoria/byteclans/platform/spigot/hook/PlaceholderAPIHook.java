@@ -89,11 +89,11 @@ public final class PlaceholderAPIHook extends PlaceholderExpansion {
             );
 
             case "kills" -> this.getClanOrEmpty(player, clan ->
-                    Integer.toString(clan.statistics().kills())
+                    clan.statistics().kills().toString()
             );
 
             case "deaths" -> this.getClanOrEmpty(player, clan ->
-                    Integer.toString(clan.statistics().deaths())
+                    clan.statistics().deaths().toString()
             );
 
             case "kdr" -> this.getClanOrEmpty(player, clan ->
@@ -101,7 +101,7 @@ public final class PlaceholderAPIHook extends PlaceholderExpansion {
             );
 
             case "kills-streak" -> this.getClanOrEmpty(player, clan ->
-                    Integer.toString(clan.statistics().killsStreak())
+                    clan.statistics().killsStreak().toString()
             );
 
             case "pvp-mode" -> this.getClanOrEmpty(player, clan ->
