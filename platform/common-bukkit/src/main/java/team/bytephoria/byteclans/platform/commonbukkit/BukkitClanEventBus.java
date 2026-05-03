@@ -6,7 +6,8 @@ import org.bukkit.event.Event;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import team.bytephoria.byteclans.api.*;
-import team.bytephoria.byteclans.api.util.IntValue;
+import team.bytephoria.byteclans.api.statistic.StatisticType;
+import team.bytephoria.byteclans.api.util.Operation;
 import team.bytephoria.byteclans.bukkitapi.BukkitClanPlayer;
 import team.bytephoria.byteclans.bukkitapi.event.*;
 import team.bytephoria.byteclans.bukkitapi.event.create.ClanPostCreateAsyncEvent;
@@ -282,9 +283,19 @@ public final class BukkitClanEventBus implements ClanEventBus {
             final int value,
             final int oldValue,
             final int finalValue,
-            final @NotNull IntValue.Operation operation
+            final @NotNull Operation operation
     ) {
         return this.callEvent(new ClanPointsChangeEvent(clan, value, oldValue, finalValue, operation));
+    }
+
+    @Override
+    public boolean callClanStatisticUpdateEvent(
+            final @NotNull Clan clan,
+            final int value,
+            final @NotNull Operation operation,
+            final @NotNull StatisticType statisticType
+    ) {
+        return this.callEvent(new ClanStatisticChangeEvent(clan, value, operation, statisticType));
     }
 
     boolean callEvent(final @NotNull Event event) {

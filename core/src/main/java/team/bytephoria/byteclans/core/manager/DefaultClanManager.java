@@ -10,7 +10,7 @@ import team.bytephoria.byteclans.api.result.ClanCreateResult;
 import team.bytephoria.byteclans.api.result.ClanDisbandResult;
 import team.bytephoria.byteclans.api.result.ClanNameValidationResult;
 import team.bytephoria.byteclans.api.result.ClanUpdatePointsResult;
-import team.bytephoria.byteclans.api.util.IntValue;
+import team.bytephoria.byteclans.api.util.Operation;
 import team.bytephoria.byteclans.api.util.response.Response;
 import team.bytephoria.byteclans.api.util.response.context.ResponseContext;
 import team.bytephoria.byteclans.api.validator.ClanNameValidator;
@@ -177,7 +177,7 @@ public final class DefaultClanManager implements ClanManager {
     public @NotNull Response<ClanUpdatePointsResult> updatePoints(
             final @NotNull Clan clan,
             final int value,
-            final @NotNull IntValue.Operation operation
+            final @NotNull Operation operation
     ) {
 
         final int oldValue = clan.points().value();

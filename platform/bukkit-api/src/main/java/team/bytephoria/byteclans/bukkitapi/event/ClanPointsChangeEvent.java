@@ -3,9 +3,10 @@ package team.bytephoria.byteclans.bukkitapi.event;
 import org.bukkit.event.Cancellable;
 import org.bukkit.event.Event;
 import org.bukkit.event.HandlerList;
+import org.jetbrains.annotations.NotNull;
 import org.jspecify.annotations.NonNull;
 import team.bytephoria.byteclans.api.Clan;
-import team.bytephoria.byteclans.api.util.IntValue;
+import team.bytephoria.byteclans.api.util.Operation;
 
 public final class ClanPointsChangeEvent extends Event implements Cancellable {
 
@@ -15,7 +16,7 @@ public final class ClanPointsChangeEvent extends Event implements Cancellable {
     private final int value;
     private final int oldValue;
     private final int finalValue;
-    private final IntValue.Operation operation;
+    private final Operation operation;
 
     private boolean cancelled;
 
@@ -24,7 +25,7 @@ public final class ClanPointsChangeEvent extends Event implements Cancellable {
             final int value,
             final int oldValue,
             final int finalValue,
-            final IntValue.Operation operation
+            final @NotNull Operation operation
     ) {
         this.clan = clan;
         this.value = value;
@@ -50,7 +51,7 @@ public final class ClanPointsChangeEvent extends Event implements Cancellable {
         return this.finalValue;
     }
 
-    public IntValue.Operation operation() {
+    public Operation operation() {
         return this.operation;
     }
 
