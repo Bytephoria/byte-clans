@@ -1,4 +1,4 @@
-package team.bytephoria.byteclans.bukkitapi;
+package team.bytephoria.byteclans.platform.commonbukkit;
 
 public final class FeaturePermissions {
 
