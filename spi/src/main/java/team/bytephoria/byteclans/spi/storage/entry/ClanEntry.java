@@ -44,9 +44,9 @@ public record ClanEntry(
                 clan.settings().pvpMode(),
                 clan.settings().maxMembers(),
                 clan.points().value(),
-                clan.statistics().kills(),
-                clan.statistics().deaths(),
-                clan.statistics().killsStreak(),
+                clan.statistics().kills().value(),
+                clan.statistics().deaths().value(),
+                clan.statistics().killsStreak().value(),
                 clan.data().displayLastChangedAt(),
                 clan.data().createdAt()
         );

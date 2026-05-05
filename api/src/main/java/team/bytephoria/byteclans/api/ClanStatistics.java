@@ -1,14 +1,14 @@
 package team.bytephoria.byteclans.api;
 
+import team.bytephoria.byteclans.api.util.IntValue;
+
 public interface ClanStatistics {
 
-    int kills();
-    int deaths();
-    int killsStreak();
-    double kdr();
+    IntValue kills();
+    IntValue deaths();
+    IntValue killsStreak();
 
-    void kills(final int kills);
-    void deaths(final int deaths);
-    void killsStreak(final int killsStreak);
+    /** Calculated value, this is not a persistent data **/
+    double kdr();
 
 }

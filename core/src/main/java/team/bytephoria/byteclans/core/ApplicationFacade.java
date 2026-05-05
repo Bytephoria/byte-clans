@@ -111,7 +111,7 @@ public final class ApplicationFacade {
                 this.clanNameValidator
         );
 
-        this.clanStatisticManager = new DefaultClanStatisticsManager(clanStorage);
+        this.clanStatisticManager = new DefaultClanStatisticsManager(clanEventBus, clanStorage);
 
         this.clanInviteManager = new DefaultClanInviteManager(
                 this.clanMemberCache,

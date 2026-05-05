@@ -2,14 +2,9 @@ package team.bytephoria.byteclans.spi.eventbus;
 
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
-import team.bytephoria.byteclans.api.Clan;
-import team.bytephoria.byteclans.api.ClanInvitation;
-import team.bytephoria.byteclans.api.ClanMember;
-import team.bytephoria.byteclans.api.ClanPlayer;
-import team.bytephoria.byteclans.api.ClanInviteState;
-import team.bytephoria.byteclans.api.ClanPvPMode;
-import team.bytephoria.byteclans.api.ClanRole;
-import team.bytephoria.byteclans.api.util.IntValue;
+import team.bytephoria.byteclans.api.*;
+import team.bytephoria.byteclans.api.statistic.StatisticUpdate;
+import team.bytephoria.byteclans.api.util.Operation;
 
 import java.util.UUID;
 
@@ -218,7 +213,14 @@ public interface ClanEventBus {
             final int value,
             final int oldValue,
             final int finalValue,
-            final @NotNull IntValue.Operation operation
+            final @NotNull Operation operation
+    ) {
+        return true;
+    }
+
+    default boolean callClanStatisticsChangeEvent(
+            final @NotNull Clan clan,
+            final StatisticUpdate statisticUpdate
     ) {
         return true;
     }

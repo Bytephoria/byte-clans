@@ -2,18 +2,22 @@ package team.bytephoria.byteclans.api.manager;
 
 import org.jetbrains.annotations.NotNull;
 import team.bytephoria.byteclans.api.Clan;
+import team.bytephoria.byteclans.api.statistic.StatisticUpdate;
+import team.bytephoria.byteclans.api.result.ClanStatisticUpdateResult;
 import team.bytephoria.byteclans.api.util.response.Response;
+
+import java.util.Collection;
 
 public interface ClanStatisticManager {
 
-    Response<Integer> addKills(final @NotNull Clan clan, final int amount);
+    @NotNull Response<ClanStatisticUpdateResult> update(
+            final @NotNull Clan clan,
+            final @NotNull Collection<StatisticUpdate> updates
+    );
 
-    Response<Integer> addDeaths(final @NotNull Clan clan, final int amount);
-
-    void addKillsAndKs(final @NotNull Clan clan, final int kills, final int ks);
-
-    Response<Integer> addDeathAndResetKs(final @NotNull Clan clan, final int amount);
-
-    void resetKs(final @NotNull Clan clan);
+    @NotNull Response<ClanStatisticUpdateResult> update(
+            final @NotNull Clan clan,
+            final @NotNull StatisticUpdate update
+    );
 
 }

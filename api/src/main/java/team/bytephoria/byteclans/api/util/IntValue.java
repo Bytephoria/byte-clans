@@ -4,22 +4,6 @@ import org.jetbrains.annotations.NotNull;
 
 public final class IntValue {
 
-    public enum Operation {
-
-        SUM,
-        SUB,
-        MUL;
-
-        public int resolve(final int value, final int otherValue) {
-            return switch (this) {
-                case SUM -> value + otherValue;
-                case SUB -> value - otherValue;
-                case MUL -> value * otherValue;
-            };
-        }
-
-    }
-
     private int value;
 
     public IntValue(int value) {
@@ -39,7 +23,7 @@ public final class IntValue {
     }
 
     public void value(final int value, final @NotNull Operation operation) {
-        this.value = operation.resolve(value, value);
+        this.value = operation.resolve(this.value, value);
     }
 
     public void add(final int value) {
@@ -74,4 +58,8 @@ public final class IntValue {
         return --this.value;
     }
 
+    @Override
+    public String toString() {
+        return Integer.toString(this.value);
+    }
 }
