@@ -19,16 +19,16 @@ import team.bytephoria.byteclans.api.util.response.Response;
 import team.bytephoria.byteclans.api.util.response.context.ResponseContext;
 import team.bytephoria.byteclans.bukkitapi.BukkitClanPlayer;
 import team.bytephoria.byteclans.bukkitapi.FeaturePermissions;
+import team.bytephoria.byteclans.core.util.ClanNameUUID;
 import team.bytephoria.byteclans.core.util.IdentityCachedMap;
 import team.bytephoria.byteclans.platform.commonbukkit.concurrent.AsyncExecutor;
 import team.bytephoria.byteclans.platform.paper.PaperPlugin;
 import team.bytephoria.byteclans.platform.paper.message.Messenger;
 
 import java.time.Duration;
-import java.util.Arrays;
-import java.util.List;
-import java.util.Locale;
-import java.util.Map;
+import java.time.ZoneId;
+import java.time.format.DateTimeFormatter;
+import java.util.*;
 
 public final class ClanCommand {
 
@@ -490,10 +490,93 @@ public final class ClanCommand {
         }
     }
 
+    @Command("clan info")
+    public void clanInfo(final @NotNull Player player) {
+        final ClanMember clanMember = this.clanMemberCache.get(player.getUniqueId());
+        if (clanMember == null || clanMember.clan() == null) {
+            this.messenger.sendPathMessage(player, "clan.info.not-in-clan");
+            return;
+        }
+
+        final Clan clan = clanMember.clan();
+        final Map<String, String> placeholders = this.clanPlaceholders(clan);
+        placeholders.put("role", clanMember.role().displayName());
+
+        this.messenger.sendListMessage(player, placeholders, "clan", "info", "success-own");
+    }
+
+    @Command("clan info <clan_name>")
+    public void clanInfoOther(
+            final @NotNull Player player,
+            final @NotNull @Argument(value = "clan_name", suggestions = "online_clans") String clanName
+    ) {
+
+        final UUID clanUniqueId = ClanNameUUID.from(clanName);
+        final Clan clan = this.clanCache.get(clanUniqueId);
+        if (clan == null) {
+            this.messenger.sendPathMessage(player, "clan.info.not-found");
+            return;
+        }
+
+        final Map<String, String> placeholders = this.clanPlaceholders(clan);
+        this.messenger.sendListMessage(player, placeholders, "clan", "info", "success-other");
+    }
+
+    private @NotNull Map<String, String> clanPlaceholders(final @NotNull Clan clan) {
+        final Map<String, String> placeholders = new HashMap<>();
+
+        placeholders.put("name", clan.data().name());
+        placeholders.put("display", clan.data().displayName());
+        placeholders.put("created_at", DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm")
+                .withZone(ZoneId.systemDefault())
+                .format(clan.data().createdAt())
+        );
+
+        placeholders.put("points", clan.points().toString());
+
+        placeholders.put("owner_name", clan.ownerData().name());
+        placeholders.put("owner_unique_id", clan.ownerData().uniqueId().toString());
+
+        placeholders.put("invite_state", clan.settings().inviteState().toString());
+        placeholders.put("pvp_mode", clan.settings().pvpMode().toString());
+
+        placeholders.put("allies", String.join(", ", clan.relations().allies().stream()
+                .map(ClanRelation::clanName)
+                .toList()));
+
+        placeholders.put("enemies", String.join(", ", clan.relations().enemies().stream()
+                .map(ClanRelation::clanName)
+                .toList()));
+
+        placeholders.put("kills", clan.statistics().kills().toString());
+        placeholders.put("deaths", clan.statistics().deaths().toString());
+        placeholders.put("kill_streak", clan.statistics().killsStreak().toString());
+
+        placeholders.put("members_size", Integer.toString(clan.allMembers().size()));
+        placeholders.put("max_members", Integer.toString(clan.settings().maxMembers()));
+
+        placeholders.put("members", String.join(", ", clan.allMembers().stream().map(ClanMember::name).toList()));
+        placeholders.put("online_members", String.join(", ", clan.allMembers().stream()
+                .filter(clanMember1 -> Bukkit.getPlayer(clanMember1.uniqueId()) != null)
+                .map(ClanMember::name)
+                .toList())
+        );
+
+        return placeholders;
+    }
+
     @Suggestions("chat_types")
     public @NotNull @Unmodifiable List<Suggestion> chatTypesSuggestions() {
         return Arrays.stream(ClanChatType.values())
                 .map(chatType -> chatType.name().toLowerCase(Locale.ROOT))
+                .map(Suggestion::suggestion)
+                .toList();
+    }
+
+    @Suggestions("online_clans")
+    public @NotNull @Unmodifiable List<Suggestion> onlineClansSuggestions() {
+        return this.clanCache.valuesCopy().stream()
+                .map(clan -> clan.data().name())
                 .map(Suggestion::suggestion)
                 .toList();
     }

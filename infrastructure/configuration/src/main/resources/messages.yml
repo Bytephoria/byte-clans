@@ -194,6 +194,33 @@ clan:
         not-enemies: "<gold><bold>{clan}</bold></gold> <red>is not your enemy.</red>"
         cancelled: "<red>Enemy removal was cancelled by an external plugin.</red>"
 
+  info:
+    success-own:
+      - "<gradient:#00e676:#1de9b6>--- </gradient><gold><bold>{display}</bold></gold> <gray>({name})</gray><gradient:#00e676:#1de9b6> ---</gradient>"
+      - "<gray> Owner:</gray> <white>{owner_name}</white>"
+      - "<gray> Your role:</gray> <white>{role}</white>"
+      - "<gray> Members:</gray> <white>{members_size}/{max_members}</white> <gray>({members})</gray>"
+      - "<gray> Online:</gray> <white>{online_members}</white>"
+      - "<gray> Points:</gray> <white>{points}</white>"
+      - "<gray> Kills:</gray> <white>{kills}</white> <gray>·</gray> <gray>Deaths:</gray> <white>{deaths}</white> <gray>·</gray> <gray>Kill streak:</gray> <white>{kill_streak}</white>"
+      - "<gray> PvP mode:</gray> <white>{pvp_mode}</white>"
+      - "<gray> Invitations:</gray> <white>{invite_state}</white>"
+      - "<gray> Allies:</gray> <aqua>{allies}</aqua>"
+      - "<gray> Enemies:</gray> <red>{enemies}</red>"
+      - "<gray> Created:</gray> <white>{created_at}</white>"
+
+    success-other:
+      - "<gradient:#00bcd4:#1de9b6>--- </gradient><gold><bold>{display}</bold></gold> <gray>({name})</gray><gradient:#00bcd4:#1de9b6> ---</gradient>"
+      - "<gray> Owner:</gray> <white>{owner_name}</white>"
+      - "<gray> Members:</gray> <white>{members_size}/{max_members}</white>"
+      - "<gray> Points:</gray> <white>{points}</white>"
+      - "<gray> Kills:</gray> <white>{kills}</white> <gray>·</gray> <gray>Deaths:</gray> <white>{deaths}</white> <gray>·</gray> <gray>Kill streak:</gray> <white>{kill_streak}</white>"
+      - "<gray> PvP mode:</gray> <white>{pvp_mode}</white>"
+      - "<gray> Invitations:</gray> <white>{invite_state}</white>"
+
+    not-found: "<red>Clan <gold><bold>{clan}</bold></gold> was not found.</red>"
+    not-in-clan: "<red>You are not in a <bold>clan</bold>.</red>"
+
 invite:
   send:
     success: "<gradient:#00e676:#1de9b6>Invite sent to</gradient> <gold><bold>{target}</bold></gold>."
