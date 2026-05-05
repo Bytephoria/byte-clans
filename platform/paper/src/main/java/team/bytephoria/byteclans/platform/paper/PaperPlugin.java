@@ -26,6 +26,7 @@ import team.bytephoria.byteclans.infrastructure.configuration.configuration.Conf
 import team.bytephoria.byteclans.infrastructure.configuration.roles.Roles;
 import team.bytephoria.byteclans.platform.commonbukkit.BukkitClanEventBus;
 import team.bytephoria.byteclans.platform.commonbukkit.RoleLoader;
+import team.bytephoria.byteclans.platform.commonbukkit.access.ComonBukkitByteClans;
 import team.bytephoria.byteclans.platform.commonbukkit.concurrent.AsyncExecutor;
 import team.bytephoria.byteclans.platform.commonbukkit.listener.ClanPostCreateAsyncListener;
 import team.bytephoria.byteclans.platform.commonbukkit.listener.PlayerJoinListener;
@@ -53,6 +54,8 @@ public final class PaperPlugin extends JavaPlugin {
     private PaperBootstrap paperBootstrap;
 
     private LegacyPaperCommandManager<Player> commandManager;
+    private AnnotationParser<Player> annotationParser;
+
     private Metrics metrics;
 
     @Override
@@ -121,9 +124,8 @@ public final class PaperPlugin extends JavaPlugin {
                 mapper
         );
 
-        final AnnotationParser<Player> annotationParser = new AnnotationParser<>(this.commandManager, Player.class);
-
-        annotationParser.parse(
+        this.annotationParser = new AnnotationParser<>(this.commandManager, Player.class);
+        this.annotationParser.parse(
                 new ClanCommand(
                         this,
                         this.messenger,
@@ -136,7 +138,7 @@ public final class PaperPlugin extends JavaPlugin {
                 )
         );
 
-        annotationParser.parse(
+        this.annotationParser.parse(
                 new ClanInviteCommand(
                         applicationFacade.clanInviteManager(),
                         this.messenger,
@@ -145,7 +147,7 @@ public final class PaperPlugin extends JavaPlugin {
                 )
         );
 
-        annotationParser.parse(
+        this.annotationParser.parse(
                 new ClanAdminCommands(
                         this,
                         applicationFacade.clanMemberCache(),
@@ -158,7 +160,7 @@ public final class PaperPlugin extends JavaPlugin {
                 )
         );
 
-        annotationParser.parse(
+        this.annotationParser.parse(
                 new ClanDiplomacyCommand(
                         this.messenger,
                         applicationFacade.clanCache(),
@@ -180,7 +182,7 @@ public final class PaperPlugin extends JavaPlugin {
         );
 
         ByteClansProvider.setInstance(
-                new PaperByteClans(
+                new ComonBukkitByteClans(
                         applicationFacade.clanCache(),
                         applicationFacade.clanMemberCache(),
                         applicationFacade.clanRoleRegistry(),
@@ -190,7 +192,9 @@ public final class PaperPlugin extends JavaPlugin {
                         applicationFacade.clanSettingsManager(),
                         applicationFacade.clanStatisticManager(),
                         applicationFacade.clanNameProcessor(),
-                        applicationFacade.clanDisplayNameProcessor()
+                        applicationFacade.clanDisplayNameProcessor(),
+                        this.commandManager,
+                        annotationParser
                 )
         );
 
@@ -203,6 +207,8 @@ public final class PaperPlugin extends JavaPlugin {
         this.getLogger().info("PaperPlugin is stopping...");
 
         HandlerList.unregisterAll(this);
+
+
         if (this.commandManager != null) {
             try {
                 this.commandManager.deleteRootCommand("clan");
@@ -221,6 +227,7 @@ public final class PaperPlugin extends JavaPlugin {
             this.metrics.shutdown();
         }
 
+        this.annotationParser = null;
         this.metrics = null;
         this.messenger = null;
         this.configuration = null;

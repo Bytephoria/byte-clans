@@ -25,6 +25,7 @@ import team.bytephoria.byteclans.infrastructure.configuration.configuration.Conf
 import team.bytephoria.byteclans.infrastructure.configuration.roles.Roles;
 import team.bytephoria.byteclans.platform.commonbukkit.BukkitClanEventBus;
 import team.bytephoria.byteclans.platform.commonbukkit.RoleLoader;
+import team.bytephoria.byteclans.platform.commonbukkit.access.ComonBukkitByteClans;
 import team.bytephoria.byteclans.platform.commonbukkit.concurrent.AsyncExecutor;
 import team.bytephoria.byteclans.platform.commonbukkit.listener.ClanPostCreateAsyncListener;
 import team.bytephoria.byteclans.platform.commonbukkit.listener.PlayerJoinListener;
@@ -214,7 +215,7 @@ public final class SpigotPlugin extends JavaPlugin {
         );
 
         ByteClansProvider.setInstance(
-                new SpigotByteClans(
+                new ComonBukkitByteClans(
                         applicationFacade.clanCache(),
                         applicationFacade.clanMemberCache(),
                         applicationFacade.clanRoleRegistry(),
@@ -224,7 +225,9 @@ public final class SpigotPlugin extends JavaPlugin {
                         applicationFacade.clanSettingsManager(),
                         applicationFacade.clanStatisticManager(),
                         applicationFacade.clanNameProcessor(),
-                        applicationFacade.clanDisplayNameProcessor()
+                        applicationFacade.clanDisplayNameProcessor(),
+                        this.commandManager,
+                        annotationParser
                 )
         );
 
