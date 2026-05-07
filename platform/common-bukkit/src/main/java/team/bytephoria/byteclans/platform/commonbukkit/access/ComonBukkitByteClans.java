@@ -1,20 +1,24 @@
-package team.bytephoria.byteclans.platform.paper;
+package team.bytephoria.byteclans.platform.commonbukkit.access;
 
+import org.bukkit.entity.Player;
+import org.incendo.cloud.CommandManager;
+import org.incendo.cloud.annotations.AnnotationParser;
 import org.jetbrains.annotations.NotNull;
+import org.jspecify.annotations.NonNull;
 import team.bytephoria.byteclans.api.Clan;
 import team.bytephoria.byteclans.api.ClanMember;
 import team.bytephoria.byteclans.api.ClanPlayer;
-import team.bytephoria.byteclans.api.access.ByteClans;
 import team.bytephoria.byteclans.api.manager.*;
 import team.bytephoria.byteclans.api.registry.ClanRoleRegistry;
 import team.bytephoria.byteclans.api.validator.ClanDisplayNameValidator;
 import team.bytephoria.byteclans.api.validator.ClanNameValidator;
+import team.bytephoria.byteclans.bukkitapi.access.BukkitByteClans;
 import team.bytephoria.byteclans.core.util.ClanNameUUID;
 import team.bytephoria.byteclans.core.util.IdentityCachedMap;
 
 import java.util.UUID;
 
-public final class PaperByteClans implements ByteClans {
+public final class ComonBukkitByteClans implements BukkitByteClans {
 
     private final IdentityCachedMap<Clan> clanCache;
     private final IdentityCachedMap<ClanMember> clanMemberCache;
@@ -30,7 +34,10 @@ public final class PaperByteClans implements ByteClans {
     private final ClanNameValidator clanNameValidator;
     private final ClanDisplayNameValidator clanDisplayNameValidator;
 
-    public PaperByteClans(
+    private final CommandManager<Player> commandManager;
+    private final AnnotationParser<Player> annotationParser;
+
+    public ComonBukkitByteClans(
             final @NotNull IdentityCachedMap<Clan> clanCache,
             final @NotNull IdentityCachedMap<ClanMember> clanMemberCache,
             final @NotNull ClanRoleRegistry clanRoleRegistry,
@@ -40,7 +47,9 @@ public final class PaperByteClans implements ByteClans {
             final @NotNull ClanSettingsManager clanSettingsManager,
             final @NotNull ClanStatisticManager clanStatisticManager,
             final @NotNull ClanNameValidator clanNameValidator,
-            final @NotNull ClanDisplayNameValidator clanDisplayNameValidator
+            final @NotNull ClanDisplayNameValidator clanDisplayNameValidator,
+            final @NotNull CommandManager<Player> commandManager,
+            final @NotNull AnnotationParser<Player> annotationParser
     ) {
         this.clanCache = clanCache;
         this.clanMemberCache = clanMemberCache;
@@ -53,6 +62,10 @@ public final class PaperByteClans implements ByteClans {
         this.clanStatisticManager = clanStatisticManager;
         this.clanNameValidator = clanNameValidator;
         this.clanDisplayNameValidator = clanDisplayNameValidator;
+
+        this.commandManager = commandManager;
+        this.annotationParser = annotationParser;
+
     }
 
     @Override
@@ -114,5 +127,15 @@ public final class PaperByteClans implements ByteClans {
     @Override
     public ClanMember getMemberOrNull(final @NotNull UUID memberUniqueId) {
         return this.clanMemberCache.get(memberUniqueId);
+    }
+
+    @Override
+    public @NonNull CommandManager<Player> commandManager() {
+        return this.commandManager;
+    }
+
+    @Override
+    public @NotNull AnnotationParser<Player> annotationParser() {
+        return this.annotationParser;
     }
 }
