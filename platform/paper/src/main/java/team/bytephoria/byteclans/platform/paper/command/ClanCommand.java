@@ -18,7 +18,7 @@ import team.bytephoria.byteclans.api.result.*;
 import team.bytephoria.byteclans.api.util.response.Response;
 import team.bytephoria.byteclans.api.util.response.context.ResponseContext;
 import team.bytephoria.byteclans.bukkitapi.BukkitClanPlayer;
-import team.bytephoria.byteclans.bukkitapi.FeaturePermissions;
+import team.bytephoria.byteclans.platform.commonbukkit.FeaturePermissions;
 import team.bytephoria.byteclans.core.util.IdentityCachedMap;
 import team.bytephoria.byteclans.platform.commonbukkit.concurrent.AsyncExecutor;
 import team.bytephoria.byteclans.platform.paper.PaperPlugin;
