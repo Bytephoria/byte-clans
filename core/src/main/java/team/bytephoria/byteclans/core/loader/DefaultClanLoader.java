@@ -19,7 +19,7 @@ import java.util.Collection;
 import java.util.UUID;
 import java.util.concurrent.CompletableFuture;
 
-public final class DefaultClanLoader implements ClanLoader {
+public final class  DefaultClanLoader implements ClanLoader {
 
     private final IdentityCachedMap<Clan> clanCache;
     private final IdentityCachedMap<ClanMember> clanMemberCache;

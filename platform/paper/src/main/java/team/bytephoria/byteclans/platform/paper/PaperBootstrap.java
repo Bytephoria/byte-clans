@@ -21,6 +21,7 @@ import team.bytephoria.byteclans.providers.storage.sql.SQLTransactionManager;
 import team.bytephoria.byteclans.providers.storage.sql.config.JdbcCredentials;
 import team.bytephoria.byteclans.providers.storage.sql.config.JdbcPoolConfig;
 import team.bytephoria.byteclans.providers.storage.sql.h2.*;
+import team.bytephoria.byteclans.providers.storage.sql.mariadb.*;
 import team.bytephoria.byteclans.providers.storage.sql.mysql.*;
 import team.bytephoria.byteclans.spi.storage.*;
 import team.bytephoria.byteclans.spi.storage.transaction.TransactionManager;
@@ -206,6 +207,23 @@ public final class PaperBootstrap implements PluginLifecycle {
                 this.transactionManager = new SQLTransactionManager(mySQLStorageConnection, executorService);
                 this.clanAllyStorage = new MySQLClanAllyStorage(mySQLStorageConnection, logger, executorService);
                 this.clanEnemyStorage = new MySQLClanEnemyStorage(mySQLStorageConnection, logger, executorService);
+            }
+
+            case "mariadb" -> {
+
+                final HikariDataSource hikariDataSource = MariaDBStorageConnectionData.builder()
+                        .jdbcCredentials(jdbcCredentials)
+                        .jdbcPoolConfig(jdbcPoolConfig)
+                        .build();
+
+                final MariaDBStorageConnection mariaDBStorageConnection = new MariaDBStorageConnection(hikariDataSource);
+
+                this.storageConnection = mariaDBStorageConnection;
+                this.clanStorage = new MariaDBClanStorage(mariaDBStorageConnection, logger, executorService);
+                this.clanMemberStorage = new MariaDBClanMemberStorage(mariaDBStorageConnection, logger, executorService);
+                this.transactionManager = new SQLTransactionManager(mariaDBStorageConnection, executorService);
+                this.clanAllyStorage = new MariaDBClanAllyStorage(mariaDBStorageConnection, logger, executorService);
+                this.clanEnemyStorage = new MariaDBClanEnemyStorage(mariaDBStorageConnection, logger, executorService);
             }
 
             default -> throw new IllegalArgumentException("Storage type not supported.");
