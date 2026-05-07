@@ -8,6 +8,7 @@ include(
     "providers:storage:sql",
     "providers:storage:sql:h2",
     "providers:storage:sql:mysql",
+    "providers:storage:sql:mariadb",
     "platform:bukkit-api",
     "platform:common-bukkit",
     "platform:paper",
