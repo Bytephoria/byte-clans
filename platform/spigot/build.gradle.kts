@@ -26,6 +26,7 @@ dependencies {
     api(project(":providers:storage:sql"))
     api(project(":providers:storage:sql:h2"))
     api(project(":providers:storage:sql:mysql"))
+    api(project(":providers:storage:sql:mariadb"))
 
     api(project(":platform:bukkit-api"))
     api(project(":platform:common-bukkit"))
