@@ -9,6 +9,7 @@ import team.bytephoria.byteclans.api.validator.ClanDisplayNameValidator;
 import team.bytephoria.byteclans.api.validator.ClanNameValidator;
 import team.bytephoria.byteclans.api.registry.ClanRoleRegistry;
 
+import java.util.Collection;
 import java.util.Optional;
 import java.util.UUID;
 
@@ -41,6 +42,8 @@ public interface ByteClans {
     ClanMember getMemberOrNull(final @NotNull ClanPlayer clanPlayer);
 
     ClanMember getMemberOrNull(final @NotNull UUID memberUniqueId);
+
+    Collection<Clan> loadedClans();
 
     default Optional<Clan> getClanByName(final @NotNull String clanName) {
         final Clan clan = this.getClanByNameOrNull(clanName);

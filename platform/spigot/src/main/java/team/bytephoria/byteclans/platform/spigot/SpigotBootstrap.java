@@ -16,12 +16,13 @@ import team.bytephoria.byteclans.infrastructure.configuration.configuration.Conf
 import team.bytephoria.byteclans.infrastructure.configuration.configuration.storage.Credentials;
 import team.bytephoria.byteclans.infrastructure.configuration.configuration.storage.Pool;
 import team.bytephoria.byteclans.infrastructure.configuration.configuration.storage.Storage;
+import team.bytephoria.byteclans.platform.commonbukkit.concurrent.AsyncExecutor;
 import team.bytephoria.byteclans.providers.storage.sql.SQLTransactionManager;
 import team.bytephoria.byteclans.providers.storage.sql.config.JdbcCredentials;
 import team.bytephoria.byteclans.providers.storage.sql.config.JdbcPoolConfig;
 import team.bytephoria.byteclans.providers.storage.sql.h2.*;
+import team.bytephoria.byteclans.providers.storage.sql.mariadb.*;
 import team.bytephoria.byteclans.providers.storage.sql.mysql.*;
-import team.bytephoria.byteclans.platform.commonbukkit.concurrent.AsyncExecutor;
 import team.bytephoria.byteclans.spi.storage.*;
 import team.bytephoria.byteclans.spi.storage.transaction.TransactionManager;
 
@@ -77,7 +78,7 @@ public final class SpigotBootstrap implements PluginLifecycle {
         try {
             this.initializeStorage();
         } catch (IllegalArgumentException exception) {
-            this.spigotPlugin.getLogger().log(Level.SEVERE, "Could not initialize storage", exception);
+            this.spigotPlugin.getLogger().info("An error has occurred while initializing storage: " + exception.getMessage());
         }
 
         this.storageConnection.connect();
@@ -135,7 +136,7 @@ public final class SpigotBootstrap implements PluginLifecycle {
             try {
                 this.storageConnection.disconnect();
             } catch (final Exception exception) {
-                this.spigotPlugin.getLogger().log(Level.SEVERE, "An error has occurred while disconnecting storage", exception);
+                this.spigotPlugin.getLogger().log(Level.SEVERE, "Error while disconnecting storage", exception);
             }
         }
 
@@ -209,12 +210,29 @@ public final class SpigotBootstrap implements PluginLifecycle {
                 this.clanEnemyStorage = new MySQLClanEnemyStorage(mySQLStorageConnection, logger, executorService);
             }
 
+            case "mariadb" -> {
+
+                final HikariDataSource hikariDataSource = MariaDBStorageConnectionData.builder()
+                        .jdbcCredentials(jdbcCredentials)
+                        .jdbcPoolConfig(jdbcPoolConfig)
+                        .build();
+
+                final MariaDBStorageConnection mariaDBStorageConnection = new MariaDBStorageConnection(hikariDataSource);
+
+                this.storageConnection = mariaDBStorageConnection;
+                this.clanStorage = new MariaDBClanStorage(mariaDBStorageConnection, logger, executorService);
+                this.clanMemberStorage = new MariaDBClanMemberStorage(mariaDBStorageConnection, logger, executorService);
+                this.transactionManager = new SQLTransactionManager(mariaDBStorageConnection, executorService);
+                this.clanAllyStorage = new MariaDBClanAllyStorage(mariaDBStorageConnection, logger, executorService);
+                this.clanEnemyStorage = new MariaDBClanEnemyStorage(mariaDBStorageConnection, logger, executorService);
+            }
+
             default -> throw new IllegalArgumentException("Storage type not supported.");
         }
 
     }
 
-    public SpigotPlugin spigotPlugin() {
+    public SpigotPlugin paperPlugin() {
         return this.spigotPlugin;
     }
 
@@ -244,5 +262,9 @@ public final class SpigotBootstrap implements PluginLifecycle {
 
     public BootstrapContext bootstrapContext() {
         return this.bootstrapContext;
+    }
+
+    public ClanDisplayNameValidator clanDisplayNameValidator() {
+        return this.clanDisplayNameValidator;
     }
 }

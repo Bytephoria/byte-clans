@@ -294,7 +294,7 @@ public final class SpigotPlugin extends JavaPlugin {
         }
     }
 
-    public SpigotBootstrap paperBootstrap() {
+    public SpigotBootstrap spigotBootstrap() {
         return this.spigotBootstrap;
     }
 

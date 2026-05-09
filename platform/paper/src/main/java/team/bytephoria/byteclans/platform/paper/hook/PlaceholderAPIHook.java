@@ -5,12 +5,14 @@ import org.apache.commons.lang3.StringUtils;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
 import team.bytephoria.byteclans.api.Clan;
+import team.bytephoria.byteclans.api.ClanAction;
 import team.bytephoria.byteclans.api.ClanMember;
 import team.bytephoria.byteclans.core.ApplicationFacade;
 import team.bytephoria.byteclans.platform.paper.PaperPlugin;
 
 import java.time.ZoneId;
 import java.time.format.DateTimeFormatter;
+import java.util.Arrays;
 import java.util.Locale;
 import java.util.function.Function;
 
@@ -61,7 +63,7 @@ public final class PlaceholderAPIHook extends PlaceholderExpansion {
 
         return switch (category) {
             case "clan" -> this.handleClan(player, arguments[1]);
-            case "member" -> this.handleMember(player, arguments[1]);
+            case "member" -> this.handleMember(player, arguments);
             default -> "";
         };
     }
@@ -124,7 +126,13 @@ public final class PlaceholderAPIHook extends PlaceholderExpansion {
         };
     }
 
-    private @NotNull String handleMember(final @NotNull Player player, final @NotNull String param) {
+    private @NotNull String handleMember(
+            final @NotNull Player player,
+            final @NotNull String @NotNull [] arguments
+    ) {
+
+        final String param = arguments[1];
+
         return switch (param) {
             case "role" -> this.getMemberOrEmpty(player, member ->
                     member.role().id()
@@ -146,7 +154,29 @@ public final class PlaceholderAPIHook extends PlaceholderExpansion {
                             .format(member.data().lastSeenAt())
             );
 
-            case "chat-mode" -> this.getMemberOrEmpty(player, member -> member.chatType().name());
+            case "chat-mode" -> this.getMemberOrEmpty(player, member ->
+                    member.chatType().name()
+            );
+
+            case "has-permission" -> {
+                if (arguments.length < 3) {
+                    yield "";
+                }
+
+                final String actionName = String.join("_", Arrays.copyOfRange(arguments, 2, arguments.length));
+                final ClanAction clanAction;
+
+                try {
+                    clanAction = ClanAction.valueOf(actionName.toUpperCase(Locale.ROOT));
+                } catch (final IllegalArgumentException exception) {
+                    yield "false";
+                }
+
+                yield this.getMemberOrEmpty(player, member ->
+                        Boolean.toString(member.hasPermission(clanAction))
+                );
+            }
+
             default -> "";
         };
     }

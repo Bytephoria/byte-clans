@@ -4,6 +4,7 @@ import org.bukkit.entity.Player;
 import org.incendo.cloud.CommandManager;
 import org.incendo.cloud.annotations.AnnotationParser;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.UnmodifiableView;
 import org.jspecify.annotations.NonNull;
 import team.bytephoria.byteclans.api.Clan;
 import team.bytephoria.byteclans.api.ClanMember;
@@ -16,6 +17,7 @@ import team.bytephoria.byteclans.bukkitapi.access.BukkitByteClans;
 import team.bytephoria.byteclans.core.util.ClanNameUUID;
 import team.bytephoria.byteclans.core.util.IdentityCachedMap;
 
+import java.util.Collection;
 import java.util.UUID;
 
 public final class ComonBukkitByteClans implements BukkitByteClans {
@@ -127,6 +129,11 @@ public final class ComonBukkitByteClans implements BukkitByteClans {
     @Override
     public ClanMember getMemberOrNull(final @NotNull UUID memberUniqueId) {
         return this.clanMemberCache.get(memberUniqueId);
+    }
+
+    @Override
+    public @NonNull @UnmodifiableView Collection<Clan> loadedClans() {
+        return this.clanCache.valuesCopy();
     }
 
     @Override
