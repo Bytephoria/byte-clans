@@ -10,6 +10,8 @@ import team.bytephoria.byteclans.core.ApplicationFacade;
 import team.bytephoria.byteclans.platform.spigot.SpigotPlugin;
 import team.bytephoria.byteclans.platform.spigot.util.StringUtil;
 
+import java.time.Duration;
+import java.time.Instant;
 import java.time.ZoneId;
 import java.time.format.DateTimeFormatter;
 import java.util.Arrays;
@@ -121,6 +123,17 @@ public final class PlaceholderAPIHook extends PlaceholderExpansion {
                             .withZone(ZoneId.systemDefault())
                             .format(clan.data().createdAt())
             );
+
+            case "display-cooldown" -> this.getClanOrEmpty(player, clan -> {
+                final Instant instant = clan.data().displayLastChangedAt();
+                final Duration duration = this.spigotPlugin.configuration().clan().display().cooldown().toDuration();
+
+                if (instant == null) {
+                    return "false";
+                }
+
+                return Boolean.toString(instant.plus(duration).isAfter(Instant.now()));
+            });
 
             default -> "";
         };
