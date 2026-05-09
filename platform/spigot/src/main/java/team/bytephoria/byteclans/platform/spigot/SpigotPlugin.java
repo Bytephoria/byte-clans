@@ -1,5 +1,6 @@
 package team.bytephoria.byteclans.platform.spigot;
 
+import net.kyori.adventure.audience.Audience;
 import net.kyori.adventure.platform.bukkit.BukkitAudiences;
 import org.bstats.bukkit.Metrics;
 import org.bukkit.command.CommandSender;
@@ -9,9 +10,12 @@ import org.bukkit.event.Listener;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.incendo.cloud.SenderMapper;
 import org.incendo.cloud.annotations.AnnotationParser;
+import org.incendo.cloud.context.CommandContext;
 import org.incendo.cloud.exception.InvalidSyntaxException;
 import org.incendo.cloud.exception.NoPermissionException;
 import org.incendo.cloud.execution.ExecutionCoordinator;
+import org.incendo.cloud.minecraft.extras.AudienceProvider;
+import org.incendo.cloud.minecraft.extras.MinecraftHelp;
 import org.incendo.cloud.paper.LegacyPaperCommandManager;
 import org.jetbrains.annotations.NotNull;
 import org.spongepowered.configurate.ConfigurationNode;
@@ -58,6 +62,7 @@ public final class SpigotPlugin extends JavaPlugin {
     private SpigotBootstrap spigotBootstrap;
 
     private LegacyPaperCommandManager<Player> commandManager;
+    private MinecraftHelp<Player> playerMinecraftHelp;
     private Metrics metrics;
 
     @Override
@@ -201,11 +206,27 @@ public final class SpigotPlugin extends JavaPlugin {
                 )
         );
 
-        this.commandManager.exceptionController().registerHandler(
-                InvalidSyntaxException.class,
-                context -> context.context().sender().sendMessage("Unknown Command.")
-        );
+        final AudienceProvider<Player> audienceProvider = new AudienceProvider<>() {
+            @Override
+            public @NotNull Audience apply(final @NotNull Player sender) {
+                return SpigotPlugin.this.adventure().player(sender);
+            }
 
+        };
+
+        this.playerMinecraftHelp = MinecraftHelp.create("/clan help", this.commandManager, audienceProvider);
+        this.playerMinecraftHelp = MinecraftHelp.<Player>builder()
+                .commandManager(this.commandManager)
+                .audienceProvider(audienceProvider)
+                .commandPrefix("/clan help")
+                .build();
+
+        this.commandManager.exceptionController().registerHandler(InvalidSyntaxException.class, context -> {
+            final CommandContext<Player> commandContext = context.context();
+            final String correctSyntax = context.exception().correctSyntax();
+
+            this.playerMinecraftHelp.queryCommands(correctSyntax, commandContext.sender());
+        });
         this.commandManager.exceptionController().registerHandler(
                 NoPermissionException.class,
                 context -> {
