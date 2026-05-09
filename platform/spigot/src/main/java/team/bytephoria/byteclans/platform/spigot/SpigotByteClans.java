@@ -1,6 +1,7 @@
 package team.bytephoria.byteclans.platform.spigot;
 
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.UnmodifiableView;
 import team.bytephoria.byteclans.api.Clan;
 import team.bytephoria.byteclans.api.ClanMember;
 import team.bytephoria.byteclans.api.ClanPlayer;
@@ -12,6 +13,7 @@ import team.bytephoria.byteclans.api.validator.ClanNameValidator;
 import team.bytephoria.byteclans.core.util.ClanNameUUID;
 import team.bytephoria.byteclans.core.util.IdentityCachedMap;
 
+import java.util.Collection;
 import java.util.UUID;
 
 public final class SpigotByteClans implements ByteClans {
@@ -114,5 +116,10 @@ public final class SpigotByteClans implements ByteClans {
     @Override
     public ClanMember getMemberOrNull(final @NotNull UUID memberUniqueId) {
         return this.clanMemberCache.get(memberUniqueId);
+    }
+
+    @Override
+    public @NotNull @UnmodifiableView Collection<Clan> loadedClans() {
+        return this.clanCache.valuesCopy();
     }
 }
