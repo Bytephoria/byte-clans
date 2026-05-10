@@ -3,6 +3,7 @@ package team.bytephoria.byteclans.platform.paper.command;
 import org.bukkit.entity.Player;
 import org.incendo.cloud.annotations.Argument;
 import org.incendo.cloud.annotations.Command;
+import org.incendo.cloud.annotations.CommandDescription;
 import org.incendo.cloud.annotations.Permission;
 import org.incendo.cloud.annotations.suggestion.Suggestions;
 import org.incendo.cloud.suggestion.Suggestion;
@@ -59,6 +60,7 @@ public final class ClanAdminCommands {
 
     @Command("clan admin disband <clanName>")
     @Permission("byteclans.command.admin.disband")
+    @CommandDescription("Mensaje de prueba")
     public void disbandClan(
             final @NotNull Player player,
             final @NotNull @Argument(value = "clanName", suggestions = "online-clans") String clanName

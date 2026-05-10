@@ -10,9 +10,13 @@ import org.bukkit.event.Listener;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.incendo.cloud.SenderMapper;
 import org.incendo.cloud.annotations.AnnotationParser;
+import org.incendo.cloud.component.DefaultValue;
+import org.incendo.cloud.context.CommandContext;
 import org.incendo.cloud.exception.InvalidSyntaxException;
 import org.incendo.cloud.exception.NoPermissionException;
 import org.incendo.cloud.execution.ExecutionCoordinator;
+import org.incendo.cloud.minecraft.extras.AudienceProvider;
+import org.incendo.cloud.minecraft.extras.MinecraftHelp;
 import org.incendo.cloud.paper.LegacyPaperCommandManager;
 import org.jetbrains.annotations.NotNull;
 import org.spongepowered.configurate.ConfigurationNode;
@@ -41,6 +45,8 @@ import team.bytephoria.byteclans.platform.paper.listener.EntityDamageByEntityLis
 import team.bytephoria.byteclans.platform.paper.listener.PlayerDeathListener;
 import team.bytephoria.byteclans.platform.paper.message.Messenger;
 
+import static org.incendo.cloud.parser.standard.StringParser.greedyStringParser;
+
 public final class PaperPlugin extends JavaPlugin {
 
     private Configuration configuration;
@@ -55,6 +61,7 @@ public final class PaperPlugin extends JavaPlugin {
 
     private LegacyPaperCommandManager<Player> commandManager;
     private AnnotationParser<Player> annotationParser;
+    private MinecraftHelp<Player> playerMinecraftHelp;
 
     private Metrics metrics;
 
@@ -171,10 +178,26 @@ public final class PaperPlugin extends JavaPlugin {
                 )
         );
 
-        this.commandManager.exceptionController().registerHandler(
-                InvalidSyntaxException.class,
-                context -> context.context().sender().sendMessage("Unknown Command.")
+        this.playerMinecraftHelp = MinecraftHelp.createNative("/clan help", this.commandManager);
+        this.playerMinecraftHelp = MinecraftHelp.<Player>builder()
+                .commandManager(this.commandManager)
+                .audienceProvider(AudienceProvider.nativeAudience())
+                .commandPrefix("/clan help")
+                .build();
+
+        this.commandManager.command(
+                this.commandManager.commandBuilder("clan")
+                        .literal("help")
+                        .optional("query", greedyStringParser(), DefaultValue.constant(""))
+                        .handler(commandContext -> this.playerMinecraftHelp.queryCommands(commandContext.get("query"), commandContext.sender()))
         );
+
+        this.commandManager.exceptionController().registerHandler(InvalidSyntaxException.class, context -> {
+            final CommandContext<Player> commandContext = context.context();
+            final String correctSyntax = context.exception().correctSyntax();
+
+            this.playerMinecraftHelp.queryCommands(correctSyntax, commandContext.sender());
+        });
 
         this.commandManager.exceptionController().registerHandler(
                 NoPermissionException.class,
@@ -250,6 +273,10 @@ public final class PaperPlugin extends JavaPlugin {
         for (final Listener listener : listeners) {
             this.getServer().getPluginManager().registerEvents(listener, this);
         }
+    }
+
+    public MinecraftHelp<Player> playerMinecraftHelp() {
+        return this.playerMinecraftHelp;
     }
 
     public PaperBootstrap paperBootstrap() {
