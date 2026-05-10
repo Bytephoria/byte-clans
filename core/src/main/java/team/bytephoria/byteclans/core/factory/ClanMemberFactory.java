@@ -41,6 +41,22 @@ public final class ClanMemberFactory {
         );
     }
 
+    public @NotNull DefaultClanMember create(final @NotNull ClanMemberView clanMemberView, final @NotNull Clan clan, final @NotNull ClanRoleRegistry clanRoleRegistry) {
+        final ClanRole clanRole = clanRoleRegistry.getRole(clanMemberView.roleId());
+        if (clanRole == null) {
+            throw new IllegalArgumentException("Invalid clan role: %s".formatted(clanMemberView.roleId()));
+        }
+
+        return new DefaultClanMember(
+                clanMemberView.memberUniqueId(),
+                clanMemberView.memberName(),
+                new DefaultClanMemberData(clanMemberView.joinedAt(), clanMemberView.lastSeenAt()),
+                clan,
+                clanRole,
+                ClanChatType.PUBLIC
+        );
+    }
+
     public @NotNull DefaultClanMember create(
             final @NotNull ClanMemberView memberView,
             final @NotNull Clan clan,

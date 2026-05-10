@@ -7,7 +7,6 @@ import org.jspecify.annotations.NonNull;
 import team.bytephoria.byteclans.api.*;
 
 import java.util.EnumSet;
-import java.util.Objects;
 import java.util.Optional;
 import java.util.UUID;
 
@@ -22,6 +21,22 @@ public final class DefaultClanMember implements ClanMember {
     private ClanRole clanRole;
     private ClanPlayer clanPlayer;
     private ClanChatType chatType;
+
+    public DefaultClanMember(
+            final @NotNull UUID userUniqueId,
+            final @NotNull String userName,
+            final @NotNull ClanMemberData clanMemberData,
+            final @NotNull Clan clan,
+            final @NotNull ClanRole clanRole,
+            final @NotNull ClanChatType clanChatType
+    ) {
+        this.userUniqueId = userUniqueId;
+        this.userName = userName;
+        this.clanMemberData = clanMemberData;
+        this.clan = clan;
+        this.clanRole = clanRole;
+        this.chatType = clanChatType;
+    }
 
     public DefaultClanMember(
             final @NotNull ClanPlayer clanPlayer,
@@ -81,8 +96,9 @@ public final class DefaultClanMember implements ClanMember {
         return Optional.ofNullable(this.clanPlayer);
     }
 
-    public void player(final @NotNull ClanPlayer clanPlayer) {
-        this.clanPlayer = Objects.requireNonNull(clanPlayer);
+    @Override
+    public void player(final @Nullable ClanPlayer clanPlayer) {
+        this.clanPlayer = clanPlayer;
     }
 
     @Override
@@ -127,6 +143,11 @@ public final class DefaultClanMember implements ClanMember {
         }
 
         return clanActions.contains(clanAction);
+    }
+
+    @Override
+    public boolean isOnline() {
+        return this.player().isPresent();
     }
 
 }

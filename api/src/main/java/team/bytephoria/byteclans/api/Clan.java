@@ -31,6 +31,12 @@ public interface Clan extends Identity {
     @UnmodifiableView
     Collection<ClanMember> allMembers();
 
+    @UnmodifiableView
+    Collection<ClanMember> onlineMembers();
+
+    @UnmodifiableView
+    Collection<ClanMember> onlineAllMembers();
+
     void ownerData(final @NotNull ClanOwnerData clanOwnerData);
     void ownerMember(final @NotNull ClanMember clanMember);
 
@@ -38,6 +44,9 @@ public interface Clan extends Identity {
 
     boolean isMember(final @NotNull UUID uniqueId);
     boolean isMember(final @NotNull ClanPlayer clanPlayer);
+
+    boolean isOwner(final @NotNull UUID uniqueId);
+    boolean isOwner(final @NotNull ClanPlayer clanPlayer);
 
     void addMember(final @NotNull ClanMember clanMember);
 
