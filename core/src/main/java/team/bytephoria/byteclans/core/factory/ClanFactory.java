@@ -42,7 +42,7 @@ public final class ClanFactory {
                 clanView.clanUniqueId(),
                 new DefaultClanOwnerData(clanView.ownerName(), clanView.ownerUniqueId()),
                 null,
-                new DefaultClanData(clanView.clanName(), clanView.clanDisplayName(), clanView.displayLastChangedAt(), clanView.createdAt()),
+                new DefaultClanData(clanView.clanName(), clanView.clanDisplayName(), clanView.displayNameChangeAvailableAt(), clanView.createdAt()),
                 new DefaultClanSettings(clanView.maxMembers(), clanView.clanPvPMode(), clanView.clanInviteState()),
                 new DefaultClanStatistics(clanView.kills(), clanView.deaths(), clanView.killsStreak()),
                 new DefaultClanRelations(),
