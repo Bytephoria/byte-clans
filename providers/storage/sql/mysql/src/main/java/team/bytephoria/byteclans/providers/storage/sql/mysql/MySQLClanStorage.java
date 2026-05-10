@@ -46,7 +46,7 @@ public final class MySQLClanStorage extends AbstractSQLClanStorage {
                                kills,
                                deaths,
                                kills_streak,
-                               display_last_changed_at,
+                               display_name_available_at,
                                created_at)
             VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?);
             """;
@@ -63,7 +63,7 @@ public final class MySQLClanStorage extends AbstractSQLClanStorage {
                 kills = ?,
                 deaths = ?,
                 kills_streak = ?,
-                display_last_changed_at = ?
+                display_name_available_at = ?
             WHERE unique_id = ?;
             """;
 
@@ -255,7 +255,7 @@ public final class MySQLClanStorage extends AbstractSQLClanStorage {
                     return Optional.empty();
                 }
 
-                final Timestamp displayLastChangedAt = resultSet.getTimestamp("display_last_changed_at");
+                final Timestamp displayLastChangedAt = resultSet.getTimestamp("display_name_available_at");
                 return Optional.of(new ClanView(
                         UUIDUtil.bytesToUUID(resultSet.getBytes("unique_id")),
                         resultSet.getString("owner_name"),
