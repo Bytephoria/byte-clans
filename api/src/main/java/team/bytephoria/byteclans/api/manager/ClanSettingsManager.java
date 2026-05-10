@@ -15,44 +15,38 @@ import java.util.UUID;
 
 public interface ClanSettingsManager {
 
-    interface Admin {
+    @NotNull Response<ClanPvPModeChangeResult> changePvPMode(
+            final @NotNull UUID clanUniqueId,
+            final @NotNull ClanPvPMode clanPvPMode
+    );
 
-        Response<ClanPvPModeChangeResult> changePvPMode(
-                final @NotNull UUID clanUniqueId,
-                final @NotNull ClanPvPMode clanPvPMode
-        );
+    @NotNull Response<ClanStatusChangeResult> changeInviteStatus(
+            final @NotNull UUID clanUniqueId,
+            final @NotNull ClanInviteState clanInviteState
+    );
 
-        Response<ClanStatusChangeResult> changeInviteStatus(
-                final @NotNull UUID clanUniqueId,
-                final @NotNull ClanInviteState clanInviteState
-        );
+    @NotNull Response<ClanRenameDisplayResult> renameDisplay(
+            final @NotNull UUID clanUniqueId,
+            final @NotNull String newDisplayName
+    );
 
-        Response<ClanRenameDisplayResult> renameDisplay(
-                final @NotNull UUID clanUniqueId,
-                final @NotNull String newDisplayName
-        );
-
-    }
-
-    Admin admin();
-
-    Response<ClanPvPModeChangeResult> changePvPMode(
+    @NotNull Response<ClanPvPModeChangeResult> changePvPMode(
             final @NotNull ClanMember clanMember,
             final @NotNull ClanPvPMode newPvPMode
     );
 
-    Response<ClanStatusChangeResult> changeInviteStatus(
+    @NotNull Response<ClanStatusChangeResult> changeInviteStatus(
             final @NotNull ClanMember clanMember,
             final @NotNull ClanInviteState newInviteState
     );
 
-    Response<ClanRenameDisplayResult> renameDisplay(
+    @NotNull Response<ClanRenameDisplayResult> renameDisplay(
             final @NotNull ClanMember clanMember,
             final @NotNull String newDisplayName,
             final @Nullable Duration cooldown
     );
 
-    Response<ClanRenameDisplayResult> renameDisplay(
+    @NotNull Response<ClanRenameDisplayResult> renameDisplay(
             final @NotNull ClanMember clanMember,
             final @NotNull String newDisplayName
     );

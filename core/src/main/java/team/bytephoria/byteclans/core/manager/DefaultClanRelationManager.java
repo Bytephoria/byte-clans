@@ -43,7 +43,7 @@ public final class DefaultClanRelationManager implements ClanRelationManager {
     }
 
     @Override
-    public Response<ClanAllyAddResult> addAllyClan(
+    public @NotNull Response<ClanAllyAddResult> addAllyClan(
             final @NotNull ClanMember clanMember,
             final @NotNull Clan targetClan
     ) {
@@ -111,7 +111,7 @@ public final class DefaultClanRelationManager implements ClanRelationManager {
     }
 
     @Override
-    public Response<ClanAllyRemoveResult> removeAllyClan(
+    public @NotNull Response<ClanAllyRemoveResult> removeAllyClan(
             final @NotNull ClanMember clanMember,
             final @NotNull Clan targetClan
     ) {
@@ -148,7 +148,7 @@ public final class DefaultClanRelationManager implements ClanRelationManager {
     }
 
     @Override
-    public Response<ClanEnemyAddResult> addEnemyClan(
+    public @NotNull Response<ClanEnemyAddResult> addEnemyClan(
             final @NotNull ClanMember clanMember,
             final @NotNull Clan targetClan
     ) {
@@ -211,7 +211,7 @@ public final class DefaultClanRelationManager implements ClanRelationManager {
     }
 
     @Override
-    public Response<ClanEnemyRemoveResult> removeEnemyClan(
+    public @NotNull Response<ClanEnemyRemoveResult> removeEnemyClan(
             final @NotNull ClanMember clanMember,
             final @NotNull Clan targetClan
     ) {
