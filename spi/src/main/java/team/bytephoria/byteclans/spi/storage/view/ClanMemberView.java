@@ -9,6 +9,8 @@ public record ClanMemberView(
         UUID memberUniqueId,
         String memberName,
         String roleId,
+        int kills,
+        int deaths,
         Instant joinedAt,
         Instant lastSeenAt
 ) {
@@ -17,7 +19,6 @@ public record ClanMemberView(
         Objects.requireNonNull(clanUniqueId);
         Objects.requireNonNull(memberUniqueId);
     }
-
 
 
 }

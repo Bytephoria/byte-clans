@@ -47,6 +47,8 @@ public final class H2StorageConnection extends AbstractSQLStorageConnection {
                         clan_id INT NOT NULL,
                         name VARCHAR(40) NOT NULL,
                         role_id VARCHAR(30) NOT NULL,
+                        kills INT NOT NULL,
+                        deaths INT NOT NULL,
                         joined_at TIMESTAMP NOT NULL,
                         last_seen_at TIMESTAMP NOT NULL,
 

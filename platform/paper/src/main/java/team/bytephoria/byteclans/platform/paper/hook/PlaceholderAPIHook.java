@@ -142,6 +142,11 @@ public final class PlaceholderAPIHook extends PlaceholderExpansion {
                     member.role().displayName()
             );
 
+            case "kills" -> this.getMemberOrEmpty(player, clanMember -> clanMember.statistics().kills().toString());
+            case "deaths" -> this.getMemberOrEmpty(player, clanMember -> clanMember.statistics().deaths().toString());
+            case "kdr" ->
+                    this.getMemberOrEmpty(player, clanMember -> String.format("%.2f", clanMember.statistics().kdr()));
+
             case "join-date" -> this.getMemberOrEmpty(player, member ->
                     FORMATTER
                             .withZone(ZoneId.systemDefault())

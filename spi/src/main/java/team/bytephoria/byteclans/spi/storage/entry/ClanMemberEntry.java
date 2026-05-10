@@ -13,6 +13,8 @@ public record ClanMemberEntry(
         UUID clanUniqueId,
         String memberName,
         String roleId,
+        int kills,
+        int deaths,
         Instant joinedAt,
         Instant lastSeenAt
 ) {
@@ -29,6 +31,8 @@ public record ClanMemberEntry(
                 clanMember.clan().uniqueId(),
                 clanMember.name(),
                 clanMember.role().id(),
+                clanMember.statistics().kills().value(),
+                clanMember.statistics().deaths().value(),
                 clanMember.data().joinedAt(),
                 clanMember.data().lastSeenAt()
         );
@@ -40,6 +44,8 @@ public record ClanMemberEntry(
                 clanMember.clan().uniqueId(),
                 clanMember.name(),
                 clanMember.role().id(),
+                clanMember.statistics().kills().value(),
+                clanMember.statistics().deaths().value(),
                 clanMember.data().joinedAt(),
                 Instant.now()
         );
