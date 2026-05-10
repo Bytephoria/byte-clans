@@ -11,9 +11,7 @@ import team.bytephoria.byteclans.spi.storage.field.ClanMemberField;
 import team.bytephoria.byteclans.spi.storage.view.ClanMemberView;
 
 import java.sql.*;
-import java.util.Arrays;
-import java.util.Optional;
-import java.util.UUID;
+import java.util.*;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ExecutorService;
 import java.util.logging.Level;
@@ -65,6 +63,25 @@ public final class H2ClanMemberStorage extends AbstractSQLClanMemberStorage {
     private static final String DELETE_BY_UNIQUE_ID_QUERY = """
             DELETE FROM members WHERE unique_id = ?;
             """;
+
+    private static final String FIND_CLAN_UNIQUE_ID_BY_UNIQUE_ID_QUERY = """
+        SELECT c.unique_id
+        FROM members m
+        JOIN clans c ON m.clan_id = c.id
+        WHERE m.unique_id = ?;
+        """;
+
+    private static final String FIND_ALL_BY_CLAN_UNIQUE_ID_QUERY = """
+        SELECT c.unique_id as clan_unique_id,
+               m.unique_id,
+               m.name,
+               m.role_id,
+               m.joined_at,
+               m.last_seen_at
+        FROM members m
+        JOIN clans c ON m.clan_id = c.id
+        WHERE c.unique_id = ?;
+        """;
 
     @Override
     public int countMembers() {
@@ -161,6 +178,59 @@ public final class H2ClanMemberStorage extends AbstractSQLClanMemberStorage {
     }
 
     @Override
+    public Optional<UUID> findClanUniqueIdByUniqueId(final @NotNull UUID uniqueId) {
+        try (
+                final Connection connection = this.storageConnection().getConnection();
+                final PreparedStatement preparedStatement = connection.prepareStatement(FIND_CLAN_UNIQUE_ID_BY_UNIQUE_ID_QUERY)
+        ) {
+            preparedStatement.setObject(1, uniqueId, H2Type.UUID);
+            try (final ResultSet resultSet = preparedStatement.executeQuery()) {
+                if (!resultSet.next()) {
+                    return Optional.empty();
+                }
+
+                return Optional.of(resultSet.getObject(1, UUID.class));
+            }
+        } catch (SQLException e) {
+            this.logger().log(Level.WARNING, e.getMessage(), e);
+            return Optional.empty();
+        }
+    }
+
+    @Override
+    public @NotNull Collection<ClanMemberView> findAllByUniqueId(final @NotNull UUID uniqueId) {
+        try (
+                final Connection connection = this.storageConnection().getConnection();
+                final PreparedStatement preparedStatement = connection.prepareStatement(FIND_ALL_BY_CLAN_UNIQUE_ID_QUERY)
+        ) {
+            preparedStatement.setObject(1, uniqueId, H2Type.UUID);
+            try (final ResultSet resultSet = preparedStatement.executeQuery()) {
+                final List<ClanMemberView> members = new ArrayList<>();
+                while (resultSet.next()) {
+                    members.add(new ClanMemberView(
+                            resultSet.getObject(1, UUID.class),
+                            resultSet.getObject(2, UUID.class),
+                            resultSet.getString(3),
+                            resultSet.getString(4),
+                            resultSet.getTimestamp(5).toInstant(),
+                            resultSet.getTimestamp(6).toInstant()
+                    ));
+                }
+
+                return members;
+            }
+        } catch (SQLException e) {
+            this.logger().log(Level.WARNING, e.getMessage(), e);
+            return List.of();
+        }
+    }
+
+    @Override
+    public @NotNull Collection<ClanMemberView> findAllByIdentity(final @NotNull Identity identity) {
+        return this.findAllByUniqueId(identity.uniqueId());
+    }
+
+    @Override
     public Optional<ClanMemberView> findByUniqueId(final @NotNull UUID uniqueId) {
         try (
                 final Connection connection = this.storageConnection().getConnection();
@@ -219,6 +289,21 @@ public final class H2ClanMemberStorage extends AbstractSQLClanMemberStorage {
             @Override
             public CompletableFuture<Void> deleteByUniqueId(final @NotNull UUID uniqueId) {
                 return CompletableFuture.runAsync(() -> this.instance().deleteByUniqueId(uniqueId), this.instance().executorService);
+            }
+
+            @Override
+            public CompletableFuture<Optional<UUID>> findClanUniqueIdByUniqueId(final @NotNull UUID uniqueId) {
+                return CompletableFuture.supplyAsync(() -> this.instance().findClanUniqueIdByUniqueId(uniqueId), this.instance().executorService);
+            }
+
+            @Override
+            public CompletableFuture<Collection<ClanMemberView>> findAllByUniqueId(final @NotNull UUID uniqueId) {
+                return CompletableFuture.supplyAsync(() -> this.instance().findAllByUniqueId(uniqueId), this.instance().executorService);
+            }
+
+            @Override
+            public CompletableFuture<Collection<ClanMemberView>> findAllByIdentity(final @NotNull Identity identity) {
+                return CompletableFuture.supplyAsync(() -> this.instance().findAllByIdentity(identity), this.instance().executorService);
             }
 
             @Override

@@ -33,7 +33,7 @@ public final class DefaultClanRelationAllyRequestManager implements ClanRelation
     }
 
     @Override
-    public ResponseContext<ClanRequestAlly, ClanAllyRequestSendResult> send(
+    public @NotNull ResponseContext<ClanRequestAlly, ClanAllyRequestSendResult> send(
             final @NotNull ClanMember clanMember,
             final @NotNull Clan targetClan
     ) {
@@ -80,7 +80,7 @@ public final class DefaultClanRelationAllyRequestManager implements ClanRelation
     }
 
     @Override
-    public ResponseContext<ClanRequestAlly, ClanAllyRequestAcceptResult> accept(final @NotNull ClanMember clanMember) {
+    public @NotNull ResponseContext<ClanRequestAlly, ClanAllyRequestAcceptResult> accept(final @NotNull ClanMember clanMember) {
         final Clan clan = clanMember.clan();
         if (clan == null) {
             return ResponseContext.failure(ClanAllyRequestAcceptResult.NOT_IN_CLAN);
@@ -106,7 +106,7 @@ public final class DefaultClanRelationAllyRequestManager implements ClanRelation
     }
 
     @Override
-    public ResponseContext<ClanRequestAlly, ClanAllyRequestDeclineResult> decline(final @NotNull ClanMember clanMember) {
+    public @NotNull ResponseContext<ClanRequestAlly, ClanAllyRequestDeclineResult> decline(final @NotNull ClanMember clanMember) {
         final Clan clan = clanMember.clan();
         if (clan == null) {
             return ResponseContext.failure(ClanAllyRequestDeclineResult.NOT_IN_CLAN);

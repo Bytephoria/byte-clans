@@ -150,14 +150,15 @@ public final class ApplicationFacade {
                 clanStorage,
                 this.clanFactory,
                 clanAllyStorage,
-                clanEnemyStorage
+                clanEnemyStorage,
+                clanMemberStorage,
+                this.clanMemberFactory,
+                this.clanRoleRegistry
         );
 
         this.userLoader = new DefaultUserLoader(
                 this.clanMemberCache,
                 clanMemberStorage,
-                this.clanMemberFactory,
-                this.clanRoleRegistry,
                 this.clanLoader
         );
 

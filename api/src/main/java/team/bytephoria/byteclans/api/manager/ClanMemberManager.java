@@ -10,67 +10,61 @@ import java.util.UUID;
 
 public interface ClanMemberManager {
 
-    interface Admin {
+    @NotNull Response<ClanKickResult> kick(final @NotNull UUID memberUniqueId);
 
-        Response<ClanKickResult> kick(final @NotNull UUID memberUniqueId);
+    @NotNull Response<ClanTransferResult> transfer(
+            final @NotNull String clanName,
+            final @NotNull UUID newOwnerUniqueId,
+            final @NotNull String newOwnerName
+    );
 
-        Response<ClanTransferResult> transfer(
-                final @NotNull String clanName,
-                final @NotNull UUID newOwnerUniqueId,
-                final @NotNull String newOwnerName
-        );
+    @NotNull Response<ClanTransferResult> transfer(
+            final @NotNull UUID clanUniqueId,
+            final @NotNull UUID newOwnerUniqueId,
+            final @NotNull String newOwnerName
+    );
 
-        Response<ClanTransferResult> transfer(
-                final @NotNull UUID clanUniqueId,
-                final @NotNull UUID newOwnerUniqueId,
-                final @NotNull String newOwnerName
-        );
+    @NotNull Response<ClanRoleChangeResult> changeRole(
+            final @NotNull UUID memberUniqueId,
+            final @NotNull ClanRole clanRole
+    );
 
-        Response<ClanRoleChangeResult> changeRole(
-                final @NotNull UUID memberUniqueId,
-                final @NotNull ClanRole clanRole
-        );
-
-    }
-
-    Admin admin();
-
-    ResponseContext<ClanMember, ClanJoinResult> join(
+    @NotNull ResponseContext<ClanMember, ClanJoinResult> join(
             final @NotNull ClanPlayer clanPlayer,
             final @NotNull Clan clan
     );
 
-    Response<ClanLeaveResult> leave(
+    @NotNull Response<ClanLeaveResult> leave(
             final @NotNull ClanMember clanMember
     );
 
-    Response<ClanKickResult> kick(
+    @NotNull Response<ClanKickResult> kick(
             final @NotNull ClanMember executorClanMember,
             final @NotNull ClanMember targetClanMember
     );
 
-    Response<ClanChangeChatModeResult> changeChatMode(
+    @NotNull Response<ClanChangeChatModeResult> changeChatMode(
             final @NotNull ClanMember clanMember,
             final @NotNull ClanChatType chatType
     );
 
-    Response<ClanRoleChangeResult> changeRole(
+    @NotNull Response<ClanRoleChangeResult> changeRole(
             final @NotNull ClanMember executorClanMember,
             final @NotNull ClanMember targetClanMember,
             final @NotNull ClanRole clanRole
     );
 
-    Response<ClanPromoteResult> promote(
+    @NotNull Response<ClanPromoteResult> promote(
             final @NotNull ClanMember clanMember,
             final @NotNull ClanMember targetClanMember
     );
 
-    Response<ClanDemoteResult> demote(
+    @NotNull Response<ClanDemoteResult> demote(
             final @NotNull ClanMember clanMember,
             final @NotNull ClanMember targetClanMember
     );
 
-    Response<ClanTransferResult> transferOwner(
+    @NotNull Response<ClanTransferResult> transferOwner(
             final @NotNull ClanMember executorClanMember,
             final @NotNull ClanMember targetClanMember
     );

@@ -64,7 +64,7 @@ public final class ClanAdminCommands {
             final @NotNull @Argument(value = "clanName", suggestions = "online-clans") String clanName
     ) {
         AsyncExecutor.runAsync(() -> {
-            final ResponseContext<Clan, ClanDisbandResult> response = this.clanManager.admin().disbandClanByName(clanName);
+            final ResponseContext<Clan, ClanDisbandResult> response = this.clanManager.disbandClan(clanName);
             final ClanDisbandResult result = response.result();
             final String path = "clan.admin.disband." + this.resolveEnumName(result);
 
@@ -85,7 +85,7 @@ public final class ClanAdminCommands {
             final @NotNull @Argument(value = "target", suggestions = "onlinePlayers") Player targetPlayer
     ) {
         AsyncExecutor.runAsync(() -> {
-            final Response<ClanTransferResult> response = this.clanMemberManager.admin().transfer(
+            final Response<ClanTransferResult> response = this.clanMemberManager.transfer(
                     clanName,
                     targetPlayer.getUniqueId(),
                     targetPlayer.getName()
@@ -113,7 +113,7 @@ public final class ClanAdminCommands {
             final @NotNull @Argument("target") Player targetPlayer
     ) {
         AsyncExecutor.runAsync(() -> {
-            final Response<ClanKickResult> response = this.clanMemberManager.admin().kick(targetPlayer.getUniqueId());
+            final Response<ClanKickResult> response = this.clanMemberManager.kick(targetPlayer.getUniqueId());
             final ClanKickResult result = response.result();
             final String path = "clan.admin.kick." + this.resolveEnumName(result);
 
@@ -145,7 +145,7 @@ public final class ClanAdminCommands {
         }
 
         AsyncExecutor.runAsync(() -> {
-            final Response<ClanRoleChangeResult> response = this.clanMemberManager.admin().changeRole(targetPlayer.getUniqueId(), clanRole);
+            final Response<ClanRoleChangeResult> response = this.clanMemberManager.changeRole(targetPlayer.getUniqueId(), clanRole);
             final ClanRoleChangeResult result = response.result();
             final String path = "clan.admin.role." + this.resolveEnumName(result);
 
@@ -177,7 +177,7 @@ public final class ClanAdminCommands {
     ) {
         AsyncExecutor.runAsync(() -> {
             final UUID clanUniqueId = ClanNameUUID.from(clanName);
-            final Response<ClanRenameDisplayResult> response = this.clanSettingsManager.admin().renameDisplay(clanUniqueId, newDisplayName);
+            final Response<ClanRenameDisplayResult> response = this.clanSettingsManager.renameDisplay(clanUniqueId, newDisplayName);
             final ClanRenameDisplayResult result = response.result();
             final String path = "clan.admin.display." + this.resolveEnumName(result);
 
@@ -217,7 +217,7 @@ public final class ClanAdminCommands {
 
         AsyncExecutor.runAsync(() -> {
             final UUID clanUniqueId = ClanNameUUID.from(clanName);
-            final Response<ClanPvPModeChangeResult> response = this.clanSettingsManager.admin().changePvPMode(clanUniqueId, clanPvPMode);
+            final Response<ClanPvPModeChangeResult> response = this.clanSettingsManager.changePvPMode(clanUniqueId, clanPvPMode);
             final ClanPvPModeChangeResult result = response.result();
             final String path = "clan.admin.pvp-mode." + this.resolveEnumName(result);
 
@@ -256,7 +256,7 @@ public final class ClanAdminCommands {
 
         AsyncExecutor.runAsync(() -> {
             final UUID clanUniqueId = ClanNameUUID.from(clanName);
-            final Response<ClanStatusChangeResult> response = this.clanSettingsManager.admin().changeInviteStatus(clanUniqueId, clanInviteState);
+            final Response<ClanStatusChangeResult> response = this.clanSettingsManager.changeInviteStatus(clanUniqueId, clanInviteState);
             final ClanStatusChangeResult result = response.result();
             final String path = "clan.admin.invite-state." + this.resolveEnumName(result);
 
