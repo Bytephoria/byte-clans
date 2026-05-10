@@ -18,6 +18,7 @@ import team.bytephoria.byteclans.spi.storage.entry.ClanEntry;
 import team.bytephoria.byteclans.spi.storage.field.ClanField;
 
 import java.time.Duration;
+import java.time.Instant;
 import java.util.UUID;
 
 public final class DefaultClanSettingsManager implements ClanSettingsManager {
@@ -41,7 +42,7 @@ public final class DefaultClanSettingsManager implements ClanSettingsManager {
     }
 
     @Override
-    public Response<ClanPvPModeChangeResult> changePvPMode(
+    public @NotNull Response<ClanPvPModeChangeResult> changePvPMode(
             final @NotNull UUID clanUniqueId,
             final @NotNull ClanPvPMode clanPvPMode
     ) {
@@ -61,7 +62,7 @@ public final class DefaultClanSettingsManager implements ClanSettingsManager {
     }
 
     @Override
-    public Response<ClanStatusChangeResult> changeInviteStatus(
+    public @NotNull Response<ClanStatusChangeResult> changeInviteStatus(
             final @NotNull UUID clanUniqueId,
             final @NotNull ClanInviteState clanInviteState
     ) {
@@ -81,7 +82,7 @@ public final class DefaultClanSettingsManager implements ClanSettingsManager {
     }
 
     @Override
-    public Response<ClanRenameDisplayResult> renameDisplay(
+    public @NotNull Response<ClanRenameDisplayResult> renameDisplay(
             final @NotNull UUID clanUniqueId,
             final @NotNull String newDisplayName
     ) {
@@ -177,7 +178,7 @@ public final class DefaultClanSettingsManager implements ClanSettingsManager {
             return Response.failure(ClanRenameDisplayResult.INSUFFICIENT_ROLE);
         }
 
-        if (cooldown != null && clan.data().isDisplayInCooldown(cooldown)) {
+        if (cooldown != null && clan.data().isDisplayNameInCooldown()) {
             return Response.failure(ClanRenameDisplayResult.IN_COOLDOWN);
         }
 
@@ -198,10 +199,18 @@ public final class DefaultClanSettingsManager implements ClanSettingsManager {
         clan.data().displayName(newDisplayName);
 
         if (cooldown != null) {
-            clan.data().displayLastChangedAtNow();
-            this.clanStorage.async().update(ClanEntry.from(clan), ClanField.DISPLAY_NAME, ClanField.DISPLAY_LAST_CHANGED_AT);
+            clan.data().displayNameChangeAvailableAt(Instant.now().plus(cooldown));
+
+            this.clanStorage.async().update(
+                    ClanEntry.from(clan),
+                    ClanField.DISPLAY_NAME,
+                    ClanField.DISPLAY_NAME_CHANGE_AVAILABLE_AT
+            );
         } else {
-            this.clanStorage.async().update(ClanEntry.from(clan), ClanField.DISPLAY_NAME);
+            this.clanStorage.async().update(
+                    ClanEntry.from(clan),
+                    ClanField.DISPLAY_NAME
+            );
         }
 
         return Response.success(ClanRenameDisplayResult.SUCCESS);

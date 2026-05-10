@@ -1,5 +1,7 @@
 package team.bytephoria.byteclans.api;
 
+import java.time.Duration;
+
 public interface ClanGlobalSettings {
 
     int defaultMaxMembers();
@@ -7,6 +9,8 @@ public interface ClanGlobalSettings {
     ClanPvPMode defaultPvPMode();
 
     ClanInviteState defaultInviteState();
+
+    Duration displayNameChangeCooldown();
 
     int minimumNameChars();
     int maximumNameChars();
