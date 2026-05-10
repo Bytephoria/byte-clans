@@ -33,7 +33,7 @@ public final class MariaDBStorageConnection extends AbstractSQLStorageConnection
                         kills            INT          NOT NULL,
                         deaths           INT          NOT NULL,
                         kills_streak     INT          NOT NULL,
-                        display_last_changed_at TIMESTAMP NULL,
+                        display_name_available_at TIMESTAMP NULL,
                         created_at       TIMESTAMP    NOT NULL DEFAULT CURRENT_TIMESTAMP
                     );
                     """);
