@@ -5,11 +5,14 @@ import team.bytephoria.byteclans.api.ClanGlobalSettings;
 import team.bytephoria.byteclans.api.ClanInviteState;
 import team.bytephoria.byteclans.api.ClanPvPMode;
 
+import java.time.Duration;
+
 public final class DefaultClanGlobalSettings implements ClanGlobalSettings {
 
     private final int defaultMaxMembers;
     private final ClanPvPMode defaultClanPvPMode;
     private final ClanInviteState defaultClanInviteState;
+    private final Duration displayNameChangeCooldown;
 
     private final int minimumPoints;
     private final int maximumPoints;
@@ -23,7 +26,8 @@ public final class DefaultClanGlobalSettings implements ClanGlobalSettings {
     public DefaultClanGlobalSettings(
             final int defaultMaxMembers,
             final @NotNull ClanPvPMode defaultClanPvPMode,
-            final  @NotNull ClanInviteState defaultClanInviteState,
+            final @NotNull ClanInviteState defaultClanInviteState,
+            final @NotNull Duration displayNameChangeCooldown,
             final int minimumChars,
             final int maximumChars,
             final int minimumPoints,
@@ -35,6 +39,7 @@ public final class DefaultClanGlobalSettings implements ClanGlobalSettings {
 
         this.defaultClanPvPMode = defaultClanPvPMode;
         this.defaultClanInviteState = defaultClanInviteState;
+        this.displayNameChangeCooldown = displayNameChangeCooldown;
 
         this.minimumChars = minimumChars;
         this.maximumChars = maximumChars;
@@ -60,6 +65,11 @@ public final class DefaultClanGlobalSettings implements ClanGlobalSettings {
     @Override
     public ClanInviteState defaultInviteState() {
         return this.defaultClanInviteState;
+    }
+
+    @Override
+    public Duration displayNameChangeCooldown() {
+        return this.displayNameChangeCooldown;
     }
 
     @Override

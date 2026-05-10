@@ -12,6 +12,6 @@ public enum ClanField {
     KILLS,
     DEATHS,
     KILLS_STREAK,
-    DISPLAY_LAST_CHANGED_AT
+    DISPLAY_NAME_CHANGE_AVAILABLE_AT
 
 }

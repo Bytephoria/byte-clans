@@ -118,7 +118,7 @@ public final class MySQLClanStorage extends AbstractSQLClanStorage {
             preparedStatement.setInt(11, clanEntry.deaths());
             preparedStatement.setInt(12, clanEntry.killsStreak());
 
-            final Instant displayLastChangedAt = clanEntry.displayLastChangedAt();
+            final Instant displayLastChangedAt = clanEntry.displayNameChangeAvailableAt();
 
             if (displayLastChangedAt != null) {
                 preparedStatement.setTimestamp(13, Timestamp.from(displayLastChangedAt));
@@ -151,7 +151,7 @@ public final class MySQLClanStorage extends AbstractSQLClanStorage {
             preparedStatement.setInt(9, clanEntry.deaths());
             preparedStatement.setInt(10, clanEntry.killsStreak());
 
-            final Instant displayLastChangedAt = clanEntry.displayLastChangedAt();
+            final Instant displayLastChangedAt = clanEntry.displayNameChangeAvailableAt();
             if (displayLastChangedAt != null) {
                 preparedStatement.setTimestamp(11, Timestamp.from(displayLastChangedAt));
             } else {
@@ -180,7 +180,7 @@ public final class MySQLClanStorage extends AbstractSQLClanStorage {
                     case KILLS ->  "kills = ?";
                     case DEATHS ->  "deaths = ?";
                     case KILLS_STREAK -> "kills_streak = ?";
-                    case DISPLAY_LAST_CHANGED_AT -> "display_last_changed_at = ?";
+                    case DISPLAY_NAME_CHANGE_AVAILABLE_AT -> "display_name_available_at = ?";
                 })
                 .collect(Collectors.joining(", "));
 
@@ -203,7 +203,7 @@ public final class MySQLClanStorage extends AbstractSQLClanStorage {
                     case KILLS -> preparedStatement.setInt(index++, clanEntry.kills());
                     case DEATHS -> preparedStatement.setInt(index++, clanEntry.deaths());
                     case KILLS_STREAK -> preparedStatement.setInt(index++, clanEntry.killsStreak());
-                    case DISPLAY_LAST_CHANGED_AT -> preparedStatement.setTimestamp(index++, Timestamp.from(clanEntry.displayLastChangedAt()));
+                    case DISPLAY_NAME_CHANGE_AVAILABLE_AT -> preparedStatement.setTimestamp(index++, Timestamp.from(clanEntry.displayNameChangeAvailableAt()));
                 }
             }
 
