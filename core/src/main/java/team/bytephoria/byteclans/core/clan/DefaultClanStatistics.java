@@ -11,47 +11,56 @@ public final class DefaultClanStatistics implements ClanStatistics {
     private final IntValue kills;
     private final IntValue deaths;
     private final IntValue killsStreak;
+    private final IntValue points;
 
     public DefaultClanStatistics(
             final @NotNull IntValue kills,
             final @NotNull IntValue deaths,
-            final @NotNull IntValue killsStreak
+            final @NotNull IntValue killsStreak,
+            final @NotNull IntValue points
     ) {
         this.kills = kills;
         this.deaths = deaths;
         this.killsStreak = killsStreak;
+        this.points = points;
     }
 
     public DefaultClanStatistics(
             final int kills,
             final int deaths,
-            final int killsStreak
+            final int killsStreak,
+            final int points
     ) {
-        this(new IntValue(kills), new IntValue(deaths), new IntValue(killsStreak));
+        this(new IntValue(kills), new IntValue(deaths), new IntValue(killsStreak), new IntValue(points));
     }
 
     public DefaultClanStatistics() {
-        this(0, 0, 0);
+        this(0, 0, 0, 0);
     }
 
     @Contract(" -> new")
     public static @NonNull DefaultClanStatistics allZero() {
-        return new DefaultClanStatistics(0, 0, 0);
+        return new DefaultClanStatistics(0, 0, 0, 0);
     }
 
     @Override
-    public IntValue kills() {
+    public @NonNull IntValue kills() {
         return this.kills;
     }
 
     @Override
-    public IntValue deaths() {
+    public @NonNull IntValue deaths() {
         return this.deaths;
     }
 
     @Override
-    public IntValue killsStreak() {
+    public @NonNull IntValue killsStreak() {
         return this.killsStreak;
+    }
+
+    @Override
+    public @NotNull IntValue points() {
+        return this.points;
     }
 
     @Override

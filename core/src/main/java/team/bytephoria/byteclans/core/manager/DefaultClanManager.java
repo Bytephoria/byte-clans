@@ -168,7 +168,7 @@ public final class DefaultClanManager implements ClanManager {
             final @NotNull Operation operation
     ) {
 
-        final int oldValue = clan.points().value();
+        final int oldValue = clan.statistics().points().value();
         int newValue = operation.resolve(oldValue, value);
 
         final int min = this.globalSettings.minimumPoints();
@@ -190,7 +190,7 @@ public final class DefaultClanManager implements ClanManager {
             return Response.failure(ClanUpdatePointsResult.CANCELLED);
         }
 
-        clan.points().value(newValue);
+        clan.statistics().points().value(newValue);
         this.clanStorage.async().update(ClanEntry.from(clan), ClanField.POINTS);
         return ResponseContext.success(clan, ClanUpdatePointsResult.SUCCESS);
     }

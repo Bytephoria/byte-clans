@@ -519,7 +519,7 @@ public final class ClanCommand {
                 .format(clan.data().createdAt())
         );
 
-        placeholders.put("points", clan.points().toString());
+        placeholders.put("points", clan.statistics().points().toString());
 
         placeholders.put("owner_name", clan.ownerData().name());
         placeholders.put("owner_unique_id", clan.ownerData().uniqueId().toString());

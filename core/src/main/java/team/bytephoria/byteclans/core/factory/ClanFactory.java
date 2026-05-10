@@ -4,7 +4,6 @@ import org.jetbrains.annotations.NotNull;
 import team.bytephoria.byteclans.api.Clan;
 import team.bytephoria.byteclans.api.ClanGlobalSettings;
 import team.bytephoria.byteclans.api.ClanMember;
-import team.bytephoria.byteclans.api.util.IntValue;
 import team.bytephoria.byteclans.core.clan.*;
 import team.bytephoria.byteclans.core.util.ClanNameUUID;
 import team.bytephoria.byteclans.spi.storage.view.ClanView;
@@ -32,8 +31,7 @@ public final class ClanFactory {
                         globalSettings.defaultInviteState()
                 ),
                 DefaultClanStatistics.allZero(),
-                new DefaultClanRelations(),
-                new IntValue()
+                new DefaultClanRelations()
         );
     }
 
@@ -44,9 +42,8 @@ public final class ClanFactory {
                 null,
                 new DefaultClanData(clanView.clanName(), clanView.clanDisplayName(), clanView.displayNameChangeAvailableAt(), clanView.createdAt()),
                 new DefaultClanSettings(clanView.maxMembers(), clanView.clanPvPMode(), clanView.clanInviteState()),
-                new DefaultClanStatistics(clanView.kills(), clanView.deaths(), clanView.killsStreak()),
-                new DefaultClanRelations(),
-                new IntValue(clanView.points())
+                new DefaultClanStatistics(clanView.kills(), clanView.deaths(), clanView.killsStreak(), clanView.points()),
+                new DefaultClanRelations()
         );
     }
 
