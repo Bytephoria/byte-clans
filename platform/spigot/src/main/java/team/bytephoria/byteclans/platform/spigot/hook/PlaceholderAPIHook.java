@@ -90,8 +90,7 @@ public final class PlaceholderAPIHook extends PlaceholderExpansion {
                     Integer.toString(clan.settings().maxMembers())
             );
 
-            case "points" -> this.getClanOrEmpty(player, clan -> Integer.toString(clan.statistics().points().value()));
-
+            case "points" -> this.getClanOrEmpty(player, clan -> clan.statistics().points().toString());
             case "kills" -> this.getClanOrEmpty(player, clan ->
                     clan.statistics().kills().toString()
             );
