@@ -11,6 +11,7 @@ public enum ClanAllyRequestSendResult {
     ALREADY_ALLIES,
     IN_TENSION,
     IS_ENEMY,
+    LIMIT_REACHED,
     TARGET_HAS_CLAN_AS_ENEMY
 
 }

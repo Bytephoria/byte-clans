@@ -48,6 +48,10 @@ public final class DefaultClanRelationAllyRequestManager implements ClanRelation
             return ResponseContext.failure(ClanAllyRequestSendResult.NO_PERMISSION);
         }
 
+        if (clan.relations().allies().size() >= clan.settings().maxAllies()) {
+            return ResponseContext.failure(ClanAllyRequestSendResult.LIMIT_REACHED);
+        }
+
         final ClanRelationType clanRelationType = clan.relations().getRelationType(targetClan.uniqueId());
         if (clanRelationType == ClanRelationType.ALLIANCE) {
             return ResponseContext.failure(ClanAllyRequestSendResult.ALREADY_ALLIES);
@@ -90,6 +94,10 @@ public final class DefaultClanRelationAllyRequestManager implements ClanRelation
             return ResponseContext.failure(ClanAllyRequestAcceptResult.NO_PERMISSION);
         }
 
+        if (clan.relations().allies().size() >= clan.settings().maxAllies()) {
+            return ResponseContext.failure(ClanAllyRequestAcceptResult.LIMIT_REACHED);
+        }
+
         final ClanRequestAlly clanRequestAlly = this.requestCache.remove(clan.uniqueId());
         if (clanRequestAlly == null) {
             return ResponseContext.failure(ClanAllyRequestAcceptResult.NOT_REQUESTED);
@@ -98,6 +106,10 @@ public final class DefaultClanRelationAllyRequestManager implements ClanRelation
         final Clan targetClan = this.clanCache.get(clanRequestAlly.clanSenderUniqueId());
         if (targetClan == null) {
             return ResponseContext.failure(ClanAllyRequestAcceptResult.TARGET_CLAN_OFFLINE);
+        }
+
+        if (targetClan.relations().allies().size() >= targetClan.settings().maxAllies()) {
+            return ResponseContext.failure(ClanAllyRequestAcceptResult.TARGET_LIMIT_REACHED);
         }
 
         this.clanEventBus.callClanAllyRequestAcceptEvent(clanMember, targetClan);

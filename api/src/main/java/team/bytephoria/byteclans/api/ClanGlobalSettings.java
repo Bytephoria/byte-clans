@@ -15,6 +15,10 @@ public interface ClanGlobalSettings {
     int minimumNameChars();
     int maximumNameChars();
 
+    int maximumAllies();
+
+    int maximumEnemies();
+
     int minimumPoints();
     int maximumPoints();
 

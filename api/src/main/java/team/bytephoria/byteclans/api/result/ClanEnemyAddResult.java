@@ -8,6 +8,7 @@ public enum ClanEnemyAddResult {
     SAME_CLAN,
     ALREADY_ENEMIES,
     IS_ALLY,
-    IN_TENSION
+    IN_TENSION,
+    LIMIT_REACHED,
 
 }

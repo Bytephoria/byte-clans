@@ -147,6 +147,7 @@ clan:
         target-has-clan-as-enemy: "<gold><bold>{clan}</bold></gold> <red>has marked your clan as enemy.</red>"
         insufficient-role: "<red>You don't have permission to manage diplomacy.</red>"
         cancelled: "<red>Alliance request was cancelled by an external plugin.</red>"
+        limit-reached: "<red>Your clan has reached the maximum number of alliances.</red>"
 
       accept:
         success: "<gradient:#00e676:#1de9b6>Alliance accepted!</gradient>"
@@ -156,6 +157,9 @@ clan:
         not-requested: "<red>You don't have a pending alliance request.</red>"
         target-clan-offline: "<red>The clan that sent the request is no longer online.</red>"
         cancelled: "<red>Alliance accept was cancelled by an external plugin.</red>"
+
+        limit-reached: "<red>Your clan has reached the maximum number of alliances.</red>"
+        target-limit-reached: "<red>That clan has reached the maximum number of alliances.</red>"
 
       decline:
         success: "<yellow>Alliance request declined.</yellow>"

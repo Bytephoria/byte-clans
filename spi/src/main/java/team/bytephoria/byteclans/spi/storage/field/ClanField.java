@@ -8,6 +8,8 @@ public enum ClanField {
     INVITE_STATE,
     PVP_MODE,
     MAX_MEMBERS,
+    MAX_ALLIES,
+    MAX_ENEMIES,
     POINTS,
     KILLS,
     DEATHS,

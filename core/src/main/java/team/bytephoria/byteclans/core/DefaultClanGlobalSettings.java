@@ -17,6 +17,9 @@ public final class DefaultClanGlobalSettings implements ClanGlobalSettings {
     private final int minimumPoints;
     private final int maximumPoints;
 
+    private final int maximumAllies;
+    private final int maximumEnemies;
+
     private final int pointsPerKill;
     private final int pointsPerDeath;
 
@@ -30,6 +33,8 @@ public final class DefaultClanGlobalSettings implements ClanGlobalSettings {
             final @NotNull Duration displayNameChangeCooldown,
             final int minimumChars,
             final int maximumChars,
+            final int maximumAllies,
+            final int maximumEnemies,
             final int minimumPoints,
             final int maximumPoints,
             final int pointsPerKill,
@@ -43,6 +48,9 @@ public final class DefaultClanGlobalSettings implements ClanGlobalSettings {
 
         this.minimumChars = minimumChars;
         this.maximumChars = maximumChars;
+
+        this.maximumAllies = maximumAllies;
+        this.maximumEnemies = maximumEnemies;
 
         this.minimumPoints = minimumPoints;
         this.maximumPoints = maximumPoints;
@@ -80,6 +88,16 @@ public final class DefaultClanGlobalSettings implements ClanGlobalSettings {
     @Override
     public int maximumNameChars() {
         return this.maximumChars;
+    }
+
+    @Override
+    public int maximumAllies() {
+        return this.maximumAllies;
+    }
+
+    @Override
+    public int maximumEnemies() {
+        return this.maximumEnemies;
     }
 
     @Override

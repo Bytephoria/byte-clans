@@ -7,6 +7,8 @@ public enum ClanAllyRequestAcceptResult {
     NO_PERMISSION,
     NOT_IN_CLAN,
     NOT_REQUESTED,
-    TARGET_CLAN_OFFLINE
+    TARGET_CLAN_OFFLINE,
+    LIMIT_REACHED,
+    TARGET_LIMIT_REACHED
 
 }

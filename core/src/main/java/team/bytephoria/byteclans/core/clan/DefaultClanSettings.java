@@ -8,16 +8,22 @@ import team.bytephoria.byteclans.api.ClanSettings;
 public final class DefaultClanSettings implements ClanSettings {
 
     private int maxMembers;
+    private int maxAllies;
+    private int maxEnemies;
 
     private ClanPvPMode pvpMode;
     private ClanInviteState inviteState;
 
     public DefaultClanSettings(
             final int maxMembers,
+            final int maxAllies,
+            final int maxEnemies,
             final @NotNull ClanPvPMode pvpMode,
             final @NotNull ClanInviteState inviteState
     ) {
         this.maxMembers = maxMembers;
+        this.maxAllies = maxAllies;
+        this.maxEnemies = maxEnemies;
         this.pvpMode = pvpMode;
         this.inviteState = inviteState;
     }
@@ -25,6 +31,16 @@ public final class DefaultClanSettings implements ClanSettings {
     @Override
     public int maxMembers() {
         return this.maxMembers;
+    }
+
+    @Override
+    public int maxAllies() {
+        return this.maxAllies;
+    }
+
+    @Override
+    public int maxEnemies() {
+        return this.maxEnemies;
     }
 
     @Override
@@ -38,8 +54,18 @@ public final class DefaultClanSettings implements ClanSettings {
     }
 
     @Override
-    public void maxMembers(int maxMembers) {
+    public void maxMembers(final int maxMembers) {
         this.maxMembers = maxMembers;
+    }
+
+    @Override
+    public void maxAllies(final int maxAllies) {
+        this.maxAllies = maxAllies;
+    }
+
+    @Override
+    public void maxEnemies(final int maxEnemies) {
+        this.maxEnemies = maxEnemies;
     }
 
     @Override

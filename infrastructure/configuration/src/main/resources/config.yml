@@ -57,6 +57,8 @@ clan:
   defaults:
     # Default settings applied when a clan is created.
     max-members: 20             # Maximum number of members a clan can have.
+    max-allies: 5               # Maximum number of allied clans allowed.
+    max-enemies: 5              # Maximum number of enemy clans allowed.
 
     # Options: NO_DAMAGE, SAFE_DAMAGE, FRIENDLY_FIRE
     pvp-mode: NO_DAMAGE         # PvP mode between clan members.

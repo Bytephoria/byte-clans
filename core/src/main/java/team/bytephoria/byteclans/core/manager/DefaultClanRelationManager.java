@@ -161,6 +161,10 @@ public final class DefaultClanRelationManager implements ClanRelationManager {
             return Response.failure(ClanEnemyAddResult.NO_PERMISSION);
         }
 
+        if (clan.relations().enemies().size() >= clan.settings().maxEnemies()) {
+            return Response.failure(ClanEnemyAddResult.LIMIT_REACHED);
+        }
+
         final ClanRelations clanRelations = clan.relations();
         final ClanRelationType clanRelationType = clanRelations.getRelationType(targetClan.uniqueId());
         if (clanRelationType == ClanRelationType.ENEMY) {
