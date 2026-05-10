@@ -225,6 +225,7 @@ public final class SpigotPlugin extends JavaPlugin {
                         applicationFacade.clanSettingsManager(),
                         applicationFacade.clanStatisticManager(),
                         applicationFacade.clanNameProcessor(),
+                        applicationFacade.clanGlobalSettings(),
                         applicationFacade.clanDisplayNameProcessor(),
                         this.commandManager,
                         annotationParser

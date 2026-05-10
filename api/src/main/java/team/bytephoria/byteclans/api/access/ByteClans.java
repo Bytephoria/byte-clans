@@ -2,6 +2,7 @@ package team.bytephoria.byteclans.api.access;
 
 import org.jetbrains.annotations.NotNull;
 import team.bytephoria.byteclans.api.Clan;
+import team.bytephoria.byteclans.api.ClanGlobalSettings;
 import team.bytephoria.byteclans.api.ClanMember;
 import team.bytephoria.byteclans.api.ClanPlayer;
 import team.bytephoria.byteclans.api.manager.*;
@@ -18,6 +19,8 @@ public interface ByteClans {
     static @NotNull ByteClans getAPI() {
         return ByteClansProvider.getInstance();
     }
+
+    ClanGlobalSettings globalSettings();
 
     ClanNameValidator nameValidator();
 
