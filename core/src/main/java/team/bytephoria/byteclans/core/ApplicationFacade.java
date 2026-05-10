@@ -43,6 +43,7 @@ public final class ApplicationFacade {
 
     private final ClanManager clanManager;
     private final ClanMemberManager clanMemberManager;
+    private final ClanMemberStatisticManager clanMemberStatisticManager;
     private final ClanInviteManager clanInviteManager;
     private final ClanSettingsManager clanSettingsManager;
     private final ClanStatisticManager clanStatisticManager;
@@ -96,6 +97,11 @@ public final class ApplicationFacade {
                 clanEventBus,
                 this.clanRoleRegistry,
                 transactionManager
+        );
+
+        this.clanMemberStatisticManager = new DefaultClanMemberStatisticManager(
+                clanEventBus,
+                clanMemberStorage
         );
 
         this.clanManager = new DefaultClanManager(
@@ -198,6 +204,10 @@ public final class ApplicationFacade {
 
     public ClanMemberManager clanMemberManager() {
         return this.clanMemberManager;
+    }
+
+    public ClanMemberStatisticManager clanMemberStatisticManager() {
+        return this.clanMemberStatisticManager;
     }
 
     public ClanInviteManager clanInviteManager() {

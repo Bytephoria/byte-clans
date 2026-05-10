@@ -16,6 +16,7 @@ public final class DefaultClanMember implements ClanMember {
     private final String userName;
 
     private final ClanMemberData clanMemberData;
+    private final ClanMemberStatistics clanMemberStatistics;
 
     private Clan clan;
     private ClanRole clanRole;
@@ -28,7 +29,8 @@ public final class DefaultClanMember implements ClanMember {
             final @NotNull ClanMemberData clanMemberData,
             final @NotNull Clan clan,
             final @NotNull ClanRole clanRole,
-            final @NotNull ClanChatType clanChatType
+            final @NotNull ClanChatType clanChatType,
+            final @NotNull ClanMemberStatistics clanMemberStatistics
     ) {
         this.userUniqueId = userUniqueId;
         this.userName = userName;
@@ -36,6 +38,7 @@ public final class DefaultClanMember implements ClanMember {
         this.clan = clan;
         this.clanRole = clanRole;
         this.chatType = clanChatType;
+        this.clanMemberStatistics = clanMemberStatistics;
     }
 
     public DefaultClanMember(
@@ -43,7 +46,8 @@ public final class DefaultClanMember implements ClanMember {
             final @Nullable Clan clan,
             final @NotNull ClanMemberData clanMemberData,
             final @NotNull ClanRole clanRole,
-            final @NotNull ClanChatType chatType
+            final @NotNull ClanChatType chatType,
+            final @NotNull ClanMemberStatistics clanMemberStatistics
     ) {
         this.userUniqueId = clanPlayer.uniqueId();
         this.userName = clanPlayer.name();
@@ -52,6 +56,7 @@ public final class DefaultClanMember implements ClanMember {
         this.clanMemberData = clanMemberData;
         this.clan = clan;
         this.chatType = chatType;
+        this.clanMemberStatistics = clanMemberStatistics;
     }
 
     public DefaultClanMember(
@@ -61,7 +66,8 @@ public final class DefaultClanMember implements ClanMember {
             final @NotNull ClanMemberData clanMemberData,
             final @NotNull ClanRole clanRole,
             final @NotNull ClanPlayer clanPlayer,
-            final @NotNull ClanChatType chatType
+            final @NotNull ClanChatType chatType,
+            final @NotNull ClanMemberStatistics clanMemberStatistics
     ) {
         this.userUniqueId = userUniqueId;
         this.userName = userName;
@@ -70,14 +76,16 @@ public final class DefaultClanMember implements ClanMember {
         this.clan = clan;
         this.clanPlayer = clanPlayer;
         this.chatType = chatType;
+        this.clanMemberStatistics = clanMemberStatistics;
     }
 
     public DefaultClanMember(
             final @NotNull ClanPlayer clanPlayer,
             final @NotNull ClanMemberData clanMemberData,
-            final @NotNull ClanRole clanRole
+            final @NotNull ClanRole clanRole,
+            final @NotNull ClanMemberStatistics clanMemberStatistics
     ) {
-        this(clanPlayer, null, clanMemberData, clanRole, ClanChatType.PUBLIC);
+        this(clanPlayer, null, clanMemberData, clanRole, ClanChatType.PUBLIC, clanMemberStatistics);
     }
 
     @Override
@@ -123,6 +131,11 @@ public final class DefaultClanMember implements ClanMember {
     @Override
     public ClanChatType chatType() {
         return this.chatType;
+    }
+
+    @Override
+    public ClanMemberStatistics statistics() {
+        return this.clanMemberStatistics;
     }
 
     @Override

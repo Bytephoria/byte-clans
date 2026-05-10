@@ -36,14 +36,18 @@ public final class H2ClanMemberStorage extends AbstractSQLClanMemberStorage {
                                  clan_id,
                                  name,
                                  role_id,
+                                 kills,
+                                 deaths,
                                  joined_at,
                                  last_seen_at)
-            VALUES (?, (SELECT id FROM clans WHERE unique_id = ?), ?, ?, ?, ?);
+            VALUES (?, (SELECT id FROM clans WHERE unique_id = ?), ?, ?, ?, ?, ?, ?);
             """;
 
     private static final String UPDATE_MEMBER_QUERY = """
             UPDATE members SET
                 role_id = ?,
+                kills = ?,
+                deaths = ?,
                 last_seen_at = ?
             WHERE unique_id = ?;
             """;
@@ -53,6 +57,8 @@ public final class H2ClanMemberStorage extends AbstractSQLClanMemberStorage {
                    m.unique_id,
                    m.name,
                    m.role_id,
+                   m.kills,
+                   m.deaths,
                    m.joined_at,
                    m.last_seen_at
             FROM members m
@@ -76,6 +82,8 @@ public final class H2ClanMemberStorage extends AbstractSQLClanMemberStorage {
                m.unique_id,
                m.name,
                m.role_id,
+               m.kills,
+               m.deaths,
                m.joined_at,
                m.last_seen_at
         FROM members m
@@ -111,8 +119,12 @@ public final class H2ClanMemberStorage extends AbstractSQLClanMemberStorage {
             preparedStatement.setObject(2, clanMemberEntry.clanUniqueId(), H2Type.UUID);
             preparedStatement.setString(3, clanMemberEntry.memberName());
             preparedStatement.setString(4, clanMemberEntry.roleId());
-            preparedStatement.setTimestamp(5, Timestamp.from(clanMemberEntry.joinedAt()));
-            preparedStatement.setTimestamp(6, Timestamp.from(clanMemberEntry.lastSeenAt()));
+
+            preparedStatement.setInt(5, clanMemberEntry.kills());
+            preparedStatement.setInt(6, clanMemberEntry.deaths());
+
+            preparedStatement.setTimestamp(7, Timestamp.from(clanMemberEntry.joinedAt()));
+            preparedStatement.setTimestamp(8, Timestamp.from(clanMemberEntry.lastSeenAt()));
             preparedStatement.executeUpdate();
         } catch (SQLException e) {
             this.logger().log(Level.WARNING, e.getMessage(), e);
@@ -126,8 +138,10 @@ public final class H2ClanMemberStorage extends AbstractSQLClanMemberStorage {
                 final PreparedStatement preparedStatement = connection.prepareStatement(UPDATE_MEMBER_QUERY)
         ) {
             preparedStatement.setString(1, clanMemberEntry.roleId());
-            preparedStatement.setTimestamp(2, Timestamp.from(clanMemberEntry.lastSeenAt()));
-            preparedStatement.setObject(3, clanMemberEntry.memberUniqueId(), H2Type.UUID);
+            preparedStatement.setInt(2, clanMemberEntry.kills());
+            preparedStatement.setInt(3, clanMemberEntry.deaths());
+            preparedStatement.setTimestamp(4, Timestamp.from(clanMemberEntry.lastSeenAt()));
+            preparedStatement.setObject(5, clanMemberEntry.memberUniqueId(), H2Type.UUID);
             preparedStatement.executeUpdate();
         } catch (SQLException e) {
             this.logger().log(Level.WARNING, e.getMessage(), e);
@@ -139,6 +153,8 @@ public final class H2ClanMemberStorage extends AbstractSQLClanMemberStorage {
         final String setClauses = Arrays.stream(fields)
                 .map(field -> switch (field) {
                     case ROLE_ID -> "role_id = ?";
+                    case STATISTIC_KILLS -> "kills = ?";
+                    case STATISTIC_DEATHS -> "deaths = ?";
                     case LAST_SEEN_AT -> "last_seen_at = ?";
                 })
                 .collect(Collectors.joining(", "));
@@ -152,6 +168,8 @@ public final class H2ClanMemberStorage extends AbstractSQLClanMemberStorage {
             for (final ClanMemberField field : fields) {
                 switch (field) {
                     case ROLE_ID -> preparedStatement.setString(index++, clanMemberEntry.roleId());
+                    case STATISTIC_KILLS -> preparedStatement.setInt(index++, clanMemberEntry.kills());
+                    case STATISTIC_DEATHS -> preparedStatement.setInt(index++, clanMemberEntry.deaths());
                     case LAST_SEEN_AT -> preparedStatement.setTimestamp(index++, Timestamp.from(clanMemberEntry.lastSeenAt()));
                 }
             }
@@ -212,8 +230,10 @@ public final class H2ClanMemberStorage extends AbstractSQLClanMemberStorage {
                             resultSet.getObject(2, UUID.class),
                             resultSet.getString(3),
                             resultSet.getString(4),
-                            resultSet.getTimestamp(5).toInstant(),
-                            resultSet.getTimestamp(6).toInstant()
+                            resultSet.getInt(5),
+                            resultSet.getInt(6),
+                            resultSet.getTimestamp(7).toInstant(),
+                            resultSet.getTimestamp(8).toInstant()
                     ));
                 }
 
@@ -247,8 +267,10 @@ public final class H2ClanMemberStorage extends AbstractSQLClanMemberStorage {
                         resultSet.getObject(2, UUID.class),
                         resultSet.getString(3),
                         resultSet.getString(4),
-                        resultSet.getTimestamp(5).toInstant(),
-                        resultSet.getTimestamp(6).toInstant()
+                        resultSet.getInt(5),
+                        resultSet.getInt(6),
+                        resultSet.getTimestamp(7).toInstant(),
+                        resultSet.getTimestamp(8).toInstant()
                 ));
             }
         } catch (SQLException e) {

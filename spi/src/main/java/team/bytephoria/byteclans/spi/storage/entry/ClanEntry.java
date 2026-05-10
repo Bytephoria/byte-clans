@@ -43,7 +43,7 @@ public record ClanEntry(
                 clan.settings().inviteState(),
                 clan.settings().pvpMode(),
                 clan.settings().maxMembers(),
-                clan.points().value(),
+                clan.statistics().points().value(),
                 clan.statistics().kills().value(),
                 clan.statistics().deaths().value(),
                 clan.statistics().killsStreak().value(),

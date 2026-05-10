@@ -115,6 +115,7 @@ public final class PaperPlugin extends JavaPlugin {
                         applicationFacade.clanMemberCache(),
                         applicationFacade.clanManager(),
                         applicationFacade.clanStatisticManager(),
+                        applicationFacade.clanMemberStatisticManager(),
                         applicationFacade.clanGlobalSettings()
                 ),
                 new ClanPostCreateAsyncListener(this.configuration)

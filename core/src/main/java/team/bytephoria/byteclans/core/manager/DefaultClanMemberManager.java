@@ -194,7 +194,7 @@ public final class DefaultClanMemberManager implements ClanMemberManager {
         }
 
         this.clanMemberStorage.update(
-                new ClanMemberEntry(memberUniqueId, null, clanRole.id(), null, null, null),
+                new ClanMemberEntry(memberUniqueId, null, clanRole.id(), null, 0, 0, null, null),
                 ClanMemberField.ROLE_ID
         );
 
@@ -295,7 +295,7 @@ public final class DefaultClanMemberManager implements ClanMemberManager {
     }
 
     @Override
-    public Response<ClanChangeChatModeResult> changeChatMode(
+    public @NonNull Response<ClanChangeChatModeResult> changeChatMode(
             final @NotNull ClanMember clanMember,
             final @NotNull ClanChatType chatType
     ) {
@@ -331,7 +331,7 @@ public final class DefaultClanMemberManager implements ClanMemberManager {
     }
 
     @Override
-    public Response<ClanRoleChangeResult> changeRole(
+    public @NonNull Response<ClanRoleChangeResult> changeRole(
             final @NotNull ClanMember executorClanMember,
             final @NotNull ClanMember targetClanMember,
             final @NotNull ClanRole clanRole

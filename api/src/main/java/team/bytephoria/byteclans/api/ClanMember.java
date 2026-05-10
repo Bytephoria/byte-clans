@@ -20,6 +20,8 @@ public interface ClanMember extends Identity {
 
     ClanChatType chatType();
 
+    ClanMemberStatistics statistics();
+
     void player(final @Nullable ClanPlayer clanPlayer);
     void role(final @NotNull ClanRole clanRole);
     void chatType(final @NotNull ClanChatType clanChatType);

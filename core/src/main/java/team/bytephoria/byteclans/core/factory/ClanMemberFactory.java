@@ -8,6 +8,7 @@ import team.bytephoria.byteclans.api.ClanRole;
 import team.bytephoria.byteclans.api.registry.ClanRoleRegistry;
 import team.bytephoria.byteclans.core.clan.DefaultClanMember;
 import team.bytephoria.byteclans.core.clan.DefaultClanMemberData;
+import team.bytephoria.byteclans.core.clan.DefaultClanMemberStatistics;
 import team.bytephoria.byteclans.spi.storage.view.ClanMemberView;
 
 public final class ClanMemberFactory {
@@ -21,7 +22,8 @@ public final class ClanMemberFactory {
         return new DefaultClanMember(
                 clanPlayer,
                 DefaultClanMemberData.now(),
-                clanRole
+                clanRole,
+                new DefaultClanMemberStatistics()
         );
     }
 
@@ -37,7 +39,8 @@ public final class ClanMemberFactory {
                 clan,
                 DefaultClanMemberData.now(),
                 isOwner ? clanRoleRegistry.getOwnerRole() : clanRoleRegistry.getDefaultRole(),
-                ClanChatType.PUBLIC
+                ClanChatType.PUBLIC,
+                new DefaultClanMemberStatistics()
         );
     }
 
@@ -53,7 +56,8 @@ public final class ClanMemberFactory {
                 new DefaultClanMemberData(clanMemberView.joinedAt(), clanMemberView.lastSeenAt()),
                 clan,
                 clanRole,
-                ClanChatType.PUBLIC
+                ClanChatType.PUBLIC,
+                new DefaultClanMemberStatistics(clanMemberView.kills(), clanMemberView.deaths())
         );
     }
 
@@ -79,7 +83,11 @@ public final class ClanMemberFactory {
                 ),
                 clanRole,
                 clanPlayer,
-                ClanChatType.PUBLIC
+                ClanChatType.PUBLIC,
+                new DefaultClanMemberStatistics(
+                        memberView.kills(),
+                        memberView.deaths()
+                )
         );
     }
 
