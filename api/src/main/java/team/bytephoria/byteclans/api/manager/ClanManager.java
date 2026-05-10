@@ -15,34 +15,28 @@ import java.util.UUID;
 
 public interface ClanManager {
 
-    interface Admin {
+    @NotNull ResponseContext<Clan, ClanDisbandResult> disbandClan(
+            final @NotNull String clanName
+    );
 
-        ResponseContext<Clan, ClanDisbandResult> disbandClanByName(
-                final @NotNull String clanName
-        );
+    @NotNull ResponseContext<Clan, ClanDisbandResult> disbandClan(
+            final @NotNull UUID uniqueId
+    );
 
-        ResponseContext<Clan, ClanDisbandResult> disbandClanByUniqueId(
-                final @NotNull UUID uniqueId
-        );
-
-    }
-
-    Admin admin();
-
-    ResponseContext<Clan, ClanCreateResult> createClan(
+    @NotNull ResponseContext<Clan, ClanCreateResult> createClan(
             final @NotNull ClanPlayer clanPlayer,
             final @NotNull String clanName
     );
 
-    ResponseContext<Clan, ClanDisbandResult> disbandClan(
+    @NotNull ResponseContext<Clan, ClanDisbandResult> disbandClan(
             final @NotNull ClanPlayer clanPlayer
     );
 
-    ResponseContext<Clan, ClanDisbandResult> disbandClan(
+    @NotNull ResponseContext<Clan, ClanDisbandResult> disbandClan(
             final @NotNull ClanMember clanMember
     );
 
-    Response<ClanUpdatePointsResult> updatePoints(
+    @NotNull Response<ClanUpdatePointsResult> updatePoints(
             final @NotNull Clan clan,
             final int value,
             final @NotNull Operation operation

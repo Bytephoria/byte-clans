@@ -1,6 +1,5 @@
 package team.bytephoria.byteclans.core.manager;
 
-import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.jspecify.annotations.NonNull;
@@ -41,83 +40,72 @@ public final class DefaultClanSettingsManager implements ClanSettingsManager {
         this.clanDisplayNameValidator = clanDisplayNameValidator;
     }
 
-    @Contract(value = " -> new", pure = true)
     @Override
-    public @NonNull Admin admin() {
-        return new Admin() {
+    public Response<ClanPvPModeChangeResult> changePvPMode(
+            final @NotNull UUID clanUniqueId,
+            final @NotNull ClanPvPMode clanPvPMode
+    ) {
+        final Clan clan = this.clanCache.get(clanUniqueId);
+        if (clan == null) {
+            return Response.failure(ClanPvPModeChangeResult.NOT_FOUND);
+        }
 
-            private DefaultClanSettingsManager thisInstance() {
-                return DefaultClanSettingsManager.this;
-            }
+        if (clan.settings().pvpMode() == clanPvPMode) {
+            return Response.failure(ClanPvPModeChangeResult.ALREADY_SET);
+        }
 
-            @Override
-            public Response<ClanPvPModeChangeResult> changePvPMode(
-                    final @NotNull UUID clanUniqueId,
-                    final @NotNull ClanPvPMode clanPvPMode
-            ) {
-                final Clan clan = this.thisInstance().clanCache.get(clanUniqueId);
-                if (clan == null) {
-                    return Response.failure(ClanPvPModeChangeResult.NOT_FOUND);
-                }
+        clan.settings().pvpMode(clanPvPMode);
+        this.clanStorage.update(ClanEntry.from(clan), ClanField.PVP_MODE);
 
-                if (clan.settings().pvpMode() == clanPvPMode) {
-                    return Response.failure(ClanPvPModeChangeResult.ALREADY_SET);
-                }
-
-                clan.settings().pvpMode(clanPvPMode);
-                this.thisInstance().clanStorage.update(ClanEntry.from(clan), ClanField.PVP_MODE);
-
-                return Response.success(ClanPvPModeChangeResult.SUCCESS);
-            }
-
-            @Override
-            public Response<ClanStatusChangeResult> changeInviteStatus(
-                    final @NotNull UUID clanUniqueId,
-                    final @NotNull ClanInviteState clanInviteState
-            ) {
-                final Clan clan = this.thisInstance().clanCache.get(clanUniqueId);
-                if (clan == null) {
-                    return Response.failure(ClanStatusChangeResult.NOT_FOUND);
-                }
-
-                if (clan.settings().inviteState() == clanInviteState) {
-                    return Response.failure(ClanStatusChangeResult.ALREADY_SET);
-                }
-
-                clan.settings().inviteState(clanInviteState);
-                this.thisInstance().clanStorage.update(ClanEntry.from(clan), ClanField.INVITE_STATE);
-
-                return Response.success(ClanStatusChangeResult.SUCCESS);
-            }
-
-            @Override
-            public Response<ClanRenameDisplayResult> renameDisplay(
-                    final @NotNull UUID clanUniqueId,
-                    final @NotNull String newDisplayName
-            ) {
-                final Clan clan = this.thisInstance().clanCache.get(clanUniqueId);
-                if (clan == null) {
-                    return Response.failure(ClanRenameDisplayResult.NOT_FOUND);
-                }
-
-                final ClanDisplayNameValidationResult validationResult = this.thisInstance()
-                        .clanDisplayNameValidator
-                        .validate(clan.data().name(), newDisplayName);
-
-                if (validationResult != ClanDisplayNameValidationResult.VALID) {
-                    return Response.failure(ClanRenameDisplayResult.valueOf(validationResult.name()));
-                }
-
-                clan.data().displayName(newDisplayName);
-                this.thisInstance().clanStorage.update(ClanEntry.from(clan), ClanField.DISPLAY_NAME);
-
-                return Response.success(ClanRenameDisplayResult.SUCCESS);
-            }
-        };
+        return Response.success(ClanPvPModeChangeResult.SUCCESS);
     }
 
     @Override
-    public Response<ClanPvPModeChangeResult> changePvPMode(
+    public Response<ClanStatusChangeResult> changeInviteStatus(
+            final @NotNull UUID clanUniqueId,
+            final @NotNull ClanInviteState clanInviteState
+    ) {
+        final Clan clan = this.clanCache.get(clanUniqueId);
+        if (clan == null) {
+            return Response.failure(ClanStatusChangeResult.NOT_FOUND);
+        }
+
+        if (clan.settings().inviteState() == clanInviteState) {
+            return Response.failure(ClanStatusChangeResult.ALREADY_SET);
+        }
+
+        clan.settings().inviteState(clanInviteState);
+        this.clanStorage.update(ClanEntry.from(clan), ClanField.INVITE_STATE);
+
+        return Response.success(ClanStatusChangeResult.SUCCESS);
+    }
+
+    @Override
+    public Response<ClanRenameDisplayResult> renameDisplay(
+            final @NotNull UUID clanUniqueId,
+            final @NotNull String newDisplayName
+    ) {
+        final Clan clan = this.clanCache.get(clanUniqueId);
+        if (clan == null) {
+            return Response.failure(ClanRenameDisplayResult.NOT_FOUND);
+        }
+
+        final ClanDisplayNameValidationResult validationResult = this
+                .clanDisplayNameValidator
+                .validate(clan.data().name(), newDisplayName);
+
+        if (validationResult != ClanDisplayNameValidationResult.VALID) {
+            return Response.failure(ClanRenameDisplayResult.valueOf(validationResult.name()));
+        }
+
+        clan.data().displayName(newDisplayName);
+        this.clanStorage.update(ClanEntry.from(clan), ClanField.DISPLAY_NAME);
+
+        return Response.success(ClanRenameDisplayResult.SUCCESS);
+    }
+
+    @Override
+    public @NonNull Response<ClanPvPModeChangeResult> changePvPMode(
             final @NotNull ClanMember clanMember,
             final @NotNull ClanPvPMode newPvPMode
     ) {
@@ -146,7 +134,7 @@ public final class DefaultClanSettingsManager implements ClanSettingsManager {
     }
 
     @Override
-    public Response<ClanStatusChangeResult> changeInviteStatus(
+    public @NonNull Response<ClanStatusChangeResult> changeInviteStatus(
             final @NotNull ClanMember clanMember,
             final @NotNull ClanInviteState newInviteState
     ) {
@@ -175,7 +163,7 @@ public final class DefaultClanSettingsManager implements ClanSettingsManager {
     }
 
     @Override
-    public Response<ClanRenameDisplayResult> renameDisplay(
+    public @NonNull Response<ClanRenameDisplayResult> renameDisplay(
             final @NotNull ClanMember clanMember,
             final @NotNull String newDisplayName,
             final @Nullable Duration cooldown
@@ -220,7 +208,7 @@ public final class DefaultClanSettingsManager implements ClanSettingsManager {
     }
 
     @Override
-    public Response<ClanRenameDisplayResult> renameDisplay(
+    public @NotNull Response<ClanRenameDisplayResult> renameDisplay(
             final @NotNull ClanMember clanMember,
             final @NotNull String newDisplayName
     ) {

@@ -11,16 +11,16 @@ import team.bytephoria.byteclans.api.util.response.context.ResponseContext;
 
 public interface ClanRelationAllyRequestManager {
 
-    ResponseContext<ClanRequestAlly, ClanAllyRequestSendResult> send(
+    @NotNull ResponseContext<ClanRequestAlly, ClanAllyRequestSendResult> send(
             final @NotNull ClanMember clanMember,
             final @NotNull Clan targetClan
     );
 
-    ResponseContext<ClanRequestAlly, ClanAllyRequestAcceptResult> accept(
+    @NotNull ResponseContext<ClanRequestAlly, ClanAllyRequestAcceptResult> accept(
             final @NotNull ClanMember clanMember
     );
 
-    ResponseContext<ClanRequestAlly, ClanAllyRequestDeclineResult> decline(
+    @NotNull ResponseContext<ClanRequestAlly, ClanAllyRequestDeclineResult> decline(
             final @NotNull ClanMember clanMember
     );
 

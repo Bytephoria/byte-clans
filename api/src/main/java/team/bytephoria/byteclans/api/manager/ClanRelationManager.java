@@ -11,26 +11,24 @@ import team.bytephoria.byteclans.api.util.response.Response;
 
 public interface ClanRelationManager {
 
-    Response<ClanAllyAddResult> addAllyClan(
+    @NotNull Response<ClanAllyAddResult> addAllyClan(
             final @NotNull ClanMember clanMember,
             final @NotNull Clan targetClan
     );
 
-    Response<ClanAllyRemoveResult> removeAllyClan(
+    @NotNull Response<ClanAllyRemoveResult> removeAllyClan(
             final @NotNull ClanMember clanMember,
             final @NotNull Clan targetClan
     );
 
-    Response<ClanEnemyAddResult> addEnemyClan(
+    @NotNull Response<ClanEnemyAddResult> addEnemyClan(
             final @NotNull ClanMember clanMember,
             final @NotNull Clan targetClan
     );
 
-    Response<ClanEnemyRemoveResult> removeEnemyClan(
+    @NotNull Response<ClanEnemyRemoveResult> removeEnemyClan(
             final @NotNull ClanMember clanMember,
             final @NotNull Clan targetClan
     );
-
-
 
 }
