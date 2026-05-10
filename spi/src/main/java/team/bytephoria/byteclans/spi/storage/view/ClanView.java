@@ -16,6 +16,8 @@ public record ClanView(
         ClanInviteState clanInviteState,
         ClanPvPMode clanPvPMode,
         int maxMembers,
+        int maxAllies,
+        int maxEnemies,
         int points,
         int kills,
         int deaths,

@@ -11,6 +11,12 @@ public final class Defaults {
     @Setting("max-members")
     private int maxMembers = 20;
 
+    @Setting("max-allies")
+    private int maxAllies = 5;
+
+    @Setting("max-enemies")
+    private int maxEnemies = 5;
+
     @Setting("pvp-mode")
     private ClanPvPMode pvpMode = ClanPvPMode.NO_DAMAGE;
 
@@ -22,6 +28,14 @@ public final class Defaults {
 
     public int maxMembers() {
         return this.maxMembers;
+    }
+
+    public int maxAllies() {
+        return this.maxAllies;
+    }
+
+    public int maxEnemies() {
+        return this.maxEnemies;
     }
 
     public ClanPvPMode pvpMode() {

@@ -42,13 +42,15 @@ public final class MySQLClanStorage extends AbstractSQLClanStorage {
                                invite_state,
                                pvp_mode,
                                max_members,
+                               max_allies,
+                               max_enemies,
                                points,
                                kills,
                                deaths,
                                kills_streak,
                                display_name_available_at,
                                created_at)
-            VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?);
+            VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?);
             """;
 
     private static final String UPDATE_CLAN_QUERY = """
@@ -113,20 +115,22 @@ public final class MySQLClanStorage extends AbstractSQLClanStorage {
             preparedStatement.setString(6, clanEntry.clanInviteState().name());
             preparedStatement.setString(7, clanEntry.clanPvPMode().name());
             preparedStatement.setInt(8, clanEntry.maxMembers());
-            preparedStatement.setInt(9, clanEntry.points());
-            preparedStatement.setInt(10, clanEntry.kills());
-            preparedStatement.setInt(11, clanEntry.deaths());
-            preparedStatement.setInt(12, clanEntry.killsStreak());
+            preparedStatement.setInt(9, clanEntry.maxAllies());
+            preparedStatement.setInt(10, clanEntry.maxEnemies());
+            preparedStatement.setInt(11, clanEntry.points());
+            preparedStatement.setInt(12, clanEntry.kills());
+            preparedStatement.setInt(13, clanEntry.deaths());
+            preparedStatement.setInt(14, clanEntry.killsStreak());
 
             final Instant displayLastChangedAt = clanEntry.displayNameChangeAvailableAt();
 
             if (displayLastChangedAt != null) {
-                preparedStatement.setTimestamp(13, Timestamp.from(displayLastChangedAt));
+                preparedStatement.setTimestamp(15, Timestamp.from(displayLastChangedAt));
             } else {
-                preparedStatement.setNull(13, Types.TIMESTAMP);
+                preparedStatement.setNull(15, Types.TIMESTAMP);
             }
 
-            preparedStatement.setTimestamp(14, Timestamp.from(clanEntry.createdAt()));
+            preparedStatement.setTimestamp(16, Timestamp.from(clanEntry.createdAt()));
             preparedStatement.executeUpdate();
 
         } catch (SQLException e) {
@@ -146,19 +150,21 @@ public final class MySQLClanStorage extends AbstractSQLClanStorage {
             preparedStatement.setString(4, clanEntry.clanInviteState().name());
             preparedStatement.setString(5, clanEntry.clanPvPMode().name());
             preparedStatement.setInt(6, clanEntry.maxMembers());
-            preparedStatement.setInt(7, clanEntry.points());
-            preparedStatement.setInt(8, clanEntry.kills());
-            preparedStatement.setInt(9, clanEntry.deaths());
-            preparedStatement.setInt(10, clanEntry.killsStreak());
+            preparedStatement.setInt(7, clanEntry.maxAllies());
+            preparedStatement.setInt(8, clanEntry.maxEnemies());
+            preparedStatement.setInt(10, clanEntry.points());
+            preparedStatement.setInt(11, clanEntry.kills());
+            preparedStatement.setInt(12, clanEntry.deaths());
+            preparedStatement.setInt(13, clanEntry.killsStreak());
 
             final Instant displayLastChangedAt = clanEntry.displayNameChangeAvailableAt();
             if (displayLastChangedAt != null) {
-                preparedStatement.setTimestamp(11, Timestamp.from(displayLastChangedAt));
+                preparedStatement.setTimestamp(14, Timestamp.from(displayLastChangedAt));
             } else {
-                preparedStatement.setNull(11, Types.TIMESTAMP);
+                preparedStatement.setNull(14, Types.TIMESTAMP);
             }
 
-            preparedStatement.setBytes(12, UUIDUtil.uuidToBytes(clanEntry.clanUniqueId()));
+            preparedStatement.setBytes(15, UUIDUtil.uuidToBytes(clanEntry.clanUniqueId()));
             preparedStatement.executeUpdate();
 
         } catch (SQLException e) {
@@ -176,6 +182,8 @@ public final class MySQLClanStorage extends AbstractSQLClanStorage {
                     case INVITE_STATE ->  "invite_state = ?";
                     case PVP_MODE -> "pvp_mode = ?";
                     case MAX_MEMBERS -> "max_members = ?";
+                    case MAX_ALLIES -> "max_allies = ?";
+                    case MAX_ENEMIES -> "max_enemies = ?";
                     case POINTS -> "points = ?";
                     case KILLS ->  "kills = ?";
                     case DEATHS ->  "deaths = ?";
@@ -199,6 +207,8 @@ public final class MySQLClanStorage extends AbstractSQLClanStorage {
                     case INVITE_STATE -> preparedStatement.setString(index++, clanEntry.clanInviteState().name());
                     case PVP_MODE -> preparedStatement.setString(index++, clanEntry.clanPvPMode().name());
                     case MAX_MEMBERS -> preparedStatement.setInt(index++, clanEntry.maxMembers());
+                    case MAX_ALLIES -> preparedStatement.setInt(index++, clanEntry.maxAllies());
+                    case MAX_ENEMIES -> preparedStatement.setInt(index++, clanEntry.maxEnemies());
                     case POINTS -> preparedStatement.setInt(index++, clanEntry.points());
                     case KILLS -> preparedStatement.setInt(index++, clanEntry.kills());
                     case DEATHS -> preparedStatement.setInt(index++, clanEntry.deaths());
@@ -265,6 +275,8 @@ public final class MySQLClanStorage extends AbstractSQLClanStorage {
                         ClanInviteState.valueOf(resultSet.getString("invite_state")),
                         ClanPvPMode.valueOf(resultSet.getString("pvp_mode")),
                         resultSet.getInt("max_members"),
+                        resultSet.getInt("max_allies"),
+                        resultSet.getInt("max_enemies"),
                         resultSet.getInt("points"),
                         resultSet.getInt("kills"),
                         resultSet.getInt("deaths"),

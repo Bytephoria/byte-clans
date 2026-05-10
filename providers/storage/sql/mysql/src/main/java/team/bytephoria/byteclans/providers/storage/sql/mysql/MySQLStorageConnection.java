@@ -29,6 +29,8 @@ public final class MySQLStorageConnection extends AbstractSQLStorageConnection {
                         invite_state     VARCHAR(20)  NOT NULL,
                         pvp_mode         VARCHAR(20)  NOT NULL,
                         max_members      TINYINT      NOT NULL,
+                        max_allies       TINYINT      NOT NULL,
+                        max_enemies      TINYINT      NOT NULL,
                         points           INT          NOT NULL,
                         kills            INT          NOT NULL,
                         deaths           INT          NOT NULL,

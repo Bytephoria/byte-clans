@@ -69,6 +69,8 @@ public final class PaperBootstrap implements PluginLifecycle {
                 configuration.clan().display().cooldown().toDuration(),
                 configuration.clan().name().minimumChars(),
                 configuration.clan().name().maximumChars(),
+                configuration.clan().defaults().maxAllies(),
+                configuration.clan().defaults().maxEnemies(),
                 configuration.clan().points().limits().minimum(),
                 configuration.clan().points().limits().maximum(),
                 configuration.clan().points().actions().kills(),
