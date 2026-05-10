@@ -6,6 +6,7 @@ import team.bytephoria.byteclans.spi.storage.entry.ClanMemberEntry;
 import team.bytephoria.byteclans.spi.storage.field.ClanMemberField;
 import team.bytephoria.byteclans.spi.storage.view.ClanMemberView;
 
+import java.util.Collection;
 import java.util.Optional;
 import java.util.UUID;
 import java.util.concurrent.CompletableFuture;
@@ -22,6 +23,12 @@ public interface ClanMemberStorage {
 
     void deleteByUniqueId(final @NotNull UUID uniqueId);
 
+    Optional<UUID> findClanUniqueIdByUniqueId(final @NotNull UUID uniqueId);
+
+    Collection<ClanMemberView> findAllByUniqueId(final @NotNull UUID uniqueId);
+
+    Collection<ClanMemberView> findAllByIdentity(final @NotNull Identity identity);
+
     Optional<ClanMemberView> findByUniqueId(final @NotNull UUID uniqueId);
 
     Optional<ClanMemberView> findByIdentity(final @NotNull Identity identity);
@@ -36,6 +43,10 @@ public interface ClanMemberStorage {
         CompletableFuture<Void> update(final @NotNull ClanMemberEntry clanMemberEntry, final @NotNull ClanMemberField @NotNull ... fields);
 
         CompletableFuture<Void> deleteByUniqueId(final @NotNull UUID uniqueId);
+
+        CompletableFuture<Optional<UUID>> findClanUniqueIdByUniqueId(final @NotNull UUID uniqueId);
+        CompletableFuture<Collection<ClanMemberView>> findAllByUniqueId(final @NotNull UUID uniqueId);
+        CompletableFuture<Collection<ClanMemberView>> findAllByIdentity(final @NotNull Identity identity);
 
         CompletableFuture<Optional<ClanMemberView>> findByUniqueId(final @NotNull UUID uniqueId);
 

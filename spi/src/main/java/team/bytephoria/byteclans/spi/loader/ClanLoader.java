@@ -9,6 +9,7 @@ import java.util.concurrent.CompletableFuture;
 public interface ClanLoader {
 
     CompletableFuture<Clan> load(final @NotNull UUID clanUniqueId);
+
     Clan unload(final @NotNull UUID clanUniqueId);
 
 }

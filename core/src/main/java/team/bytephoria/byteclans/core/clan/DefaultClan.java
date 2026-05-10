@@ -1,9 +1,6 @@
 package team.bytephoria.byteclans.core.clan;
 
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
-import org.jetbrains.annotations.Unmodifiable;
-import org.jetbrains.annotations.UnmodifiableView;
+import org.jetbrains.annotations.*;
 import org.jspecify.annotations.NonNull;
 import team.bytephoria.byteclans.api.*;
 import team.bytephoria.byteclans.api.util.IntValue;
@@ -81,19 +78,37 @@ public final class DefaultClan implements Clan {
     }
 
     @Override
-    public @NotNull @Unmodifiable List<ClanMember> members() {
-        final List<ClanMember> list = new ArrayList<>(this.members.values());
-        return Collections.unmodifiableList(list);
+    public @NotNull @Unmodifiable Collection<ClanMember> members() {
+        return Collections.unmodifiableCollection(this.members.values());
     }
 
     @Override
     public @UnmodifiableView @NotNull Collection<ClanMember> allMembers() {
-        final List<ClanMember> members = new ArrayList<>(this.members.values());
+        final Collection<ClanMember> members = this.getAllMembers();
+        return Collections.unmodifiableCollection(members);
+    }
+
+    @Override
+    public @UnmodifiableView @NotNull Collection<ClanMember> onlineMembers() {
+        return this.members.values().stream()
+                .filter(ClanMember::isOnline)
+                .toList();
+    }
+
+    @Override
+    public @UnmodifiableView @NotNull Collection<ClanMember> onlineAllMembers() {
+        return this.getAllMembers().stream()
+                .filter(ClanMember::isOnline)
+                .toList();
+    }
+
+    private @NotNull Collection<ClanMember> getAllMembers() {
+        final Collection<ClanMember> members = new ArrayList<>(this.members.values());
         if (this.owner != null) {
             members.add(this.owner);
         }
 
-        return Collections.unmodifiableCollection(members);
+        return members;
     }
 
     @Override
@@ -113,17 +128,31 @@ public final class DefaultClan implements Clan {
 
     @Override
     public ClanMember getMemberByUniqueId(final @NotNull UUID uniqueId) {
+        if (this.owner != null && this.owner.uniqueId().equals(uniqueId)) {
+            return this.owner;
+        }
+
         return this.members.get(uniqueId);
     }
 
     @Override
     public boolean isMember(final @NotNull UUID uniqueId) {
-        return this.members.containsKey(uniqueId);
+        return this.isOwner(uniqueId) || this.members.containsKey(uniqueId);
     }
 
     @Override
     public boolean isMember(final @NotNull ClanPlayer clanPlayer) {
         return this.isMember(clanPlayer.uniqueId());
+    }
+
+    @Override
+    public boolean isOwner(final @NotNull UUID uniqueId) {
+        return this.ownerData.uniqueId().equals(uniqueId);
+    }
+
+    @Override
+    public boolean isOwner(final @NotNull ClanPlayer clanPlayer) {
+        return this.isOwner(clanPlayer.uniqueId());
     }
 
     @Override

@@ -1,6 +1,7 @@
 package team.bytephoria.byteclans.api;
 
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 import team.bytephoria.byteclans.api.util.Identity;
 
 import java.util.Optional;
@@ -19,9 +20,13 @@ public interface ClanMember extends Identity {
 
     ClanChatType chatType();
 
+    void player(final @Nullable ClanPlayer clanPlayer);
     void role(final @NotNull ClanRole clanRole);
     void chatType(final @NotNull ClanChatType clanChatType);
 
     boolean hasPermission(final @NotNull ClanAction clanAction);
+
+    /** return true if this clan member is online. **/
+    boolean isOnline();
 
 }
