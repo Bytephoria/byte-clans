@@ -7,6 +7,7 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.UnmodifiableView;
 import org.jspecify.annotations.NonNull;
 import team.bytephoria.byteclans.api.Clan;
+import team.bytephoria.byteclans.api.ClanGlobalSettings;
 import team.bytephoria.byteclans.api.ClanMember;
 import team.bytephoria.byteclans.api.ClanPlayer;
 import team.bytephoria.byteclans.api.manager.*;
@@ -35,6 +36,7 @@ public final class ComonBukkitByteClans implements BukkitByteClans {
 
     private final ClanNameValidator clanNameValidator;
     private final ClanDisplayNameValidator clanDisplayNameValidator;
+    private final ClanGlobalSettings clanGlobalSettings;
 
     private final CommandManager<Player> commandManager;
     private final AnnotationParser<Player> annotationParser;
@@ -49,6 +51,7 @@ public final class ComonBukkitByteClans implements BukkitByteClans {
             final @NotNull ClanSettingsManager clanSettingsManager,
             final @NotNull ClanStatisticManager clanStatisticManager,
             final @NotNull ClanNameValidator clanNameValidator,
+            final @NotNull ClanGlobalSettings clanGlobalSettings,
             final @NotNull ClanDisplayNameValidator clanDisplayNameValidator,
             final @NotNull CommandManager<Player> commandManager,
             final @NotNull AnnotationParser<Player> annotationParser
@@ -63,11 +66,17 @@ public final class ComonBukkitByteClans implements BukkitByteClans {
         this.clanSettingsManager = clanSettingsManager;
         this.clanStatisticManager = clanStatisticManager;
         this.clanNameValidator = clanNameValidator;
+        this.clanGlobalSettings = clanGlobalSettings;
         this.clanDisplayNameValidator = clanDisplayNameValidator;
 
         this.commandManager = commandManager;
         this.annotationParser = annotationParser;
 
+    }
+
+    @Override
+    public ClanGlobalSettings globalSettings() {
+        return this.clanGlobalSettings;
     }
 
     @Override

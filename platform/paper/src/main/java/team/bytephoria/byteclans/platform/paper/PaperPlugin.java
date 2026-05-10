@@ -192,9 +192,10 @@ public final class PaperPlugin extends JavaPlugin {
                         applicationFacade.clanSettingsManager(),
                         applicationFacade.clanStatisticManager(),
                         applicationFacade.clanNameProcessor(),
+                        applicationFacade.clanGlobalSettings(),
                         applicationFacade.clanDisplayNameProcessor(),
                         this.commandManager,
-                        annotationParser
+                        this.annotationParser
                 )
         );
 
