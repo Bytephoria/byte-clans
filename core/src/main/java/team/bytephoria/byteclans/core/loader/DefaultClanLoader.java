@@ -149,7 +149,7 @@ public final class DefaultClanLoader implements ClanLoader {
     @Override
     public @NotNull Clan unload(final @NotNull UUID clanUniqueId) {
         final Clan clan = this.clanCache.remove(clanUniqueId);
-        clan.onlineAllMembers().forEach(this.clanMemberCache::remove);
+        clan.allOnlineMembers().forEach(this.clanMemberCache::remove);
         return clan;
     }
 }

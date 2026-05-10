@@ -96,7 +96,7 @@ public final class DefaultClan implements Clan {
     }
 
     @Override
-    public @UnmodifiableView @NotNull Collection<ClanMember> onlineAllMembers() {
+    public @UnmodifiableView @NotNull Collection<ClanMember> allOnlineMembers() {
         return this.getAllMembers().stream()
                 .filter(ClanMember::isOnline)
                 .toList();

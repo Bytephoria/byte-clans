@@ -76,7 +76,7 @@ public final class DefaultUserLoader implements UserLoader {
         }
 
         final Clan clan = clanMember.clan();
-        if (clan.onlineAllMembers().size() == 1) {
+        if (clan.allOnlineMembers().size() == 1) {
             this.clanLoader.unload(clan.uniqueId());
         } else {
             clanMember.player(null);

@@ -35,7 +35,7 @@ public interface Clan extends Identity {
     Collection<ClanMember> onlineMembers();
 
     @UnmodifiableView
-    Collection<ClanMember> onlineAllMembers();
+    Collection<ClanMember> allOnlineMembers();
 
     void ownerData(final @NotNull ClanOwnerData clanOwnerData);
     void ownerMember(final @NotNull ClanMember clanMember);
