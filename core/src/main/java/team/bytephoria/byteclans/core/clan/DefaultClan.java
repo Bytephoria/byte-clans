@@ -6,6 +6,7 @@ import org.jetbrains.annotations.Unmodifiable;
 import org.jetbrains.annotations.UnmodifiableView;
 import org.jspecify.annotations.NonNull;
 import team.bytephoria.byteclans.api.*;
+import team.bytephoria.datacontainer.api.DataContainer;
 
 import java.util.*;
 
@@ -18,6 +19,7 @@ public final class DefaultClan implements Clan {
     private final ClanSettings clanSettings;
     private final ClanStatistics clanStatistics;
     private final ClanRelations clanRelations;
+    private final DataContainer dataContainer;
 
     private ClanOwnerData ownerData;
     private ClanMember owner;
@@ -29,7 +31,8 @@ public final class DefaultClan implements Clan {
             final @NotNull ClanData clanData,
             final @NotNull ClanSettings clanSettings,
             final @NotNull ClanStatistics clanStatistics,
-            final @NotNull ClanRelations clanRelations
+            final @NotNull ClanRelations clanRelations,
+            final @NotNull DataContainer dataContainer
     ) {
         this.uniqueId = clanUniqueId;
         this.ownerData = ownerData;
@@ -39,6 +42,7 @@ public final class DefaultClan implements Clan {
         this.clanStatistics = clanStatistics;
         this.members = new HashMap<>();
         this.clanRelations = clanRelations;
+        this.dataContainer = dataContainer;
     }
 
     @Override
@@ -99,6 +103,11 @@ public final class DefaultClan implements Clan {
         return this.getAllMembers().stream()
                 .filter(ClanMember::isOnline)
                 .toList();
+    }
+
+    @Override
+    public @NotNull DataContainer dataContainer() {
+        return this.dataContainer;
     }
 
     private @NotNull Collection<ClanMember> getAllMembers() {

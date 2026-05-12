@@ -3,10 +3,13 @@ package team.bytephoria.byteclans.platform.paper;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.format.NamedTextColor;
 import org.bstats.bukkit.Metrics;
+import org.bukkit.block.Block;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
+import org.bukkit.event.EventHandler;
 import org.bukkit.event.HandlerList;
 import org.bukkit.event.Listener;
+import org.bukkit.event.block.BlockBreakEvent;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.incendo.cloud.SenderMapper;
 import org.incendo.cloud.annotations.AnnotationParser;
@@ -20,6 +23,9 @@ import org.incendo.cloud.minecraft.extras.MinecraftHelp;
 import org.incendo.cloud.paper.LegacyPaperCommandManager;
 import org.jetbrains.annotations.NotNull;
 import org.spongepowered.configurate.ConfigurationNode;
+import team.bytephoria.byteclans.api.Clan;
+import team.bytephoria.byteclans.api.ClanMember;
+import team.bytephoria.byteclans.api.access.ByteClans;
 import team.bytephoria.byteclans.api.access.ByteClansProvider;
 import team.bytephoria.byteclans.core.ApplicationFacade;
 import team.bytephoria.byteclans.infrastructure.adventure.ComponentSerializerAdapter;
@@ -44,6 +50,9 @@ import team.bytephoria.byteclans.platform.paper.listener.AsyncChatEventListener;
 import team.bytephoria.byteclans.platform.paper.listener.EntityDamageByEntityListener;
 import team.bytephoria.byteclans.platform.paper.listener.PlayerDeathListener;
 import team.bytephoria.byteclans.platform.paper.message.Messenger;
+import team.bytephoria.datacontainer.api.DataContainer;
+import team.bytephoria.datacontainer.api.DataKey;
+import team.bytephoria.datacontainer.serializers.Serializers;
 
 import static org.incendo.cloud.parser.standard.StringParser.greedyStringParser;
 
@@ -215,6 +224,7 @@ public final class PaperPlugin extends JavaPlugin {
                         applicationFacade.clanMemberManager(),
                         applicationFacade.clanSettingsManager(),
                         applicationFacade.clanStatisticManager(),
+                        applicationFacade.clanDataContainerManager(),
                         applicationFacade.clanNameProcessor(),
                         applicationFacade.clanGlobalSettings(),
                         applicationFacade.clanDisplayNameProcessor(),
@@ -222,6 +232,48 @@ public final class PaperPlugin extends JavaPlugin {
                         this.annotationParser
                 )
         );
+
+
+
+        this.getServer().getPluginManager().registerEvents(new Listener() {
+
+            private static final DataKey<String> CLAN_OWNER = DataKey.of("Bytephoria", "owner", Serializers.STRING);
+
+            @EventHandler
+            public void onBlockBreakEvent(final @NotNull BlockBreakEvent blockBreakEvent) {
+                final Player player = blockBreakEvent.getPlayer();
+                final Block block = blockBreakEvent.getBlock();
+
+                final ClanMember clanMember = ByteClans.getAPI().getMemberOrNull(player.getUniqueId());
+                if (clanMember == null) {
+                    return;
+                }
+
+                final Clan clan = clanMember.clan();
+                final DataContainer persistentDataContainer = clan.dataContainer();
+
+                switch (block.getType()) {
+                    case STONE -> {
+                        if (persistentDataContainer.has(CLAN_OWNER)) {
+                            player.sendRichMessage("<red>Ya tienes dueño: " + persistentDataContainer.get(CLAN_OWNER));
+                            return;
+                        }
+
+                        persistentDataContainer.set(CLAN_OWNER, clan.ownerData().name());
+                        player.sendRichMessage("<green>Dato puesto, ya tienes dueño.");
+                    }
+
+                    case GLASS -> {
+                        applicationFacade.clanDataContainerManager().save(clan);
+                        player.sendRichMessage("<green>Datos guardados.");
+                    }
+
+                }
+
+
+            }
+
+        }, this);
 
         this.metrics = new Metrics(this, 30263);
         this.getLogger().info("PaperPlugin has been enabled!");
@@ -232,7 +284,6 @@ public final class PaperPlugin extends JavaPlugin {
         this.getLogger().info("PaperPlugin is stopping...");
 
         HandlerList.unregisterAll(this);
-
 
         if (this.commandManager != null) {
             try {

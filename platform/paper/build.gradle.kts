@@ -8,6 +8,7 @@ plugins {
 repositories {
     maven("https://repo.papermc.io/repository/maven-public/")
     maven("https://repo.extendedclip.com/releases/")
+    maven("https://jitpack.io")
 }
 
 dependencies {
@@ -25,6 +26,7 @@ dependencies {
 
     api(project(":platform:bukkit-api"))
     api(project(":platform:common-bukkit"))
+    api("com.github.bytephoria.data-container:serializers:v1.0.0")
 
     compileOnly("io.papermc.paper:paper-api:1.21.11-R0.1-SNAPSHOT")
     compileOnly("me.clip:placeholderapi:2.12.2")

@@ -36,7 +36,8 @@ public final class MySQLStorageConnection extends AbstractSQLStorageConnection {
                         deaths           INT          NOT NULL,
                         kills_streak     INT          NOT NULL,
                         display_name_available_at TIMESTAMP NULL,
-                        created_at       TIMESTAMP    NOT NULL DEFAULT CURRENT_TIMESTAMP
+                        created_at       TIMESTAMP    NOT NULL DEFAULT CURRENT_TIMESTAMP,
+                        persistent_data  BLOB         NOT NULL
                     );
                     """);
 
