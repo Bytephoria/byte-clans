@@ -52,8 +52,8 @@ jobs:
         run: |
           git config user.name "${{ github.actor }}"
           git config user.email "${{ github.actor }}@users.noreply.github.com"
-          git tag "${{ steps.version.outputs.VERSION }}"
-          git push origin "${{ steps.version.outputs.VERSION }}"
+          git tag "v${{ steps.version.outputs.VERSION }}"
+          git push origin "v${{ steps.version.outputs.VERSION }}"
 
       - name: Generate changelog
         if: steps.tag_check.outputs.exists == 'false'
