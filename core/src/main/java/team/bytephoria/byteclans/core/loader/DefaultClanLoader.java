@@ -19,6 +19,7 @@ import team.bytephoria.byteclans.spi.storage.view.ClanAllyView;
 import team.bytephoria.byteclans.spi.storage.view.ClanEnemyView;
 import team.bytephoria.byteclans.spi.storage.view.ClanMemberView;
 import team.bytephoria.byteclans.spi.storage.view.ClanTensionView;
+import team.bytephoria.datacontainer.api.DataContainer;
 
 import java.util.Collection;
 import java.util.UUID;
@@ -76,6 +77,11 @@ public final class DefaultClanLoader implements ClanLoader {
                     }
 
                     final Clan clan = this.clanFactory.create(optionalView.get());
+                    final DataContainer dataContainer = clan.dataContainer();
+                    final byte[] data = optionalView.get().persistentData();
+
+                    dataContainer.fromBytes(data);
+
                     final CompletableFuture<Collection<ClanAllyView>> alliesFuture =
                             this.clanAllyStorage.async().findByClanUniqueId(clanUniqueId);
 

@@ -3,6 +3,14 @@ plugins {
     id("com.gradleup.shadow") version "9.4.0"
 }
 
+publishing {
+    publications {
+        create<MavenPublication>("mavenJava") {
+            artifact(tasks.shadowJar)
+        }
+    }
+}
+
 repositories {
     mavenCentral()
     maven("https://hub.spigotmc.org/nexus/content/groups/public/")
@@ -13,6 +21,7 @@ repositories {
         url = uri("https://repo.alessiodp.com/snapshots")
     }
 
+    maven("https://jitpack.io")
 }
 
 dependencies {

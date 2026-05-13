@@ -49,6 +49,7 @@ public final class ApplicationFacade {
     private final ClanStatisticManager clanStatisticManager;
     private final ClanRelationManager clanRelationManager;
     private final ClanRelationAllyRequestManager clanRelationAllyRequestManager;
+    private final ClanDataContainerManager clanDataContainerManager;
 
     private final ClanCombatProcessor combatProcessor;
 
@@ -149,6 +150,8 @@ public final class ApplicationFacade {
                 clanEventBus
         );
 
+        this.clanDataContainerManager = new DefaultClanDataContainerManager(clanStorage);
+
         this.combatProcessor = new DefaultClanCombatProcessor(clanEventBus);
         this.clanLoader = new DefaultClanLoader(
                 this.clanCache,
@@ -224,6 +227,18 @@ public final class ApplicationFacade {
 
     public ClanRelationManager clanRelationManager() {
         return this.clanRelationManager;
+    }
+
+    public ClanDataContainerManager clanDataContainerManager() {
+        return this.clanDataContainerManager;
+    }
+
+    public ClanDisplayNameValidator clanDisplayNameValidator() {
+        return this.clanDisplayNameValidator;
+    }
+
+    public ClanNameValidator clanNameValidator() {
+        return this.clanNameValidator;
     }
 
     public ClanCombatProcessor combatProcessor() {

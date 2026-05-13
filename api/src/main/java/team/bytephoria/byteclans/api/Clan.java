@@ -3,6 +3,7 @@ package team.bytephoria.byteclans.api;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.UnmodifiableView;
 import team.bytephoria.byteclans.api.util.Identity;
+import team.bytephoria.datacontainer.api.DataContainer;
 
 import java.util.Collection;
 import java.util.Optional;
@@ -33,6 +34,8 @@ public interface Clan extends Identity {
 
     @UnmodifiableView
     Collection<ClanMember> allOnlineMembers();
+
+    @NotNull DataContainer dataContainer();
 
     void ownerData(final @NotNull ClanOwnerData clanOwnerData);
     void ownerMember(final @NotNull ClanMember clanMember);
