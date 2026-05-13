@@ -88,6 +88,10 @@ jobs:
           name: "Release v${{ steps.version.outputs.VERSION }}"
           body: ${{ steps.changelog.outputs.changelog }}
           files: |
-            **/build/libs/*.jar
+            api/build/libs/*.jar
+            platform/bukkit-api/build/libs/*.jar
+            platform/common-bukkit/build/libs/*.jar
+            platform/paper/build/libs/*.jar
+            platform/spigot/build/libs/*.jar
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
