@@ -87,6 +87,7 @@ jobs:
           tag_name: "v${{ steps.version.outputs.VERSION }}"
           name: "Release v${{ steps.version.outputs.VERSION }}"
           body: ${{ steps.changelog.outputs.changelog }}
-          files: build/libs/*.jar
+          files: |
+            **/build/libs/*.jar
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
