@@ -38,6 +38,8 @@ public interface ByteClans {
 
     ClanStatisticManager statisticManager();
 
+    ClanDataContainerManager dataContainerManager();
+
     Clan getClanOrNull(final @NotNull UUID clanUniqueId);
 
     Clan getClanByNameOrNull(final String clanName);

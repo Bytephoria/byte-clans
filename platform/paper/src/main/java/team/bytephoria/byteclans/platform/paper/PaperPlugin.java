@@ -215,6 +215,7 @@ public final class PaperPlugin extends JavaPlugin {
                         applicationFacade.clanMemberManager(),
                         applicationFacade.clanSettingsManager(),
                         applicationFacade.clanStatisticManager(),
+                        applicationFacade.clanDataContainerManager(),
                         applicationFacade.clanNameProcessor(),
                         applicationFacade.clanGlobalSettings(),
                         applicationFacade.clanDisplayNameProcessor(),
@@ -232,7 +233,6 @@ public final class PaperPlugin extends JavaPlugin {
         this.getLogger().info("PaperPlugin is stopping...");
 
         HandlerList.unregisterAll(this);
-
 
         if (this.commandManager != null) {
             try {

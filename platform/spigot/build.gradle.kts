@@ -13,6 +13,7 @@ repositories {
         url = uri("https://repo.alessiodp.com/snapshots")
     }
 
+    maven("https://jitpack.io")
 }
 
 dependencies {

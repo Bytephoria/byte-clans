@@ -26,7 +26,8 @@ public record ClanEntry(
         int deaths,
         int killsStreak,
         Instant displayNameChangeAvailableAt,
-        Instant createdAt
+        Instant createdAt,
+        byte[] persistentData
 ) {
 
     public ClanEntry {
@@ -52,7 +53,8 @@ public record ClanEntry(
                 clan.statistics().deaths().value(),
                 clan.statistics().killsStreak().value(),
                 clan.data().displayNameChangeAvailableAt(),
-                clan.data().createdAt()
+                clan.data().createdAt(),
+                clan.dataContainer().toBytes()
         );
     }
 

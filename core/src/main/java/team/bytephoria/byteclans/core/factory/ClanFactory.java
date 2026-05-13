@@ -7,6 +7,7 @@ import team.bytephoria.byteclans.api.ClanMember;
 import team.bytephoria.byteclans.core.clan.*;
 import team.bytephoria.byteclans.core.util.ClanNameUUID;
 import team.bytephoria.byteclans.spi.storage.view.ClanView;
+import team.bytephoria.datacontainer.binary.BinaryDataContainer;
 
 import java.time.Instant;
 import java.util.UUID;
@@ -33,7 +34,8 @@ public final class ClanFactory {
                         globalSettings.defaultInviteState()
                 ),
                 DefaultClanStatistics.allZero(),
-                new DefaultClanRelations()
+                new DefaultClanRelations(),
+                BinaryDataContainer.fast()
         );
     }
 
@@ -45,7 +47,8 @@ public final class ClanFactory {
                 new DefaultClanData(clanView.clanName(), clanView.clanDisplayName(), clanView.displayNameChangeAvailableAt(), clanView.createdAt()),
                 new DefaultClanSettings(clanView.maxMembers(), clanView.maxAllies(), clanView.maxEnemies(), clanView.clanPvPMode(), clanView.clanInviteState()),
                 new DefaultClanStatistics(clanView.kills(), clanView.deaths(), clanView.killsStreak(), clanView.points()),
-                new DefaultClanRelations()
+                new DefaultClanRelations(),
+                BinaryDataContainer.fast()
         );
     }
 }

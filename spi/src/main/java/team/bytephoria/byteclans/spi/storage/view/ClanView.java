@@ -23,7 +23,8 @@ public record ClanView(
         int deaths,
         int killsStreak,
         Instant displayNameChangeAvailableAt,
-        Instant createdAt
+        Instant createdAt,
+        byte[] persistentData
 ) {
 
     public ClanView {

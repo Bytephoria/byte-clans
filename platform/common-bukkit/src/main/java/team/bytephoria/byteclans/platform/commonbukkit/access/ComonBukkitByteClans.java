@@ -33,6 +33,7 @@ public final class ComonBukkitByteClans implements BukkitByteClans {
     private final ClanMemberManager clanMemberManager;
     private final ClanSettingsManager clanSettingsManager;
     private final ClanStatisticManager clanStatisticManager;
+    private final ClanDataContainerManager clanDataContainerManager;
 
     private final ClanNameValidator clanNameValidator;
     private final ClanDisplayNameValidator clanDisplayNameValidator;
@@ -50,6 +51,7 @@ public final class ComonBukkitByteClans implements BukkitByteClans {
             final @NotNull ClanMemberManager clanMemberManager,
             final @NotNull ClanSettingsManager clanSettingsManager,
             final @NotNull ClanStatisticManager clanStatisticManager,
+            final @NotNull ClanDataContainerManager clanDataContainerManager,
             final @NotNull ClanNameValidator clanNameValidator,
             final @NotNull ClanGlobalSettings clanGlobalSettings,
             final @NotNull ClanDisplayNameValidator clanDisplayNameValidator,
@@ -65,6 +67,8 @@ public final class ComonBukkitByteClans implements BukkitByteClans {
         this.clanMemberManager = clanMemberManager;
         this.clanSettingsManager = clanSettingsManager;
         this.clanStatisticManager = clanStatisticManager;
+        this.clanDataContainerManager = clanDataContainerManager;
+
         this.clanNameValidator = clanNameValidator;
         this.clanGlobalSettings = clanGlobalSettings;
         this.clanDisplayNameValidator = clanDisplayNameValidator;
@@ -117,6 +121,11 @@ public final class ComonBukkitByteClans implements BukkitByteClans {
     @Override
     public ClanStatisticManager statisticManager() {
         return this.clanStatisticManager;
+    }
+
+    @Override
+    public ClanDataContainerManager dataContainerManager() {
+        return this.clanDataContainerManager;
     }
 
     @Override

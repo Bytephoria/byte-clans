@@ -49,8 +49,9 @@ public final class MySQLClanStorage extends AbstractSQLClanStorage {
                                deaths,
                                kills_streak,
                                display_name_available_at,
-                               created_at)
-            VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?);
+                               created_at,
+                               persistent_data)
+            VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?);
             """;
 
     private static final String UPDATE_CLAN_QUERY = """
@@ -65,7 +66,8 @@ public final class MySQLClanStorage extends AbstractSQLClanStorage {
                 kills = ?,
                 deaths = ?,
                 kills_streak = ?,
-                display_name_available_at = ?
+                display_name_available_at = ?,
+                persistent_data = ?
             WHERE unique_id = ?;
             """;
 
@@ -131,6 +133,8 @@ public final class MySQLClanStorage extends AbstractSQLClanStorage {
             }
 
             preparedStatement.setTimestamp(16, Timestamp.from(clanEntry.createdAt()));
+            preparedStatement.setBytes(17, clanEntry.persistentData());
+
             preparedStatement.executeUpdate();
 
         } catch (SQLException e) {
@@ -165,6 +169,8 @@ public final class MySQLClanStorage extends AbstractSQLClanStorage {
             }
 
             preparedStatement.setBytes(15, UUIDUtil.uuidToBytes(clanEntry.clanUniqueId()));
+            preparedStatement.setBytes(16, clanEntry.persistentData());
+
             preparedStatement.executeUpdate();
 
         } catch (SQLException e) {
@@ -189,6 +195,7 @@ public final class MySQLClanStorage extends AbstractSQLClanStorage {
                     case DEATHS ->  "deaths = ?";
                     case KILLS_STREAK -> "kills_streak = ?";
                     case DISPLAY_NAME_CHANGE_AVAILABLE_AT -> "display_name_available_at = ?";
+                    case PERSISTENT_DATA -> "persistent_data = ?";
                 })
                 .collect(Collectors.joining(", "));
 
@@ -214,6 +221,7 @@ public final class MySQLClanStorage extends AbstractSQLClanStorage {
                     case DEATHS -> preparedStatement.setInt(index++, clanEntry.deaths());
                     case KILLS_STREAK -> preparedStatement.setInt(index++, clanEntry.killsStreak());
                     case DISPLAY_NAME_CHANGE_AVAILABLE_AT -> preparedStatement.setTimestamp(index++, Timestamp.from(clanEntry.displayNameChangeAvailableAt()));
+                    case PERSISTENT_DATA -> preparedStatement.setBytes(index++, clanEntry.persistentData());
                 }
             }
 
@@ -282,9 +290,11 @@ public final class MySQLClanStorage extends AbstractSQLClanStorage {
                         resultSet.getInt("deaths"),
                         resultSet.getInt("kills_streak"),
                         displayLastChangedAt != null ? displayLastChangedAt.toInstant() : null,
-                        resultSet.getTimestamp("created_at").toInstant()
+                        resultSet.getTimestamp("created_at").toInstant(),
+                        resultSet.getBytes("persistent_data")
                 ));
             }
+
         } catch (SQLException e) {
             this.logger().log(Level.WARNING, e.getMessage(), e);
             return Optional.empty();
