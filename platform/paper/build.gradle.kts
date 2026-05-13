@@ -5,6 +5,14 @@ plugins {
     id("com.gradleup.shadow") version("9.3.0")
 }
 
+publishing {
+    publications {
+        create<MavenPublication>("mavenJava") {
+            artifact(tasks.shadowJar)
+        }
+    }
+}
+
 repositories {
     maven("https://repo.papermc.io/repository/maven-public/")
     maven("https://repo.extendedclip.com/releases/")
