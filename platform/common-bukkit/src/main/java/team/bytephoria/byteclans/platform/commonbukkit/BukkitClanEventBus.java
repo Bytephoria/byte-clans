@@ -42,7 +42,6 @@ public final class BukkitClanEventBus implements ClanEventBus {
             final @NotNull ClanMember clanMember,
             final @NotNull Clan clan
     ) {
-
         final BukkitClanPlayer bukkitClanPlayer = ensureBukkitPlayer(clanPlayer);
         this.callEvent(new ClanPostCreateAsyncEvent(bukkitClanPlayer, clanMember, clan));
     }
