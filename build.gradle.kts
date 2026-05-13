@@ -1,10 +1,12 @@
 plugins {
     java
+    `maven-publish`
 }
 
 allprojects {
     apply {
         plugin("java-library")
+        plugin("maven-publish")
     }
 
     repositories {
