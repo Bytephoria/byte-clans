@@ -7,7 +7,7 @@ plugins {
 
 publishing {
     publications {
-        create<MavenPublication>("mavenJava") {
+        named<MavenPublication>("mavenJava") {
             artifact(tasks.shadowJar)
         }
     }
@@ -74,6 +74,11 @@ paper {
 }
 
 tasks {
+
+    jar {
+        enabled = false
+    }
+
     generatePaperPluginDescription {
         useGoogleMavenCentralProxy()
     }

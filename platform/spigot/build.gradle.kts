@@ -5,7 +5,7 @@ plugins {
 
 publishing {
     publications {
-        create<MavenPublication>("mavenJava") {
+        named<MavenPublication>("mavenJava") {
             artifact(tasks.shadowJar)
         }
     }
@@ -84,6 +84,11 @@ bukkit {
 }
 
 tasks {
+
+    jar {
+        enabled = false
+    }
+
     generateBukkitPluginDescription {
         useGoogleMavenCentralProxy()
     }

@@ -19,3 +19,13 @@ allprojects {
 
     java.toolchain.languageVersion.set(JavaLanguageVersion.of(21))
 }
+
+subprojects {
+    publishing {
+        publications {
+            create<MavenPublication>("mavenJava") {
+                from(components["java"])
+            }
+        }
+    }
+}
