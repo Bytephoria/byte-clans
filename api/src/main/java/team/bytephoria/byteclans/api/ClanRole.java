@@ -1,6 +1,6 @@
 package team.bytephoria.byteclans.api;
 
-import java.util.EnumSet;
+import java.util.Set;
 
 public interface ClanRole {
 
@@ -10,7 +10,7 @@ public interface ClanRole {
 
     int priority();
 
-    EnumSet<ClanAction> actions();
+    Set<ClanPermission> permissions();
 
     boolean isDefault();
 

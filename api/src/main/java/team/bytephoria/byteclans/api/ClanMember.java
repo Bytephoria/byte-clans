@@ -26,7 +26,7 @@ public interface ClanMember extends Identity {
     void role(final @NotNull ClanRole clanRole);
     void chatType(final @NotNull ClanChatType clanChatType);
 
-    boolean hasPermission(final @NotNull ClanAction clanAction);
+    boolean hasPermission(final @NotNull ClanPermission clanPermission);
 
     /** return true if this clan member is online. **/
     boolean isOnline();

@@ -1,15 +1,15 @@
 package team.bytephoria.byteclans.core.clan;
 
-import team.bytephoria.byteclans.api.ClanAction;
+import team.bytephoria.byteclans.api.ClanPermission;
 import team.bytephoria.byteclans.api.ClanRole;
 
-import java.util.EnumSet;
+import java.util.Set;
 
 public record DefaultClanRole(
         String id,
         String displayName,
         int priority,
-        EnumSet<ClanAction> actions,
+        Set<ClanPermission> permissions,
         boolean isDefault
 ) implements ClanRole {
 

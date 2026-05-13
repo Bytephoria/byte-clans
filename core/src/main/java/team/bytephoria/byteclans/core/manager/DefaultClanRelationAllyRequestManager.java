@@ -44,7 +44,7 @@ public final class DefaultClanRelationAllyRequestManager implements ClanRelation
             return ResponseContext.failure(ClanAllyRequestSendResult.SAME_CLAN);
         }
 
-        if (!clanMember.hasPermission(ClanAction.MANAGE_DIPLOMACY)) {
+        if (!clanMember.hasPermission(BuiltInPermission.MANAGE_DIPLOMACY)) {
             return ResponseContext.failure(ClanAllyRequestSendResult.NO_PERMISSION);
         }
 
@@ -90,7 +90,7 @@ public final class DefaultClanRelationAllyRequestManager implements ClanRelation
             return ResponseContext.failure(ClanAllyRequestAcceptResult.NOT_IN_CLAN);
         }
 
-        if (!clanMember.hasPermission(ClanAction.MANAGE_DIPLOMACY)) {
+        if (!clanMember.hasPermission(BuiltInPermission.MANAGE_DIPLOMACY)) {
             return ResponseContext.failure(ClanAllyRequestAcceptResult.NO_PERMISSION);
         }
 
@@ -124,7 +124,7 @@ public final class DefaultClanRelationAllyRequestManager implements ClanRelation
             return ResponseContext.failure(ClanAllyRequestDeclineResult.NOT_IN_CLAN);
         }
 
-        if (!clanMember.hasPermission(ClanAction.MANAGE_DIPLOMACY)) {
+        if (!clanMember.hasPermission(BuiltInPermission.MANAGE_DIPLOMACY)) {
             return ResponseContext.failure(ClanAllyRequestDeclineResult.NO_PERMISSION);
         }
 
