@@ -8,7 +8,7 @@ plugins {
 publishing {
     publications {
         named<MavenPublication>("mavenJava") {
-            artifact(tasks.shadowJar)
+            setArtifacts(listOf(tasks.shadowJar.get()))
         }
     }
 }
