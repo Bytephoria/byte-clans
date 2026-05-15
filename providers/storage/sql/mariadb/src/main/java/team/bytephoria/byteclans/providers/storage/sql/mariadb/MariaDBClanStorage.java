@@ -153,8 +153,8 @@ public final class MariaDBClanStorage extends AbstractSQLClanStorage {
             preparedStatement.setString(3, clanEntry.displayName());
             preparedStatement.setString(4, clanEntry.clanInviteState().name());
             preparedStatement.setString(5, clanEntry.clanPvPMode().name());
-            preparedStatement.setInt(6, clanEntry.maxMembers());
 
+            preparedStatement.setInt(6, clanEntry.maxMembers());
             preparedStatement.setInt(7, clanEntry.maxAllies());
             preparedStatement.setInt(8, clanEntry.maxEnemies());
 
@@ -222,7 +222,15 @@ public final class MariaDBClanStorage extends AbstractSQLClanStorage {
                     case KILLS -> preparedStatement.setInt(index++, clanEntry.kills());
                     case DEATHS -> preparedStatement.setInt(index++, clanEntry.deaths());
                     case KILLS_STREAK -> preparedStatement.setInt(index++, clanEntry.killsStreak());
-                    case DISPLAY_NAME_CHANGE_AVAILABLE_AT -> preparedStatement.setTimestamp(index++, Timestamp.from(clanEntry.displayNameChangeAvailableAt()));
+                    case DISPLAY_NAME_CHANGE_AVAILABLE_AT -> {
+                        final Instant displayNameChangeAvailableAt = clanEntry.displayNameChangeAvailableAt();
+
+                        if (displayNameChangeAvailableAt != null) {
+                            preparedStatement.setTimestamp(index++, Timestamp.from(displayNameChangeAvailableAt));
+                        } else {
+                            preparedStatement.setNull(index++, Types.TIMESTAMP);
+                        }
+                    }
                     case PERSISTENT_DATA -> preparedStatement.setBytes(index++, clanEntry.persistentData());
                 }
             }
