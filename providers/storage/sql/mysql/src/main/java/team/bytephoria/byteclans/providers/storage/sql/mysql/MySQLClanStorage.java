@@ -220,7 +220,16 @@ public final class MySQLClanStorage extends AbstractSQLClanStorage {
                     case KILLS -> preparedStatement.setInt(index++, clanEntry.kills());
                     case DEATHS -> preparedStatement.setInt(index++, clanEntry.deaths());
                     case KILLS_STREAK -> preparedStatement.setInt(index++, clanEntry.killsStreak());
-                    case DISPLAY_NAME_CHANGE_AVAILABLE_AT -> preparedStatement.setTimestamp(index++, Timestamp.from(clanEntry.displayNameChangeAvailableAt()));
+                    case DISPLAY_NAME_CHANGE_AVAILABLE_AT -> {
+                        final Instant displayNameChangeAvailableAt = clanEntry.displayNameChangeAvailableAt();
+
+                        if (displayNameChangeAvailableAt != null) {
+                            preparedStatement.setTimestamp(index++, Timestamp.from(displayNameChangeAvailableAt));
+                        } else {
+                            preparedStatement.setNull(index++, Types.TIMESTAMP);
+                        }
+                    }
+
                     case PERSISTENT_DATA -> preparedStatement.setBytes(index++, clanEntry.persistentData());
                 }
             }

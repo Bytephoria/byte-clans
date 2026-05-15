@@ -114,7 +114,9 @@ public final class H2ClanStorage extends AbstractSQLClanStorage {
             preparedStatement.setObject(3, clanEntry.ownerUniqueId(), H2Type.UUID);
             preparedStatement.setString(4, clanEntry.clanName());
             preparedStatement.setString(5, clanEntry.displayName());
+
             preparedStatement.setString(6, clanEntry.clanInviteState().name());
+
             preparedStatement.setString(7, clanEntry.clanPvPMode().name());
             preparedStatement.setInt(8, clanEntry.maxMembers());
 
@@ -135,6 +137,7 @@ public final class H2ClanStorage extends AbstractSQLClanStorage {
 
             preparedStatement.setTimestamp(16, Timestamp.from(clanEntry.createdAt()));
             preparedStatement.setBytes(17, clanEntry.persistentData());
+
             preparedStatement.executeUpdate();
         } catch (SQLException e) {
             this.logger().log(Level.WARNING, e.getMessage(), e);
@@ -152,21 +155,25 @@ public final class H2ClanStorage extends AbstractSQLClanStorage {
             preparedStatement.setString(3, clanEntry.displayName());
             preparedStatement.setString(4, clanEntry.clanInviteState().name());
             preparedStatement.setString(5, clanEntry.clanPvPMode().name());
+
             preparedStatement.setInt(6, clanEntry.maxMembers());
-            preparedStatement.setInt(7, clanEntry.points());
-            preparedStatement.setInt(8, clanEntry.kills());
-            preparedStatement.setInt(9, clanEntry.deaths());
-            preparedStatement.setInt(10, clanEntry.killsStreak());
+            preparedStatement.setInt(7, clanEntry.maxAllies());
+            preparedStatement.setInt(8, clanEntry.maxEnemies());
+
+            preparedStatement.setInt(9, clanEntry.points());
+            preparedStatement.setInt(10, clanEntry.kills());
+            preparedStatement.setInt(11, clanEntry.deaths());
+            preparedStatement.setInt(12, clanEntry.killsStreak());
 
             final Instant displayLastChangedAt = clanEntry.displayNameChangeAvailableAt();
             if (displayLastChangedAt != null) {
-                preparedStatement.setTimestamp(11, Timestamp.from(displayLastChangedAt));
+                preparedStatement.setTimestamp(13, Timestamp.from(displayLastChangedAt));
             } else {
-                preparedStatement.setNull(11, Types.TIMESTAMP);
+                preparedStatement.setNull(13, Types.TIMESTAMP);
             }
 
-            preparedStatement.setObject(12, clanEntry.clanUniqueId(), H2Type.UUID);
-            preparedStatement.setBytes(13, clanEntry.persistentData());
+            preparedStatement.setObject(14, clanEntry.clanUniqueId(), H2Type.UUID);
+            preparedStatement.setBytes(15, clanEntry.persistentData());
 
             preparedStatement.executeUpdate();
         } catch (SQLException e) {
@@ -217,7 +224,16 @@ public final class H2ClanStorage extends AbstractSQLClanStorage {
                     case KILLS -> preparedStatement.setInt(index++, clanEntry.kills());
                     case DEATHS -> preparedStatement.setInt(index++, clanEntry.deaths());
                     case KILLS_STREAK -> preparedStatement.setInt(index++, clanEntry.killsStreak());
-                    case DISPLAY_NAME_CHANGE_AVAILABLE_AT -> preparedStatement.setTimestamp(index++, Timestamp.from(clanEntry.displayNameChangeAvailableAt()));
+                    case DISPLAY_NAME_CHANGE_AVAILABLE_AT -> {
+                        final Instant displayNameChangeAvailableAt = clanEntry.displayNameChangeAvailableAt();
+
+                        if (displayNameChangeAvailableAt != null) {
+                            preparedStatement.setTimestamp(index++, Timestamp.from(displayNameChangeAvailableAt));
+                        } else {
+                            preparedStatement.setNull(index++, Types.TIMESTAMP);
+                        }
+                    }
+
                     case PERSISTENT_DATA -> preparedStatement.setBytes(index++, clanEntry.persistentData());
                 }
             }
