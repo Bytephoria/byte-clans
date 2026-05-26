@@ -270,7 +270,7 @@ public final class DefaultClanMemberManager implements ClanMemberManager {
             return Response.failure(ClanKickResult.DISTINCT_CLAN);
         }
 
-        if (!executorClanMember.hasPermission(ClanAction.KICK_MEMBERS)) {
+        if (!executorClanMember.hasPermission(ClanPermissions.KICK_MEMBERS)) {
             return Response.failure(ClanKickResult.INSUFFICIENT_ROLE);
         }
 
@@ -383,7 +383,7 @@ public final class DefaultClanMemberManager implements ClanMemberManager {
             return Response.failure(ClanPromoteResult.DISTINCT_CLAN);
         }
 
-        if (!clanMember.hasPermission(ClanAction.PROMOTE_MEMBER)) {
+        if (!clanMember.hasPermission(ClanPermissions.PROMOTE_MEMBER)) {
             return Response.failure(ClanPromoteResult.INSUFFICIENT_ROLE);
         }
 
@@ -427,7 +427,7 @@ public final class DefaultClanMemberManager implements ClanMemberManager {
             return Response.failure(ClanDemoteResult.DISTINCT_CLAN);
         }
 
-        if (!clanMember.hasPermission(ClanAction.PROMOTE_MEMBER)) {
+        if (!clanMember.hasPermission(ClanPermissions.PROMOTE_MEMBER)) {
             return Response.failure(ClanDemoteResult.INSUFFICIENT_ROLE);
         }
 

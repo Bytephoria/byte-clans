@@ -6,9 +6,7 @@ import org.jetbrains.annotations.Nullable;
 import org.jspecify.annotations.NonNull;
 import team.bytephoria.byteclans.api.*;
 
-import java.util.EnumSet;
-import java.util.Optional;
-import java.util.UUID;
+import java.util.*;
 
 public final class DefaultClanMember implements ClanMember {
 
@@ -149,13 +147,13 @@ public final class DefaultClanMember implements ClanMember {
     }
 
     @Override
-    public boolean hasPermission(final @NotNull ClanAction clanAction) {
-        final EnumSet<ClanAction> clanActions = this.role().actions();
-        if (clanActions.contains(ClanAction.ADMINISTRATOR)) {
+    public boolean hasPermission(final @NotNull ClanPermission clanPermission) {
+        final Set<ClanPermission> clanPermissions = this.role().permissions();
+        if (clanPermissions.contains(ClanPermissions.ADMINISTRATOR)) {
             return true;
         }
 
-        return clanActions.contains(clanAction);
+        return clanPermissions.contains(clanPermission);
     }
 
     @Override

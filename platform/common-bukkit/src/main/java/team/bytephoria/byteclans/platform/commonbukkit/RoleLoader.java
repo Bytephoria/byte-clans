@@ -1,16 +1,14 @@
 package team.bytephoria.byteclans.platform.commonbukkit;
 
 import org.jetbrains.annotations.NotNull;
-import team.bytephoria.byteclans.api.ClanAction;
+import team.bytephoria.byteclans.api.ClanPermissions;
+import team.bytephoria.byteclans.api.ClanPermission;
 import team.bytephoria.byteclans.core.clan.DefaultClanRole;
 import team.bytephoria.byteclans.core.registry.DefaultClanRoleRegistry;
 import team.bytephoria.byteclans.infrastructure.configuration.roles.Role;
 import team.bytephoria.byteclans.infrastructure.configuration.roles.Roles;
 
-import java.util.EnumSet;
-import java.util.List;
-import java.util.Locale;
-import java.util.Map;
+import java.util.*;
 
 public final class RoleLoader {
 
@@ -29,18 +27,19 @@ public final class RoleLoader {
         for (final Map.Entry<String, Role> roleEntry : this.roles.roles().entrySet()) {
             final String roleId = roleEntry.getKey();
             final Role role = roleEntry.getValue();
-            final List<ClanAction> roleActions = role.actions()
+            final List<ClanPermissions> permissions = role.actions()
                     .stream()
-                    .map(actionId -> ClanAction.valueOf(actionId.toUpperCase(Locale.ROOT)))
+                    .map(actionId -> ClanPermissions.valueOf(actionId.toUpperCase(Locale.ROOT)))
                     .toList();
 
-            final EnumSet<ClanAction> clanActions = roleActions.isEmpty() ? EnumSet.noneOf(ClanAction.class) : EnumSet.copyOf(roleActions);
+            final Set<ClanPermission> clanPermissions = new HashSet<>(permissions);
+
             this.clanRoleRegistry.register(
                     new DefaultClanRole(
                             roleId,
                             role.displayName(),
                             role.priority(),
-                            clanActions,
+                            clanPermissions,
                             role.isDefault()
                     )
             );
