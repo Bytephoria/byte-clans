@@ -2,7 +2,7 @@ package team.bytephoria.byteclans.core.registry;
 
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.UnmodifiableView;
-import team.bytephoria.byteclans.api.BuiltInPermission;
+import team.bytephoria.byteclans.api.ClanPermissions;
 import team.bytephoria.byteclans.api.ClanRole;
 import team.bytephoria.byteclans.api.registry.ClanRoleRegistry;
 
@@ -22,7 +22,7 @@ public final class DefaultClanRoleRegistry implements ClanRoleRegistry {
             this.defaultRole = clanRole;
         }
 
-        if (clanRole.permissions().contains(BuiltInPermission.ADMINISTRATOR)) {
+        if (clanRole.permissions().contains(ClanPermissions.ADMINISTRATOR)) {
             this.ownerRole = clanRole;
         }
 

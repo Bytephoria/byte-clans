@@ -3,7 +3,7 @@ package team.bytephoria.byteclans.platform.spigot.hook;
 import me.clip.placeholderapi.expansion.PlaceholderExpansion;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
-import team.bytephoria.byteclans.api.BuiltInPermission;
+import team.bytephoria.byteclans.api.ClanPermissions;
 import team.bytephoria.byteclans.api.Clan;
 import team.bytephoria.byteclans.api.ClanMember;
 import team.bytephoria.byteclans.core.ApplicationFacade;
@@ -168,16 +168,16 @@ public final class PlaceholderAPIHook extends PlaceholderExpansion {
                 }
 
                 final String actionName = String.join("_", Arrays.copyOfRange(arguments, 2, arguments.length));
-                final BuiltInPermission builtInPermission;
+                final ClanPermissions clanPermissions;
 
                 try {
-                    builtInPermission = BuiltInPermission.valueOf(actionName.toUpperCase(Locale.ROOT));
+                    clanPermissions = ClanPermissions.valueOf(actionName.toUpperCase(Locale.ROOT));
                 } catch (final IllegalArgumentException exception) {
                     yield "false";
                 }
 
                 yield this.getMemberOrEmpty(player, member ->
-                        Boolean.toString(member.hasPermission(builtInPermission))
+                        Boolean.toString(member.hasPermission(clanPermissions))
                 );
             }
 

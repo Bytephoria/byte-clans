@@ -203,7 +203,7 @@ public final class DefaultClanManager implements ClanManager {
             return ResponseContext.failure(ClanDisbandResult.NOT_IN_CLAN);
         }
 
-        if (!clanMember.hasPermission(BuiltInPermission.DISBAND_CLAN)) {
+        if (!clanMember.hasPermission(ClanPermissions.DISBAND_CLAN)) {
             return ResponseContext.failure(ClanDisbandResult.INSUFFICIENT_ROLE);
         }
 

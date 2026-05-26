@@ -2,7 +2,7 @@ package team.bytephoria.byteclans.api;
 
 import org.jetbrains.annotations.NotNull;
 
-public enum BuiltInPermission implements ClanPermission {
+public enum ClanPermissions implements ClanPermission {
 
     ADMINISTRATOR,
     INVITE_MEMBERS,

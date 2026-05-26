@@ -56,7 +56,7 @@ public final class DefaultClanRelationManager implements ClanRelationManager {
             return Response.failure(ClanAllyAddResult.SAME_CLAN);
         }
 
-        if (!clanMember.hasPermission(BuiltInPermission.MANAGE_DIPLOMACY)) {
+        if (!clanMember.hasPermission(ClanPermissions.MANAGE_DIPLOMACY)) {
             return Response.failure(ClanAllyAddResult.NO_PERMISSION);
         }
 
@@ -120,7 +120,7 @@ public final class DefaultClanRelationManager implements ClanRelationManager {
             return Response.failure(ClanAllyRemoveResult.SAME_CLAN);
         }
 
-        if (!clanMember.hasPermission(BuiltInPermission.MANAGE_DIPLOMACY)) {
+        if (!clanMember.hasPermission(ClanPermissions.MANAGE_DIPLOMACY)) {
             return Response.failure(ClanAllyRemoveResult.NO_PERMISSION);
         }
 
@@ -157,7 +157,7 @@ public final class DefaultClanRelationManager implements ClanRelationManager {
             return Response.failure(ClanEnemyAddResult.SAME_CLAN);
         }
 
-        if (!clanMember.hasPermission(BuiltInPermission.MANAGE_DIPLOMACY)) {
+        if (!clanMember.hasPermission(ClanPermissions.MANAGE_DIPLOMACY)) {
             return Response.failure(ClanEnemyAddResult.NO_PERMISSION);
         }
 
@@ -224,7 +224,7 @@ public final class DefaultClanRelationManager implements ClanRelationManager {
             return Response.failure(ClanEnemyRemoveResult.SAME_CLAN);
         }
 
-        if (!clanMember.hasPermission(BuiltInPermission.MANAGE_DIPLOMACY)) {
+        if (!clanMember.hasPermission(ClanPermissions.MANAGE_DIPLOMACY)) {
             return Response.failure(ClanEnemyRemoveResult.NO_PERMISSION);
         }
 

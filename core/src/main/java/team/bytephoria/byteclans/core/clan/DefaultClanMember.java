@@ -149,7 +149,7 @@ public final class DefaultClanMember implements ClanMember {
     @Override
     public boolean hasPermission(final @NotNull ClanPermission clanPermission) {
         final Set<ClanPermission> clanPermissions = this.role().permissions();
-        if (clanPermissions.contains(BuiltInPermission.ADMINISTRATOR)) {
+        if (clanPermissions.contains(ClanPermissions.ADMINISTRATOR)) {
             return true;
         }
 

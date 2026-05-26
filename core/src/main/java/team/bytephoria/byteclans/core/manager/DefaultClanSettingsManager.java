@@ -116,7 +116,7 @@ public final class DefaultClanSettingsManager implements ClanSettingsManager {
             return Response.failure(ClanPvPModeChangeResult.NOT_IN_CLAN);
         }
 
-        if (!clanMember.hasPermission(BuiltInPermission.CHANGE_PVP_MODE)) {
+        if (!clanMember.hasPermission(ClanPermissions.CHANGE_PVP_MODE)) {
             return Response.failure(ClanPvPModeChangeResult.INSUFFICIENT_ROLE);
         }
 
@@ -145,7 +145,7 @@ public final class DefaultClanSettingsManager implements ClanSettingsManager {
             return Response.failure(ClanStatusChangeResult.NOT_IN_CLAN);
         }
 
-        if (!clanMember.hasPermission(BuiltInPermission.CHANGE_INVITE_STATE)) {
+        if (!clanMember.hasPermission(ClanPermissions.CHANGE_INVITE_STATE)) {
             return Response.failure(ClanStatusChangeResult.INSUFFICIENT_ROLE);
         }
 
@@ -174,7 +174,7 @@ public final class DefaultClanSettingsManager implements ClanSettingsManager {
             return Response.failure(ClanRenameDisplayResult.NOT_IN_CLAN);
         }
 
-        if (!clanMember.hasPermission(BuiltInPermission.RENAME_DISPLAY)) {
+        if (!clanMember.hasPermission(ClanPermissions.RENAME_DISPLAY)) {
             return Response.failure(ClanRenameDisplayResult.INSUFFICIENT_ROLE);
         }
 

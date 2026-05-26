@@ -1,7 +1,7 @@
 package team.bytephoria.byteclans.platform.commonbukkit;
 
 import org.jetbrains.annotations.NotNull;
-import team.bytephoria.byteclans.api.BuiltInPermission;
+import team.bytephoria.byteclans.api.ClanPermissions;
 import team.bytephoria.byteclans.api.ClanPermission;
 import team.bytephoria.byteclans.core.clan.DefaultClanRole;
 import team.bytephoria.byteclans.core.registry.DefaultClanRoleRegistry;
@@ -27,9 +27,9 @@ public final class RoleLoader {
         for (final Map.Entry<String, Role> roleEntry : this.roles.roles().entrySet()) {
             final String roleId = roleEntry.getKey();
             final Role role = roleEntry.getValue();
-            final List<BuiltInPermission> permissions = role.actions()
+            final List<ClanPermissions> permissions = role.actions()
                     .stream()
-                    .map(actionId -> BuiltInPermission.valueOf(actionId.toUpperCase(Locale.ROOT)))
+                    .map(actionId -> ClanPermissions.valueOf(actionId.toUpperCase(Locale.ROOT)))
                     .toList();
 
             final Set<ClanPermission> clanPermissions = new HashSet<>(permissions);
