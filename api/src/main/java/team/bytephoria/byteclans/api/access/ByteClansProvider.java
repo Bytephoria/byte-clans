@@ -1,5 +1,6 @@
 package team.bytephoria.byteclans.api.access;
 
+import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.Objects;
@@ -12,6 +13,7 @@ public final class ByteClansProvider {
         throw new UnsupportedOperationException("This class cannot be instantiated.");
     }
 
+    @ApiStatus.Internal
     public static void setInstance(final @NotNull ByteClans instance) {
         final ByteClans notNullInstance = Objects.requireNonNull(instance, "ByteClansProvider instance must not be null");
         if (ByteClansProvider.instance != null) {
@@ -29,6 +31,7 @@ public final class ByteClansProvider {
         return instance != null;
     }
 
+    @ApiStatus.Internal
     public static void resetInstance() {
         ByteClansProvider.instance = null;
     }
