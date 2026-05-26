@@ -20,8 +20,10 @@ import org.incendo.cloud.minecraft.extras.MinecraftHelp;
 import org.incendo.cloud.paper.LegacyPaperCommandManager;
 import org.jetbrains.annotations.NotNull;
 import org.spongepowered.configurate.ConfigurationNode;
+import team.bytephoria.byteclans.api.access.ByteClans;
 import team.bytephoria.byteclans.api.access.ByteClansProvider;
 import team.bytephoria.byteclans.core.ApplicationFacade;
+import team.bytephoria.byteclans.platform.commonbukkit.extension.ClanExtensionManager;
 import team.bytephoria.byteclans.infrastructure.adventure.ComponentSerializerAdapter;
 import team.bytephoria.byteclans.infrastructure.adventure.ComponentSerializerFactory;
 import team.bytephoria.byteclans.infrastructure.bootstrap.BootstrapContext;
@@ -35,10 +37,7 @@ import team.bytephoria.byteclans.platform.commonbukkit.concurrent.AsyncExecutor;
 import team.bytephoria.byteclans.platform.commonbukkit.listener.ClanPostCreateAsyncListener;
 import team.bytephoria.byteclans.platform.commonbukkit.listener.PlayerJoinListener;
 import team.bytephoria.byteclans.platform.commonbukkit.listener.PlayerQuitListener;
-import team.bytephoria.byteclans.platform.paper.command.ClanAdminCommands;
-import team.bytephoria.byteclans.platform.paper.command.ClanCommand;
-import team.bytephoria.byteclans.platform.paper.command.ClanDiplomacyCommand;
-import team.bytephoria.byteclans.platform.paper.command.ClanInviteCommand;
+import team.bytephoria.byteclans.platform.paper.command.*;
 import team.bytephoria.byteclans.platform.paper.hook.PlaceholderAPIHook;
 import team.bytephoria.byteclans.platform.paper.listener.AsyncChatEventListener;
 import team.bytephoria.byteclans.platform.paper.listener.EntityDamageByEntityListener;
@@ -62,6 +61,8 @@ public final class PaperPlugin extends JavaPlugin {
     private LegacyPaperCommandManager<Player> commandManager;
     private AnnotationParser<Player> annotationParser;
     private MinecraftHelp<Player> playerMinecraftHelp;
+
+    private ClanExtensionManager clanExtensionManager;
 
     private Metrics metrics;
 
@@ -205,24 +206,30 @@ public final class PaperPlugin extends JavaPlugin {
                 context -> context.context().sender().sendMessage(Component.text("You don't have permission.", NamedTextColor.RED))
         );
 
-        ByteClansProvider.setInstance(
-                new ComonBukkitByteClans(
-                        applicationFacade.clanCache(),
-                        applicationFacade.clanMemberCache(),
-                        applicationFacade.clanRoleRegistry(),
-                        applicationFacade.clanInviteManager(),
-                        applicationFacade.clanManager(),
-                        applicationFacade.clanMemberManager(),
-                        applicationFacade.clanSettingsManager(),
-                        applicationFacade.clanStatisticManager(),
-                        applicationFacade.clanDataContainerManager(),
-                        applicationFacade.clanNameProcessor(),
-                        applicationFacade.clanGlobalSettings(),
-                        applicationFacade.clanDisplayNameProcessor(),
-                        this.commandManager,
-                        this.annotationParser
-                )
+        final ByteClans byteClans = new ComonBukkitByteClans(
+                applicationFacade.clanCache(),
+                applicationFacade.clanMemberCache(),
+                applicationFacade.clanRoleRegistry(),
+                applicationFacade.clanInviteManager(),
+                applicationFacade.clanManager(),
+                applicationFacade.clanMemberManager(),
+                applicationFacade.clanSettingsManager(),
+                applicationFacade.clanStatisticManager(),
+                applicationFacade.clanDataContainerManager(),
+                applicationFacade.clanNameProcessor(),
+                applicationFacade.clanGlobalSettings(),
+                applicationFacade.clanDisplayNameProcessor(),
+                this.commandManager,
+                this.annotationParser
         );
+
+        this.clanExtensionManager = new ClanExtensionManager(this.getLogger());
+        this.clanExtensionManager.loadAll(this, this.getClassLoader(), byteClans);
+        this.clanExtensionManager.enableAll();
+
+        ByteClansProvider.setInstance(byteClans);
+
+        this.annotationParser.parse(new ByteClansCommand(this.clanExtensionManager));
 
         this.metrics = new Metrics(this, 30263);
         this.getLogger().info("PaperPlugin has been enabled!");
@@ -242,6 +249,10 @@ public final class PaperPlugin extends JavaPlugin {
             }
         }
 
+        if (this.clanExtensionManager != null) {
+            this.clanExtensionManager.unloadAll();
+        }
+
         ByteClansProvider.resetInstance();
         if (this.paperBootstrap != null) {
             this.paperBootstrap.disable();
@@ -252,6 +263,7 @@ public final class PaperPlugin extends JavaPlugin {
             this.metrics.shutdown();
         }
 
+        this.clanExtensionManager = null;
         this.annotationParser = null;
         this.metrics = null;
         this.messenger = null;

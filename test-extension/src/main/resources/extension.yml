@@ -1,0 +1,5 @@
+name: "ExampleTest"
+description: "An example extension for testing purposes"
+main: team.bytephoria.testextension.Extension
+author: Bytephoria
+version: 1.0.0
