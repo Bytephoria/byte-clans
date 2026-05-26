@@ -55,7 +55,6 @@ public final class ByteClansCommand {
         final Component footer = Component.text("------------------------------------------------", NamedTextColor.GRAY);
         components.add(footer);
 
-
         Component component = Component.empty();
         for (final Component component1 : components) {
             component = component.append(component1);
