@@ -4,6 +4,7 @@ public enum StatisticType {
 
     KILLS,
     DEATHS,
-    KILL_STREAK
+    KILL_STREAK,
+    POINTS
 
 }
