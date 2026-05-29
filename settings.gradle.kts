@@ -12,5 +12,6 @@ include(
     "platform:bukkit-api",
     "platform:common-bukkit",
     "platform:paper",
-    "platform:spigot"
+    "platform:spigot",
+    "test-extension"
 )

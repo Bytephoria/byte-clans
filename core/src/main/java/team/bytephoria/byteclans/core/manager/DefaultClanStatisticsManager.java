@@ -54,12 +54,14 @@ public final class DefaultClanStatisticsManager implements ClanStatisticManager 
                 case KILLS -> clanStatistics.kills();
                 case DEATHS -> clanStatistics.deaths();
                 case KILL_STREAK -> clanStatistics.killsStreak();
+                case POINTS -> clanStatistics.points();
             };
 
             final ClanField field = switch (statisticType) {
                 case KILLS -> ClanField.KILLS;
                 case DEATHS -> ClanField.DEATHS;
                 case KILL_STREAK -> ClanField.KILLS_STREAK;
+                case POINTS -> ClanField.POINTS;
             };
 
             intValue.value(value, operation);

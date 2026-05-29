@@ -4,7 +4,6 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import team.bytephoria.byteclans.api.*;
 import team.bytephoria.byteclans.api.statistic.StatisticUpdate;
-import team.bytephoria.byteclans.api.util.Operation;
 
 import java.util.UUID;
 
@@ -207,16 +206,6 @@ public interface ClanEventBus {
             final @NotNull Clan targetClan,
             final @NotNull Clan sourceClan
     );
-
-    default boolean callClanPointsChangeEvent(
-            final @NotNull Clan clan,
-            final int value,
-            final int oldValue,
-            final int finalValue,
-            final @NotNull Operation operation
-    ) {
-        return true;
-    }
 
     default boolean callClanStatisticsChangeEvent(
             final @NotNull Clan clan,

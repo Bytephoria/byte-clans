@@ -83,7 +83,7 @@ public final class DefaultClanInviteManager implements ClanInviteManager {
             return ResponseContext.failure(ClanInviteSendResult.NOT_IN_CLAN);
         }
 
-        if (!senderMember.hasPermission(ClanAction.INVITE_MEMBERS)) {
+        if (!senderMember.hasPermission(ClanPermissions.INVITE_MEMBERS)) {
             return ResponseContext.failure(ClanInviteSendResult.INSUFFICIENT_ROLE);
         }
 

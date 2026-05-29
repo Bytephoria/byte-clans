@@ -8,5 +8,6 @@ public final class FeaturePermissions {
 
     public static final String CREATE_CLAN = "byteclans.command.create";
     public static final String DISPLAY_MODIFY = "byteclans.command.display-modify";
+    public static final String EXTENSIONS = "byteclans.command.extensions";
 
 }

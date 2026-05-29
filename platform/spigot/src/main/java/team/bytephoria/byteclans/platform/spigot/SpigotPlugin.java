@@ -19,6 +19,7 @@ import org.incendo.cloud.minecraft.extras.MinecraftHelp;
 import org.incendo.cloud.paper.LegacyPaperCommandManager;
 import org.jetbrains.annotations.NotNull;
 import org.spongepowered.configurate.ConfigurationNode;
+import team.bytephoria.byteclans.api.access.ByteClans;
 import team.bytephoria.byteclans.api.access.ByteClansProvider;
 import team.bytephoria.byteclans.core.ApplicationFacade;
 import team.bytephoria.byteclans.infrastructure.adventure.ComponentSerializerAdapter;
@@ -31,13 +32,11 @@ import team.bytephoria.byteclans.platform.commonbukkit.BukkitClanEventBus;
 import team.bytephoria.byteclans.platform.commonbukkit.RoleLoader;
 import team.bytephoria.byteclans.platform.commonbukkit.access.ComonBukkitByteClans;
 import team.bytephoria.byteclans.platform.commonbukkit.concurrent.AsyncExecutor;
+import team.bytephoria.byteclans.platform.commonbukkit.extension.ClanExtensionManager;
 import team.bytephoria.byteclans.platform.commonbukkit.listener.ClanPostCreateAsyncListener;
 import team.bytephoria.byteclans.platform.commonbukkit.listener.PlayerJoinListener;
 import team.bytephoria.byteclans.platform.commonbukkit.listener.PlayerQuitListener;
-import team.bytephoria.byteclans.platform.spigot.command.ClanAdminCommands;
-import team.bytephoria.byteclans.platform.spigot.command.ClanCommand;
-import team.bytephoria.byteclans.platform.spigot.command.ClanDiplomacyCommand;
-import team.bytephoria.byteclans.platform.spigot.command.ClanInviteCommand;
+import team.bytephoria.byteclans.platform.spigot.command.*;
 import team.bytephoria.byteclans.platform.spigot.hook.PlaceholderAPIHook;
 import team.bytephoria.byteclans.platform.spigot.listener.AsyncPlayerChatListener;
 import team.bytephoria.byteclans.platform.spigot.listener.v1_20_3.V1_20_3EntityDamageByEntityListener;
@@ -63,6 +62,8 @@ public final class SpigotPlugin extends JavaPlugin {
 
     private LegacyPaperCommandManager<Player> commandManager;
     private MinecraftHelp<Player> playerMinecraftHelp;
+    private ClanExtensionManager clanExtensionManager;
+
     private Metrics metrics;
 
     @Override
@@ -235,23 +236,31 @@ public final class SpigotPlugin extends JavaPlugin {
                 }
         );
 
-        ByteClansProvider.setInstance(
-                new ComonBukkitByteClans(
-                        applicationFacade.clanCache(),
-                        applicationFacade.clanMemberCache(),
-                        applicationFacade.clanRoleRegistry(),
-                        applicationFacade.clanInviteManager(),
-                        applicationFacade.clanManager(),
-                        applicationFacade.clanMemberManager(),
-                        applicationFacade.clanSettingsManager(),
-                        applicationFacade.clanStatisticManager(),
-                        applicationFacade.clanDataContainerManager(),
-                        applicationFacade.clanNameProcessor(),
-                        applicationFacade.clanGlobalSettings(),
-                        applicationFacade.clanDisplayNameProcessor(),
-                        this.commandManager,
-                        annotationParser
-                )
+        final ByteClans byteClans = new ComonBukkitByteClans(
+                applicationFacade.clanCache(),
+                applicationFacade.clanMemberCache(),
+                applicationFacade.clanRoleRegistry(),
+                applicationFacade.clanInviteManager(),
+                applicationFacade.clanManager(),
+                applicationFacade.clanMemberManager(),
+                applicationFacade.clanSettingsManager(),
+                applicationFacade.clanStatisticManager(),
+                applicationFacade.clanDataContainerManager(),
+                applicationFacade.clanNameProcessor(),
+                applicationFacade.clanGlobalSettings(),
+                applicationFacade.clanDisplayNameProcessor(),
+                this.commandManager,
+                annotationParser
+        );
+
+        this.clanExtensionManager = new ClanExtensionManager(this.getLogger());
+        this.clanExtensionManager.loadAll(this, this.getClassLoader(), byteClans);
+        this.clanExtensionManager.enableAll();
+
+        ByteClansProvider.setInstance(byteClans);
+
+        annotationParser.parse(
+                new ByteClansCommand(this.clanExtensionManager, this)
         );
 
         this.metrics = new Metrics(this, 30263);
@@ -271,6 +280,10 @@ public final class SpigotPlugin extends JavaPlugin {
             }
         }
 
+        if (this.clanExtensionManager != null) {
+            this.clanExtensionManager.unloadAll();
+        }
+
         ByteClansProvider.resetInstance();
         if (this.spigotBootstrap != null) {
             this.spigotBootstrap.disable();
@@ -285,6 +298,7 @@ public final class SpigotPlugin extends JavaPlugin {
             this.bukkitAudiences.close();
         }
 
+        this.clanExtensionManager = null;
         this.metrics = null;
         this.messenger = null;
         this.configuration = null;
