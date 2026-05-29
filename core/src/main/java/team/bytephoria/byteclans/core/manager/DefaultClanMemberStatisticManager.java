@@ -49,7 +49,7 @@ public final class DefaultClanMemberStatisticManager implements ClanMemberStatis
             final IntValue intValue = switch (statisticType) {
                 case KILLS -> clanStatistics.kills();
                 case DEATHS -> clanStatistics.deaths();
-                case KILL_STREAK -> null;
+                case POINTS, KILL_STREAK -> null;
             };
 
             final ClanMemberField field = switch (statisticType) {

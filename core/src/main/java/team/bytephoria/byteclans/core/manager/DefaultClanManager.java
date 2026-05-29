@@ -8,9 +8,6 @@ import team.bytephoria.byteclans.api.manager.ClanManager;
 import team.bytephoria.byteclans.api.result.ClanCreateResult;
 import team.bytephoria.byteclans.api.result.ClanDisbandResult;
 import team.bytephoria.byteclans.api.result.ClanNameValidationResult;
-import team.bytephoria.byteclans.api.result.ClanUpdatePointsResult;
-import team.bytephoria.byteclans.api.util.Operation;
-import team.bytephoria.byteclans.api.util.response.Response;
 import team.bytephoria.byteclans.api.util.response.context.ResponseContext;
 import team.bytephoria.byteclans.api.validator.ClanNameValidator;
 import team.bytephoria.byteclans.core.clan.DefaultClan;
@@ -25,7 +22,6 @@ import team.bytephoria.byteclans.spi.storage.ClanMemberStorage;
 import team.bytephoria.byteclans.spi.storage.ClanStorage;
 import team.bytephoria.byteclans.spi.storage.entry.ClanEntry;
 import team.bytephoria.byteclans.spi.storage.entry.ClanMemberEntry;
-import team.bytephoria.byteclans.spi.storage.field.ClanField;
 
 import java.util.UUID;
 
@@ -159,40 +155,6 @@ public final class DefaultClanManager implements ClanManager {
     public @NonNull ResponseContext<Clan, ClanDisbandResult> disbandClan(final @NotNull ClanMember clanMember) {
         final ClanPlayer clanPlayer = clanMember.player().orElse(null);
         return this.disbandClan(clanMember, clanPlayer);
-    }
-
-    @Override
-    public @NotNull Response<ClanUpdatePointsResult> updatePoints(
-            final @NotNull Clan clan,
-            final int value,
-            final @NotNull Operation operation
-    ) {
-
-        final int oldValue = clan.statistics().points().value();
-        int newValue = operation.resolve(oldValue, value);
-
-        final int min = this.globalSettings.minimumPoints();
-        final int max = this.globalSettings.maximumPoints();
-
-        if (newValue < min) {
-            newValue = min;
-        }
-
-        if (max > -1 && newValue > max) {
-            newValue = max;
-        }
-
-        if (newValue == oldValue) {
-            return ResponseContext.failure(ClanUpdatePointsResult.SAME_VALUE);
-        }
-
-        if (!this.clanEventBus.callClanPointsChangeEvent(clan, value, oldValue, newValue, operation)) {
-            return Response.failure(ClanUpdatePointsResult.CANCELLED);
-        }
-
-        clan.statistics().points().value(newValue);
-        this.clanStorage.async().update(ClanEntry.from(clan), ClanField.POINTS);
-        return ResponseContext.success(clan, ClanUpdatePointsResult.SUCCESS);
     }
 
     private ResponseContext<Clan, ClanDisbandResult> disbandClan(

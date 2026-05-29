@@ -12,9 +12,11 @@ import team.bytephoria.byteclans.api.manager.ClanMemberStatisticManager;
 import team.bytephoria.byteclans.api.manager.ClanStatisticManager;
 import team.bytephoria.byteclans.api.statistic.StatisticType;
 import team.bytephoria.byteclans.api.statistic.StatisticUpdate;
+import team.bytephoria.byteclans.api.util.IntValue;
 import team.bytephoria.byteclans.api.util.Operation;
 import team.bytephoria.byteclans.core.util.IdentityCachedMap;
 
+import java.util.Collections;
 import java.util.List;
 
 public final class PlayerDeathListener implements Listener {
@@ -49,6 +51,8 @@ public final class PlayerDeathListener implements Listener {
         if (damageSource.getCausingEntity() instanceof Player killer && player != killer) {
             this.clanMemberCache.getIfPresent(killer.getUniqueId())
                     .ifPresent(clanMember -> {
+                        final Clan clan = clanMember.clan();
+
                         this.clanMemberStatisticManager.update(
                                 clanMember,
                                 List.of(
@@ -56,12 +60,26 @@ public final class PlayerDeathListener implements Listener {
                                 )
                         );
 
-                        this.clanStatisticManager.update(clanMember.clan(), List.of(
+                        this.clanStatisticManager.update(clan, List.of(
                                 new StatisticUpdate(StatisticType.KILLS, 1, Operation.SUM),
                                 new StatisticUpdate(StatisticType.KILL_STREAK, 1, Operation.SUM))
                         );
 
-                        this.clanManager.updatePoints(clanMember.clan(), this.clanGlobalSettings.pointsPerKill(), Operation.SUM);
+                        final IntValue points = clan.statistics().points();
+                        final int maximumPoints = this.clanGlobalSettings.maximumPoints();
+                        final int pointsToAdd;
+                        if (maximumPoints == -1) {
+                            pointsToAdd = this.clanGlobalSettings.pointsPerKill();
+                        } else {
+                            pointsToAdd = Math.min(this.clanGlobalSettings.pointsPerKill(), maximumPoints - points.value());
+                        }
+
+                        if (pointsToAdd > 0) {
+                            this.clanStatisticManager.update(clan, Collections.singleton(
+                                    new StatisticUpdate(StatisticType.POINTS, pointsToAdd, Operation.SUM)
+                            ));
+                        }
+
                     });
         }
 
@@ -81,7 +99,31 @@ public final class PlayerDeathListener implements Listener {
                             new StatisticUpdate(StatisticType.KILL_STREAK, clan.statistics().killsStreak().value(), Operation.SUB)
                     ));
 
-                    this.clanManager.updatePoints(clanMember.clan(), this.clanGlobalSettings.pointsPerDeath(), Operation.SUM);
+                    final IntValue points = clan.statistics().points();
+                    final int minimumPoints = this.clanGlobalSettings.minimumPoints();
+
+                    final int pointsToRemove;
+
+                    if (minimumPoints == -1) {
+                        pointsToRemove = this.clanGlobalSettings.pointsPerDeath();
+                    } else {
+                        pointsToRemove = Math.min(
+                                this.clanGlobalSettings.pointsPerDeath(),
+                                points.value() - minimumPoints
+                        );
+                    }
+
+                    if (pointsToRemove > 0) {
+                        this.clanStatisticManager.update(clan, List.of(
+                                        new StatisticUpdate(
+                                                StatisticType.POINTS,
+                                                pointsToRemove,
+                                                Operation.SUB
+                                        )
+                                )
+                        );
+                    }
+
                 });
 
     }

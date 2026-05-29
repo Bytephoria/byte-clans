@@ -7,7 +7,6 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import team.bytephoria.byteclans.api.*;
 import team.bytephoria.byteclans.api.statistic.StatisticUpdate;
-import team.bytephoria.byteclans.api.util.Operation;
 import team.bytephoria.byteclans.bukkitapi.BukkitClanPlayer;
 import team.bytephoria.byteclans.bukkitapi.event.*;
 import team.bytephoria.byteclans.bukkitapi.event.create.ClanPostCreateAsyncEvent;
@@ -274,17 +273,6 @@ public final class BukkitClanEventBus implements ClanEventBus {
         }
 
         throw new UnsupportedOperationException("ClanPlayer must be an instance of BukkitClanPlayer.");
-    }
-
-    @Override
-    public boolean callClanPointsChangeEvent(
-            final @NotNull Clan clan,
-            final int value,
-            final int oldValue,
-            final int finalValue,
-            final @NotNull Operation operation
-    ) {
-        return this.callEvent(new ClanPointsChangeEvent(clan, value, oldValue, finalValue, operation));
     }
 
     @Override
