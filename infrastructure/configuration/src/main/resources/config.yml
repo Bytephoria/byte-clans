@@ -49,6 +49,17 @@ settings:
 # Clan-related configuration.
 # -----------------------------------------------------------
 clan:
+
+  # -----------------------------------------------------------
+  # Clan creation workflow configuration.
+  # Used only for clan creation requests started
+  # through zMenu input actions.
+  # -----------------------------------------------------------
+  creation:
+    timeout:
+      amount: 30                # Duration before a pending clan creation request expires.
+      unit: SECONDS             # Time unit for the timeout. Options: SECONDS, MINUTES, HOURS
+
   name:
     # Minimum and maximum allowed characters for clan names.
     minimum-chars: 3            # Minimum number of characters for a clan name.

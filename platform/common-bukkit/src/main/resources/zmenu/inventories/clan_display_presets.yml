@@ -1,0 +1,346 @@
+size: 54
+name: "<#EC4899>Clan Presets"
+
+patterns:
+  - "byteclans-decoration"
+  
+items:
+
+  # Navigation
+  main-menu:
+    slot: 49
+    type: HOME
+    item:
+      material: SPRUCE_DOOR
+      name: "<#FB7185>Return to Main Menu"
+      lore:
+      - ""
+      - "<#D1D5DB>Go back to the main"
+      - "<#D1D5DB>clan management menu."
+      - ""
+      - "<#6EE7B7>▶ Click to return"
+    sound: UI_BUTTON_CLICK
+  
+  previous-menu:
+    slot: 48
+    type: BACK
+    item:
+      material: ARROW
+      name: "<white>Return to Previous Page"
+    sound: UI_BUTTON_CLICK
+
+  # Sunset
+  sunset:
+    slot: 11
+    item:
+      material: ORANGE_BANNER
+      name: "<gradient:#F97316:#EF4444><bold>%byteclans_clan_name%</bold>"
+      lore:
+      - ""
+      - "<#FDBA74>Warm sunset orange and red."
+      - ""
+      - "<#6EE7B7>▶ Click to apply"
+    actions:
+      - type: close
+      - type: set-clan-display
+        display: "<gradient:#F97316:#EF4444><bold>%clan_name%</bold></gradient>"
+      - type: message
+        messages:
+        - "<#F97316>You changed your clan display to %byteclans_clan_display%"
+      - type: sound
+        sound: UI_BUTTON_CLICK
+
+  # Ocean
+  ocean:
+    slot: 12
+    item:
+      material: HEART_OF_THE_SEA
+      name: "<gradient:#06B6D4:#3B82F6><bold>%byteclans_clan_name%</bold>"
+      lore:
+      - ""
+      - "<#93C5FD>Deep ocean inspired gradient."
+      - ""
+      - "<#6EE7B7>▶ Click to apply"
+    actions:
+      - type: close
+      - type: set-clan-display
+        display: "<gradient:#06B6D4:#3B82F6><bold>%clan_name%</bold></gradient>"
+      - type: message
+        messages:
+        - "<#3B82F6>You changed your clan display to %byteclans_clan_display%"
+      - type: sound
+        sound: UI_BUTTON_CLICK
+
+  # Toxic
+  toxic:
+    slot: 13
+    item:
+      material: SLIME_BALL
+      name: "<gradient:#84CC16:#22C55E><bold>%byteclans_clan_name%</bold>"
+      lore:
+      - ""
+      - "<#BEF264>Radioactive green energy."
+      - ""
+      - "<#6EE7B7>▶ Click to apply"
+    actions:
+      - type: close
+      - type: set-clan-display
+        display: "<gradient:#84CC16:#22C55E><bold>%clan_name%</bold></gradient>"
+      - type: message
+        messages:
+        - "<#84CC16>You changed your clan display to %byteclans_clan_display%"
+      - type: sound
+        sound: UI_BUTTON_CLICK
+
+  # Galaxy
+  galaxy:
+    slot: 14
+    item:
+      material: AMETHYST_SHARD
+      name: "<gradient:#8B5CF6:#EC4899><bold>%byteclans_clan_name%</bold>"
+      lore:
+      - ""
+      - "<#C4B5FD>Cosmic purple and pink style."
+      - ""
+      - "<#6EE7B7>▶ Click to apply"
+    actions:
+      - type: close
+      - type: set-clan-display
+        display: "<gradient:#8B5CF6:#EC4899><bold>%clan_name%</bold></gradient>"
+      - type: message
+        messages:
+        - "<#A855F7>You changed your clan display to %byteclans_clan_display%"
+      - type: sound
+        sound: UI_BUTTON_CLICK
+
+  # Frozen
+  frozen:
+    slot: 15
+    item:
+      material: ICE
+      name: "<gradient:#E0F2FE:#38BDF8><bold>%byteclans_clan_name%</bold>"
+      lore:
+      - ""
+      - "<#BAE6FD>Cold icy blue aesthetic."
+      - ""
+      - "<#6EE7B7>▶ Click to apply"
+    actions:
+      - type: close
+      - type: set-clan-display
+        display: "<gradient:#E0F2FE:#38BDF8><bold>%clan_name%</bold></gradient>"
+      - type: message
+        messages:
+        - "<#38BDF8>You changed your clan display to %byteclans_clan_display%"
+      - type: sound
+        sound: UI_BUTTON_CLICK
+
+  # Blood
+  blood:
+    slot: 20
+    item:
+      material: REDSTONE
+      name: "<gradient:#7F1D1D:#EF4444><bold>%byteclans_clan_name%</bold>"
+      lore:
+      - ""
+      - "<#FCA5A5>Dark blood-red war theme."
+      - ""
+      - "<#6EE7B7>▶ Click to apply"
+    actions:
+      - type: close
+      - type: set-clan-display
+        display: "<gradient:#7F1D1D:#EF4444><bold>%clan_name%</bold></gradient>"
+      - type: message
+        messages:
+        - "<#EF4444>You changed your clan display to %byteclans_clan_display%"
+      - type: sound
+        sound: UI_BUTTON_CLICK
+
+  # Gold
+  gold:
+    slot: 21
+    item:
+      material: GOLD_INGOT
+      name: "<gradient:#FACC15:#F59E0B><bold>%byteclans_clan_name%</bold>"
+      lore:
+      - ""
+      - "<#FDE68A>Luxury golden premium style."
+      - ""
+      - "<#6EE7B7>▶ Click to apply"
+    actions:
+      - type: close
+      - type: set-clan-display
+        display: "<gradient:#FACC15:#F59E0B><bold>%clan_name%</bold></gradient>"
+      - type: message
+        messages:
+        - "<#FACC15>You changed your clan display to %byteclans_clan_display%"
+      - type: sound
+        sound: UI_BUTTON_CLICK
+
+  # Emerald
+  emerald:
+    slot: 22
+    item:
+      material: EMERALD
+      name: "<gradient:#10B981:#22C55E><bold>%byteclans_clan_name%</bold>"
+      lore:
+      - ""
+      - "<#86EFAC>Fresh emerald green glow."
+      - ""
+      - "<#6EE7B7>▶ Click to apply"
+    actions:
+      - type: close
+      - type: set-clan-display
+        display: "<gradient:#10B981:#22C55E><bold>%clan_name%</bold></gradient>"
+      - type: message
+        messages:
+        - "<#22C55E>You changed your clan display to %byteclans_clan_display%"
+      - type: sound
+        sound: UI_BUTTON_CLICK
+
+  # Cotton Candy
+  cotton-candy:
+    slot: 23
+    item:
+      material: PINK_DYE
+      name: "<gradient:#EC4899:#60A5FA><bold>%byteclans_clan_name%</bold>"
+      lore:
+      - ""
+      - "<#F9A8D4>Pink and blue candy vibes."
+      - ""
+      - "<#6EE7B7>▶ Click to apply"
+    actions:
+      - type: close
+      - type: set-clan-display
+        display: "<gradient:#EC4899:#60A5FA><bold>%clan_name%</bold></gradient>"
+      - type: message
+        messages:
+        - "<#EC4899>You changed your clan display to %byteclans_clan_display%"
+      - type: sound
+        sound: UI_BUTTON_CLICK
+
+  # Void
+  void:
+    slot: 24
+    item:
+      material: OBSIDIAN
+      name: "<gradient:#111827:#6D28D9><bold>%byteclans_clan_name%</bold>"
+      lore:
+      - ""
+      - "<#A78BFA>Mysterious dark void energy."
+      - ""
+      - "<#6EE7B7>▶ Click to apply"
+    actions:
+      - type: close
+      - type: set-clan-display
+        display: "<gradient:#111827:#6D28D9><bold>%clan_name%</bold></gradient>"
+      - type: message
+        messages:
+        - "<#8B5CF6>You changed your clan display to %byteclans_clan_display%"
+      - type: sound
+        sound: UI_BUTTON_CLICK
+
+  # Fire & Ice
+  fire-ice:
+    slot: 29
+    item:
+      material: DIAMOND_SWORD
+      name: "<gradient:#EF4444:#38BDF8><bold>%byteclans_clan_name%</bold>"
+      lore:
+      - ""
+      - "<#FCA5A5>Perfect balance between"
+      - "<#93C5FD>fire and ice."
+      - ""
+      - "<#6EE7B7>▶ Click to apply"
+    actions:
+      - type: close
+      - type: set-clan-display
+        display: "<gradient:#EF4444:#38BDF8><bold>%clan_name%</bold></gradient>"
+      - type: message
+        messages:
+        - "<#38BDF8>You changed your clan display to %byteclans_clan_display%"
+      - type: sound
+        sound: UI_BUTTON_CLICK
+
+  # Neon
+  neon:
+    slot: 30
+    item:
+      material: END_ROD
+      name: "<gradient:#39FF14:#00FFFF><bold>%byteclans_clan_name%</bold>"
+      lore:
+      - ""
+      - "<#67E8F9>Bright futuristic neon style."
+      - ""
+      - "<#6EE7B7>▶ Click to apply"
+    actions:
+      - type: close
+      - type: set-clan-display
+        display: "<gradient:#39FF14:#00FFFF><bold>%clan_name%</bold></gradient>"
+      - type: message
+        messages:
+        - "<#00FFFF>You changed your clan display to %byteclans_clan_display%"
+      - type: sound
+        sound: UI_BUTTON_CLICK
+
+  # Royal
+  royal:
+    slot: 31
+    item:
+      material: NETHER_STAR
+      name: "<gradient:#7C3AED:#FACC15><bold>%byteclans_clan_name%</bold>"
+      lore:
+      - ""
+      - "<#DDD6FE>Elegant royal purple and gold."
+      - ""
+      - "<#6EE7B7>▶ Click to apply"
+    actions:
+      - type: close
+      - type: set-clan-display
+        display: "<gradient:#7C3AED:#FACC15><bold>%clan_name%</bold></gradient>"
+      - type: message
+        messages:
+        - "<#7C3AED>You changed your clan display to %byteclans_clan_display%"
+      - type: sound
+        sound: UI_BUTTON_CLICK
+
+  # Cherry
+  cherry:
+    slot: 32
+    item:
+      material: CHERRY_SAPLING
+      name: "<gradient:#FB7185:#F9A8D4><bold>%byteclans_clan_name%</bold>"
+      lore:
+      - ""
+      - "<#FBCFE8>Soft cherry blossom palette."
+      - ""
+      - "<#6EE7B7>▶ Click to apply"
+    actions:
+      - type: close
+      - type: set-clan-display
+        display: "<gradient:#FB7185:#F9A8D4><bold>%clan_name%</bold></gradient>"
+      - type: message
+        messages:
+        - "<#FB7185>You changed your clan display to %byteclans_clan_display%"
+      - type: sound
+        sound: UI_BUTTON_CLICK
+
+  # Matrix
+  matrix:
+    slot: 33
+    item:
+      material: GREEN_STAINED_GLASS
+      name: "<gradient:#22C55E:#14532D><bold>%byteclans_clan_name%</bold>"
+      lore:
+      - ""
+      - "<#86EFAC>Digital hacker-inspired style."
+      - ""
+      - "<#6EE7B7>▶ Click to apply"
+    actions:
+      - type: close
+      - type: set-clan-display
+        display: "<gradient:#22C55E:#14532D><bold>%clan_name%</bold></gradient>"
+      - type: message
+        messages:
+        - "<#22C55E>You changed your clan display to %byteclans_clan_display%"
+      - type: sound
+        sound: UI_BUTTON_CLICK

@@ -20,8 +20,8 @@ import team.bytephoria.byteclans.api.util.response.context.ResponseContext;
 import team.bytephoria.byteclans.core.util.ClanNameUUID;
 import team.bytephoria.byteclans.core.util.IdentityCachedMap;
 import team.bytephoria.byteclans.platform.commonbukkit.concurrent.AsyncExecutor;
+import team.bytephoria.byteclans.platform.commonbukkit.messages.Messenger;
 import team.bytephoria.byteclans.platform.paper.PaperPlugin;
-import team.bytephoria.byteclans.platform.paper.message.Messenger;
 
 import java.util.*;
 

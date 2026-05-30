@@ -29,26 +29,31 @@ import team.bytephoria.byteclans.infrastructure.configuration.ConfigurationLoade
 import team.bytephoria.byteclans.infrastructure.configuration.configuration.Configuration;
 import team.bytephoria.byteclans.infrastructure.configuration.roles.Roles;
 import team.bytephoria.byteclans.platform.commonbukkit.BukkitClanEventBus;
+import team.bytephoria.byteclans.platform.commonbukkit.CommonBukkitFacade;
 import team.bytephoria.byteclans.platform.commonbukkit.RoleLoader;
 import team.bytephoria.byteclans.platform.commonbukkit.access.ComonBukkitByteClans;
+import team.bytephoria.byteclans.platform.commonbukkit.chat.ChatInput;
 import team.bytephoria.byteclans.platform.commonbukkit.concurrent.AsyncExecutor;
 import team.bytephoria.byteclans.platform.commonbukkit.extension.ClanExtensionManager;
+import team.bytephoria.byteclans.platform.commonbukkit.hook.zmenu.ZMenuHook;
 import team.bytephoria.byteclans.platform.commonbukkit.listener.ClanPostCreateAsyncListener;
 import team.bytephoria.byteclans.platform.commonbukkit.listener.PlayerJoinListener;
 import team.bytephoria.byteclans.platform.commonbukkit.listener.PlayerQuitListener;
+import team.bytephoria.byteclans.platform.commonbukkit.messages.Messenger;
 import team.bytephoria.byteclans.platform.spigot.command.*;
 import team.bytephoria.byteclans.platform.spigot.hook.PlaceholderAPIHook;
 import team.bytephoria.byteclans.platform.spigot.listener.AsyncPlayerChatListener;
+import team.bytephoria.byteclans.platform.spigot.listener.ChatInputListener;
 import team.bytephoria.byteclans.platform.spigot.listener.v1_20_3.V1_20_3EntityDamageByEntityListener;
 import team.bytephoria.byteclans.platform.spigot.listener.v1_20_3.V1_20_3PlayerDeathListener;
 import team.bytephoria.byteclans.platform.spigot.listener.v1_20_4.V1_20_4EntityDamageByEntityListener;
 import team.bytephoria.byteclans.platform.spigot.listener.v1_20_4.V1_20_4PlayerDeathListener;
-import team.bytephoria.byteclans.platform.spigot.message.Messenger;
 import team.bytephoria.byteclans.platform.spigot.util.ServerVersion;
 
 public final class SpigotPlugin extends JavaPlugin {
 
     private BukkitAudiences bukkitAudiences;
+    private SpigotAudienceProvider spigotAudienceProvider;
 
     private Configuration configuration;
     private Roles roles;
@@ -63,6 +68,10 @@ public final class SpigotPlugin extends JavaPlugin {
     private LegacyPaperCommandManager<Player> commandManager;
     private MinecraftHelp<Player> playerMinecraftHelp;
     private ClanExtensionManager clanExtensionManager;
+
+    private ChatInput chatInput;
+    private ZMenuHook zMenuHook;
+    private CommonBukkitFacade commonBukkitFacade;
 
     private Metrics metrics;
 
@@ -92,6 +101,7 @@ public final class SpigotPlugin extends JavaPlugin {
         this.getLogger().info("SpigotPlugin is starting...");
 
         this.bukkitAudiences = BukkitAudiences.create(this);
+        this.spigotAudienceProvider = new SpigotAudienceProvider(this);
         this.serializerAdapter = ComponentSerializerFactory.create(this.configuration.settings().serializer());
         this.bukkitClanEventBus = new BukkitClanEventBus();
         this.spigotBootstrap = new SpigotBootstrap(this, new BootstrapContext(this.getDataFolder().toPath()));
@@ -102,7 +112,7 @@ public final class SpigotPlugin extends JavaPlugin {
             this.getLogger().info("PlaceholderAPI has been hooked!");
         }
 
-        this.messenger = new Messenger(this, this.messages, this.serializerAdapter);
+        this.messenger = new Messenger(this.messages, this.serializerAdapter, this.spigotAudienceProvider);
 
         final ApplicationFacade applicationFacade = this.spigotBootstrap.applicationFacade();
         new RoleLoader(this.roles, applicationFacade.clanRoleRegistry()).loadAll();
@@ -228,6 +238,7 @@ public final class SpigotPlugin extends JavaPlugin {
 
             this.playerMinecraftHelp.queryCommands(correctSyntax, commandContext.sender());
         });
+
         this.commandManager.exceptionController().registerHandler(
                 NoPermissionException.class,
                 context -> {
@@ -262,6 +273,19 @@ public final class SpigotPlugin extends JavaPlugin {
         annotationParser.parse(
                 new ByteClansCommand(this.clanExtensionManager, this)
         );
+
+        if (this.getServer().getPluginManager().getPlugin("zMenu") != null) {
+            this.getLogger().info("ZMenu was detected! Initializing assets to hook...");
+
+            annotationParser.parse(new ClanMenuCommand(this));
+            this.commonBukkitFacade = new SpigotCommonBukkitFacade(this);
+            this.chatInput = new ChatInput(this, () -> new ChatInputListener(this.chatInput), this.spigotBootstrap().clanGlobalSettings());
+            this.zMenuHook = new ZMenuHook(this, this.commonBukkitFacade, this.messenger);
+
+            this.zMenuHook.loadAll();
+            this.getLogger().info("ZMenu was loaded! Enjoy it!");
+        }
+
 
         this.metrics = new Metrics(this, 30263);
         this.getLogger().info("SpigotPlugin has been enabled!");
@@ -321,6 +345,10 @@ public final class SpigotPlugin extends JavaPlugin {
         return this.bukkitAudiences;
     }
 
+    public SpigotAudienceProvider spigotAudienceProvider() {
+        return this.spigotAudienceProvider;
+    }
+
     public void runMainThread(final @NotNull Runnable runnable) {
         this.getServer().getScheduler().runTask(this, runnable);
     }
@@ -329,6 +357,14 @@ public final class SpigotPlugin extends JavaPlugin {
         for (final Listener listener : listeners) {
             this.getServer().getPluginManager().registerEvents(listener, this);
         }
+    }
+
+    public ZMenuHook zMenuHook() {
+        return this.zMenuHook;
+    }
+
+    public ChatInput chatInput() {
+        return this.chatInput;
     }
 
     public SpigotBootstrap spigotBootstrap() {

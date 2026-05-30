@@ -18,12 +18,12 @@ import team.bytephoria.byteclans.api.result.*;
 import team.bytephoria.byteclans.api.util.response.Response;
 import team.bytephoria.byteclans.api.util.response.context.ResponseContext;
 import team.bytephoria.byteclans.bukkitapi.BukkitClanPlayer;
-import team.bytephoria.byteclans.platform.commonbukkit.FeaturePermissions;
 import team.bytephoria.byteclans.core.util.ClanNameUUID;
 import team.bytephoria.byteclans.core.util.IdentityCachedMap;
-import team.bytephoria.byteclans.platform.spigot.SpigotPlugin;
+import team.bytephoria.byteclans.platform.commonbukkit.FeaturePermissions;
 import team.bytephoria.byteclans.platform.commonbukkit.concurrent.AsyncExecutor;
-import team.bytephoria.byteclans.platform.spigot.message.Messenger;
+import team.bytephoria.byteclans.platform.commonbukkit.messages.Messenger;
+import team.bytephoria.byteclans.platform.spigot.SpigotPlugin;
 
 import java.time.Duration;
 import java.time.ZoneId;

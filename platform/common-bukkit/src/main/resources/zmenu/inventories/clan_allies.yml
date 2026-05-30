@@ -1,0 +1,92 @@
+size: 54
+name: "<#22C55E>Clan Allies"
+
+patterns:
+  - "byteclans-decoration"
+
+items:
+
+  # Previous Page
+  previous-page:
+    type: PREVIOUS
+    slot: 46
+    is-permanent: true
+    view-requirement:
+      requirements:
+        - type: placeholder
+          placeholder: "%zmenu_player_page%"
+          action: SUPERIOR
+          value: "%zmenu_player_max_page%"
+    item:
+      material: ARROW
+      name: "<#EF4444>← Previous Page"
+      lore:
+      - ""
+      - "<#D1D5DB>Go to the previous page"
+      - "<#D1D5DB>of your clan allies."
+      - ""
+      - "<#6EE7B7>▶ Click to continue"
+    else:
+      item:
+        material: BLACK_STAINED_GLASS_PANE
+        name: " "
+    sound: item.book.page_turn
+
+  # Next Page
+  next-page:
+    type: NEXT
+    slot: 52
+    is-permanent: true
+    view-requirement:
+      requirements:
+        - type: placeholder
+          placeholder: "%zmenu_player_page%"
+          action: LOWER
+          value: "%zmenu_player_max_page%"
+    item:
+      material: ARROW
+      name: "<#22C55E>Next Page →"
+      lore:
+      - ""
+      - "<#D1D5DB>Go to the next page"
+      - "<#D1D5DB>of your clan allies."
+      - ""
+      - "<#6EE7B7>▶ Click to continue"
+    else:
+      item:
+        material: BLACK_STAINED_GLASS_PANE
+        name: " "
+    sound: item.book.page_turn
+
+  # Previous Menu
+  previous-menu:
+    slot: 49
+    is-permanent: true
+    type: HOME
+    item:
+      material: SPRUCE_DOOR
+      name: "<#FB7185>Return to Main Menu"
+      lore:
+      - ""
+      - "<#D1D5DB>Go back to the main"
+      - "<#D1D5DB>clan management menu."
+      - ""
+      - "<#6EE7B7>▶ Click to return"
+    sound: UI_BUTTON_CLICK
+
+  # Clan Ally item
+  clan-ally-item:
+    type: BYTECLANS_CLAN_ALLY_ITEM
+    slots:
+    - 10-16
+    - 19-25
+    - 28-34
+    item:
+      material: LIME_BANNER
+      name: "<#22C55E>%relation_name%"
+      lore:
+      - ""
+      - "<#D1D5DB>This clan is currently"
+      - "<#D1D5DB>allied with your clan."
+      - ""
+      - "<#86EFAC>✔ Trusted relationship"

@@ -1,0 +1,218 @@
+size: 45
+name: "<#FB7185>Clan Settings"
+
+items:
+  # Decorations
+  fill:
+    slots:
+    - 0-8
+    - 9
+    - 17
+    - 18
+    - 26
+    - 27
+    - 35
+    - 36-44
+    item:
+      material: BLACK_STAINED_GLASS_PANE
+      name: " "
+
+  # Navigation
+  main-menu:
+    slot: 40
+    type: HOME
+    item:
+      material: SPRUCE_DOOR
+      name: "<#FB7185>Return to Main Menu"
+      lore:
+      - ""
+      - "<#D1D5DB>Go back to the main"
+      - "<#D1D5DB>clan management menu."
+      - ""
+      - "<#6EE7B7>▶ Click to return"
+    sound: UI_BUTTON_CLICK
+
+  # Options
+  pvp-mode:
+    slot: 21
+    type: SWITCH
+    key: "%byteclans_clan_pvp-mode%"
+    buttons:
+      "FRIENDLY_FIRE":
+        slot: 21
+        item:
+          material: NETHERITE_SWORD
+          name: "<#EF4444>Friendly Fire"
+          lore:
+          - ""
+          - "<#D1D5DB>Clan members can fully"
+          - "<#D1D5DB>damage and kill each other."
+          - ""
+          - "<#FCA5A5>⚔ Dangerous PvP mode"
+          - ""
+          - "<#6EE7B7>▶ Click to switch mode"
+        actions:
+          - type: set-clan-pvp-mode
+            pvp-mode: SAFE_DAMAGE
+          - type: sound
+            sound: UI_BUTTON_CLICK
+          - type: refresh-inventory
+        click-requirement:
+          requirements:
+            clicks:
+            - ALL
+            requirements:
+              - type: placeholder
+                placeholder: "%byteclans_member_has-permission_CHANGE_PVP_MODE%"
+                action: "b="
+                value: true
+
+      "SAFE_DAMAGE":
+        slot: 21
+        item:
+          material: SHIELD
+          name: "<#FBBF24>Safe Damage"
+          lore:
+          - ""
+          - "<#D1D5DB>Clan members can fight,"
+          - "<#D1D5DB>but cannot kill each other."
+          - ""
+          - "<#FDE68A>🛡 Practice-friendly mode"
+          - ""
+          - "<#6EE7B7>▶ Click to switch mode"
+        actions:
+          - type: set-clan-pvp-mode
+            pvp-mode: NO_DAMAGE
+          - type: sound
+            sound: UI_BUTTON_CLICK
+          - type: refresh-inventory
+        click-requirement:
+          requirements:
+            clicks:
+            - ALL
+            requirements:
+              - type: placeholder
+                placeholder: "%byteclans_member_has-permission_CHANGE_PVP_MODE%"
+                action: "b="
+                value: true
+
+      "NO_DAMAGE":
+        slot: 21
+        item:
+          material: TOTEM_OF_UNDYING
+          name: "<#22C55E>No Damage"
+          lore:
+          - ""
+          - "<#D1D5DB>Clan members cannot"
+          - "<#D1D5DB>hurt each other at all."
+          - ""
+          - "<#86EFAC>✔ Peaceful clan mode"
+          - ""
+          - "<#6EE7B7>▶ Click to switch mode"
+        actions:
+          - type: set-clan-pvp-mode
+            pvp-mode: FRIENDLY_FIRE
+          - type: sound
+            sound: UI_BUTTON_CLICK
+          - type: refresh-inventory
+        click-requirement:
+          requirements:
+            clicks:
+            - ALL
+            requirements:
+              - type: placeholder
+                placeholder: "%byteclans_member_has-permission_CHANGE_PVP_MODE%"
+                action: "b="
+                value: true
+
+  invite-state:
+    slot: 23
+    type: SWITCH
+    key: "%byteclans_clan_invite-state%"
+    buttons:
+      "OPENED":
+        slot: 23
+        item:
+          material: BEACON
+          name: "<#22C55E>Open Clan"
+          lore:
+          - ""
+          - "<#D1D5DB>Anyone can join the clan"
+          - "<#D1D5DB>without an invitation."
+          - ""
+          - "<#86EFAC>✔ Public recruitment enabled"
+          - ""
+          - "<#6EE7B7>▶ Click to switch mode"
+        actions:
+          - type: set-clan-invite-state
+            invite-state: CLOSED
+          - type: sound
+            sound: UI_BUTTON_CLICK
+          - type: refresh-inventory
+        click-requirement:
+          requirements:
+            clicks:
+            - ALL
+            requirements:
+              - type: placeholder
+                placeholder: "%byteclans_member_has-permission_CHANGE_INVITE_STATE%"
+                action: "b="
+                value: true
+
+      "CLOSED":
+        slot: 23
+        item:
+          material: BARRIER
+          name: "<#EF4444>Closed Clan"
+          lore:
+          - ""
+          - "<#D1D5DB>No players can join"
+          - "<#D1D5DB>the clan under any condition."
+          - ""
+          - "<#FCA5A5>✖ Recruitment disabled"
+          - ""
+          - "<#6EE7B7>▶ Click to switch mode"
+        actions:
+          - type: set-clan-invite-state
+            invite-state: INVITE_ONLY
+          - type: sound
+            sound: UI_BUTTON_CLICK
+          - type: refresh-inventory
+        click-requirement:
+          requirements:
+            clicks:
+            - ALL
+            requirements:
+              - type: placeholder
+                placeholder: "%byteclans_member_has-permission_CHANGE_INVITE_STATE%"
+                action: "b="
+                value: true
+
+      "INVITE_ONLY":
+        slot: 23
+        item:
+          material: WRITABLE_BOOK
+          name: "<#60A5FA>Invite Only"
+          lore:
+          - ""
+          - "<#D1D5DB>Players may only join"
+          - "<#D1D5DB>through clan invitations."
+          - ""
+          - "<#93C5FD>✉ Controlled recruitment"
+          - ""
+          - "<#6EE7B7>▶ Click to switch mode"
+        actions:
+          - type: set-clan-invite-state
+            invite-state: OPENED
+          - type: sound
+            sound: UI_BUTTON_CLICK
+          - type: refresh-inventory
+        click-requirement:
+          requirements:
+            clicks:
+            - ALL
+            requirements:
+              - type: placeholder
+                placeholder: "%byteclans_member_has-permission_CHANGE_INVITE_STATE%"
+                action: "b="
+                value: true

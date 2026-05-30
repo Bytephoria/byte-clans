@@ -1,0 +1,87 @@
+size: 54
+name: "<#FBBF24>Clan Statistics"
+
+patterns:
+  - "byteclans-decoration"
+
+items:
+
+  # Navigation
+  main-menu:
+    slot: 49
+    type: HOME
+    item:
+      material: SPRUCE_DOOR
+      name: "<#FB7185>Return to Main Menu"
+      lore:
+      - ""
+      - "<#D1D5DB>Go back to the main"
+      - "<#D1D5DB>clan management menu."
+      - ""
+      - "<#6EE7B7>▶ Click to return"
+    sound: UI_BUTTON_CLICK
+
+  # Kill Streak
+  kill-streak:
+    slot: 20
+    item:
+      material: BLAZE_POWDER
+      name: "<gradient:#F59E0B:#EF4444><bold>Kill Streak</bold>"
+      lore:
+      - ""
+      - "<#D1D5DB>Your clan is currently on a"
+      - "<gradient:#FBBF24:#EF4444><bold>%byteclans_clan_kills-streak%</bold></gradient><#D1D5DB> kill streak."
+      - ""
+      - "<#6EE7B7>🔥 Keep the momentum going"
+
+  # Kills
+  kills:
+    slot: 22
+    item:
+      material: DIAMOND_SWORD
+      name: "<gradient:#EF4444:#F87171><bold>Total Kills</bold>"
+      lore:
+      - ""
+      - "<#D1D5DB>Your clan has accumulated"
+      - "<gradient:#EF4444:#FCA5A5><bold>%byteclans_clan_kills%</bold></gradient><#D1D5DB> total kills."
+      - ""
+      - "<#6EE7B7>⚔ Dominating the battlefield"
+
+  # Deaths
+  deaths:
+    slot: 24
+    item:
+      material: WITHER_SKELETON_SKULL
+      name: "<gradient:#6B7280:#D1D5DB><bold>Total Deaths</bold>"
+      lore:
+      - ""
+      - "<#D1D5DB>Your clan has suffered"
+      - "<gradient:#9CA3AF:#E5E7EB><bold>%byteclans_clan_deaths%</bold></gradient><#D1D5DB> total deaths."
+      - ""
+      - "<#6EE7B7>☠ Every battle has a cost"
+
+  # Points
+  points:
+    slot: 31
+    item:
+      material: NETHER_STAR
+      name: "<gradient:#8B5CF6:#EC4899><bold>Clan Points</bold>"
+      lore:
+      - ""
+      - "<#D1D5DB>Your clan currently owns"
+      - "<gradient:#A855F7:#F472B6><bold>%byteclans_clan_points%</bold></gradient><#D1D5DB> points."
+      - ""
+      - "<#6EE7B7>🏆 Rise through the rankings"
+
+  # KDR
+  kdr:
+    slot: 29
+    item:
+      material: TARGET
+      name: "<gradient:#06B6D4:#3B82F6><bold>K/D Ratio</bold>"
+      lore:
+      - ""
+      - "<#D1D5DB>Your clan currently has a"
+      - "<gradient:#38BDF8:#60A5FA><bold>%byteclans_clan_kdr%</bold></gradient><#D1D5DB> K/D ratio."
+      - ""
+      - "<#6EE7B7>🎯 Precision and efficiency"

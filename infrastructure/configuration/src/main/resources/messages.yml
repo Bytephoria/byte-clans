@@ -48,6 +48,7 @@ clan:
     name-too-short: "<red>Clan name must be at least <gold><bold>{min}</bold></gold> characters.</red>"
     name-too-long: "<red>Clan name must be at most <gold><bold>{max}</bold></gold> characters.</red>"
     cancelled: "<red>Clan creation was cancelled by an external plugin.</red>"
+    timeout: "<red>The clan creation request has expired.</red>"
 
   disband:
     success: "<gradient:#ff5252:#ff1744>The clan</gradient> <gold><bold>{clan}</bold></gold> <gradient:#ff5252:#ff1744>has been disbanded.</gradient>"
