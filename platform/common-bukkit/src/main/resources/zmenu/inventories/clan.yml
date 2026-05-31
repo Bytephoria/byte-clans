@@ -1,0 +1,157 @@
+size: 54
+name: "<#8B5CF6>%byteclans_clan_name%"
+
+clear-inventory: false
+open-requirement:
+  requirements:
+    - type: placeholder
+      placeholder: "%byteclans_clan_name%"
+      action: "DIFFERENT_STRING"
+      value: ""
+      success:
+        - type: sound
+          sound: UI_BUTTON_CLICK
+      deny:
+        - type: inventory
+          inventory: no_clan
+
+patterns:
+  - "byteclans-decoration"
+
+items:
+
+  # Clan information
+  clan-information:
+    slot: 49
+    item:
+      material: BELL
+      name: "<#F4D35E>Clan Information"
+      lore:
+      - ""
+      - "<#D1D5DB>◆ <white>Display:</white> <#A78BFA>%byteclans_clan_display%</#A78BFA>"
+      - "<#D1D5DB>◆ <white>Name:</white> <gray>%byteclans_clan_name%</gray>"
+      - "<#D1D5DB>◆ <white>Created:</white> <#6EE7B7>%byteclans_clan_created-at%</#6EE7B7>"
+      - "<#D1D5DB>◆ <white>Members:</white> <#FCA5A5>%byteclans_clan_members%</#FCA5A5><gray>/</gray><#FCA5A5>%byteclans_clan_max-members%</#FCA5A5>"
+      - ""
+      - "<#9CA3AF>Overview of your clan information."
+    sound: UI_BUTTON_CLICK
+
+  # Clan Display
+  clan-display:
+    slot: 50
+    type: INVENTORY
+    inventory: "clan_display"
+    item:
+      material: NAME_TAG
+      name: "<#C084FC><italic:false>Clan Display"
+      lore:
+      - ""
+      - "<#D1D5DB>Customize your clan display"
+      - "<#D1D5DB>with colors and style."
+      - ""
+      - "<#6EE7B7>▶ Click to edit display"
+    sound: UI_BUTTON_CLICK
+    view-requirement:
+      requirements:
+        - type: permission
+          permission: "byteclans.command.display-modify"
+        - type: placeholder
+          placeholder: "%byteclans_clan_display-cooldown%"
+          action: "b="
+          value: false
+
+  # Clan Settings
+  clan-settings:
+    slot: 22
+    type: INVENTORY
+    inventory: "clan_settings"
+    item:
+      material: REDSTONE
+      name: "<#FB7185>Clan Settings"
+      lore:
+      - ""
+      - "<#D1D5DB>Manage clan preferences,"
+      - "<#D1D5DB>permissions and options."
+      - ""
+      - "<#6EE7B7>▶ Click to open settings"
+    sound: UI_BUTTON_CLICK
+
+  # Clan List
+  clan-list:
+    slot: 29
+    type: INVENTORY
+    inventory: "clan_list"
+    item:
+      material: BOOK
+      name: "<#60A5FA>Clan List"
+      lore:
+      - ""
+      - "<#D1D5DB>Browse all active clans"
+      - "<#D1D5DB>currently online."
+      - ""
+      - "<#6EE7B7>▶ Click to open"
+    sound: UI_BUTTON_CLICK
+
+  # Clan Member List
+  member-list:
+    slot: 30
+    type: INVENTORY
+    inventory: "clan_member_list"
+    item:
+      material: PLAYER_HEAD
+      name: "<#34D399>Member List"
+      lore:
+      - ""
+      - "<#D1D5DB>View clan members,"
+      - "<#D1D5DB>roles and activity."
+      - ""
+      - "<#6EE7B7>▶ Click to view members"
+    sound: UI_BUTTON_CLICK
+
+  # Clan Statistics
+  clan-statistics:
+    slot: 31
+    type: INVENTORY
+    inventory: "clan_statistics"
+    item:
+      material: TOTEM_OF_UNDYING
+      name: "<#FBBF24>Statistics"
+      lore:
+      - ""
+      - "<#D1D5DB>Track clan progress,"
+      - "<#D1D5DB>kills, deaths and rankings."
+      - ""
+      - "<#6EE7B7>▶ Click to view statistics"
+    sound: UI_BUTTON_CLICK
+
+  # Clan Allies
+  clan-allies:
+    slot: 32
+    type: INVENTORY
+    inventory: "clan_allies"
+    item:
+      material: SHIELD
+      name: "<#22C55E>Allies"
+      lore:
+      - ""
+      - "<#D1D5DB>Manage trusted clans"
+      - "<#D1D5DB>and diplomatic relations."
+      - ""
+      - "<#6EE7B7>▶ Click to view allies"
+    sound: UI_BUTTON_CLICK
+
+  # Clan enemies
+  clan-enemies:
+    slot: 33
+    type: INVENTORY
+    inventory: "clan_enemies"
+    item:
+      material: SPYGLASS
+      name: "<#EF4444>Enemies"
+      lore:
+      - ""
+      - "<#D1D5DB>Keep track of rival clans"
+      - "<#D1D5DB>and incoming threats."
+      - ""
+      - "<#6EE7B7>▶ Click to view enemies"
+    sound: UI_BUTTON_CLICK

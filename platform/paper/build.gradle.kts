@@ -17,6 +17,7 @@ repositories {
     maven("https://repo.papermc.io/repository/maven-public/")
     maven("https://repo.extendedclip.com/releases/")
     maven("https://jitpack.io")
+    maven("https://repo.groupez.dev/releases")
 }
 
 dependencies {
@@ -37,6 +38,7 @@ dependencies {
 
     compileOnly("io.papermc.paper:paper-api:1.21.11-R0.1-SNAPSHOT")
     compileOnly("me.clip:placeholderapi:2.12.2")
+    compileOnly("fr.maxlego08.menu:zmenu-api:1.1.1.4")
     implementation("org.bstats:bstats-bukkit:3.2.1")
 
     paperLibrary("com.github.ben-manes.caffeine:caffeine:3.2.3")
@@ -68,6 +70,13 @@ paper {
             joinClasspath = true
             load = PaperPluginDescription.RelativeLoadOrder.BEFORE
         }
+
+        register("zMenu") {
+            required = false
+            joinClasspath = true
+            load = PaperPluginDescription.RelativeLoadOrder.BEFORE
+        }
+
     }
 
 }

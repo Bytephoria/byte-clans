@@ -1,0 +1,80 @@
+size: 45
+name: "<gradient:#8B5CF6:#EC4899>Clan Menu"
+
+clear-inventory: false
+
+items:
+  # Decorations
+  decoration:
+    slots:
+    - 0-8
+    - 9
+    - 17
+    - 18
+    - 26
+    - 27
+    - 35
+    - 36-44
+    item:
+      material: BLACK_STAINED_GLASS_PANE
+      name: " "
+
+  # Close
+  close:
+    slot: 40
+    item:
+      material: BARRIER
+      name: "<#EF4444>Close Menu"
+      lore:
+      - ""
+      - "<#D1D5DB>Close the clan menu"
+      - "<#D1D5DB>and return to gameplay."
+      - ""
+      - "<#6EE7B7>▶ Click to close"
+    actions:
+      - type: close
+    sound: UI_BUTTON_CLICK
+
+  # Clan List
+  clan-list:
+    slot: 21
+    type: INVENTORY
+    inventory: "clan_list"
+    item:
+      material: BOOK
+      name: "<#60A5FA>Clan List"
+      lore:
+      - ""
+      - "<#D1D5DB>Browse all active clans"
+      - "<#D1D5DB>currently online."
+      - ""
+      - "<#6EE7B7>▶ Click to open"
+    sound: UI_BUTTON_CLICK
+
+  # Create Clan
+  create-clan:
+    slot: 23
+    item:
+      material: NETHER_STAR
+      name: "<gradient:#22C55E:#84CC16>Create Clan"
+      lore:
+      - ""
+      - "<#D1D5DB>Create your own clan and"
+      - "<#D1D5DB>start building your legacy."
+      - ""
+      - "<#9CA3AF>Customize name, members"
+      - "<#9CA3AF>and clan identity."
+      - ""
+      - "<#6EE7B7>▶ Click to create"
+    sound: UI_BUTTON_CLICK
+    actions:
+      - type: clan-create
+      - type: close
+      - type: title
+        title: "&b&lClan creation"
+        subtitle: "&7Type your clan name in chat"
+        start: 60
+        duration: 100
+        end: 60
+      - type: message
+        messages: "&aType your clan name in the chat for create!"

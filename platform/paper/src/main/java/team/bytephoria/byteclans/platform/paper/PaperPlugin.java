@@ -23,7 +23,6 @@ import org.spongepowered.configurate.ConfigurationNode;
 import team.bytephoria.byteclans.api.access.ByteClans;
 import team.bytephoria.byteclans.api.access.ByteClansProvider;
 import team.bytephoria.byteclans.core.ApplicationFacade;
-import team.bytephoria.byteclans.platform.commonbukkit.extension.ClanExtensionManager;
 import team.bytephoria.byteclans.infrastructure.adventure.ComponentSerializerAdapter;
 import team.bytephoria.byteclans.infrastructure.adventure.ComponentSerializerFactory;
 import team.bytephoria.byteclans.infrastructure.bootstrap.BootstrapContext;
@@ -31,18 +30,23 @@ import team.bytephoria.byteclans.infrastructure.configuration.ConfigurationLoade
 import team.bytephoria.byteclans.infrastructure.configuration.configuration.Configuration;
 import team.bytephoria.byteclans.infrastructure.configuration.roles.Roles;
 import team.bytephoria.byteclans.platform.commonbukkit.BukkitClanEventBus;
+import team.bytephoria.byteclans.platform.commonbukkit.CommonBukkitFacade;
 import team.bytephoria.byteclans.platform.commonbukkit.RoleLoader;
 import team.bytephoria.byteclans.platform.commonbukkit.access.ComonBukkitByteClans;
+import team.bytephoria.byteclans.platform.commonbukkit.chat.ChatInput;
 import team.bytephoria.byteclans.platform.commonbukkit.concurrent.AsyncExecutor;
+import team.bytephoria.byteclans.platform.commonbukkit.extension.ClanExtensionManager;
+import team.bytephoria.byteclans.platform.commonbukkit.hook.zmenu.ZMenuHook;
 import team.bytephoria.byteclans.platform.commonbukkit.listener.ClanPostCreateAsyncListener;
 import team.bytephoria.byteclans.platform.commonbukkit.listener.PlayerJoinListener;
 import team.bytephoria.byteclans.platform.commonbukkit.listener.PlayerQuitListener;
+import team.bytephoria.byteclans.platform.commonbukkit.messages.Messenger;
 import team.bytephoria.byteclans.platform.paper.command.*;
 import team.bytephoria.byteclans.platform.paper.hook.PlaceholderAPIHook;
 import team.bytephoria.byteclans.platform.paper.listener.AsyncChatEventListener;
+import team.bytephoria.byteclans.platform.paper.listener.ChatInputListener;
 import team.bytephoria.byteclans.platform.paper.listener.EntityDamageByEntityListener;
 import team.bytephoria.byteclans.platform.paper.listener.PlayerDeathListener;
-import team.bytephoria.byteclans.platform.paper.message.Messenger;
 
 import static org.incendo.cloud.parser.standard.StringParser.greedyStringParser;
 
@@ -63,6 +67,10 @@ public final class PaperPlugin extends JavaPlugin {
     private MinecraftHelp<Player> playerMinecraftHelp;
 
     private ClanExtensionManager clanExtensionManager;
+
+    private ChatInput chatInput;
+    private ZMenuHook zMenuHook;
+    private CommonBukkitFacade commonBukkitFacade;
 
     private Metrics metrics;
 
@@ -94,7 +102,7 @@ public final class PaperPlugin extends JavaPlugin {
             this.getSLF4JLogger().info("[PlaceholderAPI] Placeholders registered.");
         }
 
-        this.messenger = new Messenger(this.messages, this.serializerAdapter);
+        this.messenger = new Messenger(this.messages, this.serializerAdapter, PaperAudienceProvider.INSTANCE);
 
         final ApplicationFacade applicationFacade = this.paperBootstrap.applicationFacade();
         new RoleLoader(this.roles, applicationFacade.clanRoleRegistry()).loadAll();
@@ -231,6 +239,18 @@ public final class PaperPlugin extends JavaPlugin {
 
         this.annotationParser.parse(new ByteClansCommand(this.clanExtensionManager));
 
+        if (this.getServer().getPluginManager().getPlugin("zMenu") != null) {
+            this.getSLF4JLogger().info("ZMenu was detected! Initializing assets to hook...");
+
+            this.annotationParser.parse(new ClanMenuCommand(this));
+            this.commonBukkitFacade = new PaperCommonBukkitFacade(this);
+            this.chatInput = new ChatInput(this, () -> new ChatInputListener(this.chatInput), this.paperBootstrap().clanGlobalSettings());
+            this.zMenuHook = new ZMenuHook(this, this.commonBukkitFacade, this.messenger);
+
+            this.zMenuHook.loadAll();
+            this.getSLF4JLogger().info("ZMenu was loaded! Enjoy it!");
+        }
+
         this.metrics = new Metrics(this, 30263);
         this.getLogger().info("PaperPlugin has been enabled!");
     }
@@ -240,6 +260,16 @@ public final class PaperPlugin extends JavaPlugin {
         this.getLogger().info("PaperPlugin is stopping...");
 
         HandlerList.unregisterAll(this);
+        this.getServer().getScheduler().cancelTasks(this);
+        this.getServer().getAsyncScheduler().cancelTasks(this);
+
+        if (this.chatInput != null) {
+            this.chatInput.clear();
+        }
+
+        if (this.zMenuHook != null) {
+            this.zMenuHook.unloadAll();
+        }
 
         if (this.commandManager != null) {
             try {
@@ -263,6 +293,9 @@ public final class PaperPlugin extends JavaPlugin {
             this.metrics.shutdown();
         }
 
+        this.chatInput = null;
+        this.zMenuHook = null;
+        this.commonBukkitFacade = null;
         this.clanExtensionManager = null;
         this.annotationParser = null;
         this.metrics = null;
@@ -286,6 +319,18 @@ public final class PaperPlugin extends JavaPlugin {
         for (final Listener listener : listeners) {
             this.getServer().getPluginManager().registerEvents(listener, this);
         }
+    }
+
+    public ZMenuHook zMenuHook() {
+        return this.zMenuHook;
+    }
+
+    public ChatInput chatInput() {
+        return this.chatInput;
+    }
+
+    public PaperAudienceProvider nativeAudienceProvider() {
+        return PaperAudienceProvider.INSTANCE;
     }
 
     public MinecraftHelp<Player> playerMinecraftHelp() {

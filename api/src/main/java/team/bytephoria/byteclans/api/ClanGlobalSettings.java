@@ -12,7 +12,12 @@ public interface ClanGlobalSettings {
 
     Duration displayNameChangeCooldown();
 
+    default Duration clanCreationTimeout() {
+        return Duration.ZERO;
+    }
+
     int minimumNameChars();
+
     int maximumNameChars();
 
     int maximumAllies();
@@ -20,6 +25,7 @@ public interface ClanGlobalSettings {
     int maximumEnemies();
 
     int minimumPoints();
+
     int maximumPoints();
 
     int pointsPerKill();

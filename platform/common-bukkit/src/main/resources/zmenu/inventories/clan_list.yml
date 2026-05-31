@@ -1,0 +1,93 @@
+size: 54
+name: "<#60A5FA>Clan List"
+
+patterns:
+  - "byteclans-decoration"
+
+items:
+
+  # Previous Page
+  previous-page:
+    type: PREVIOUS
+    slot: 46
+    is-permanent: true
+    view-requirement:
+      requirements:
+        - type: placeholder
+          placeholder: "%zmenu_player_page%"
+          action: SUPERIOR
+          value: "%zmenu_player_max_page%"
+    item:
+      material: ARROW
+      name: "<#EF4444>← Previous Page"
+      lore:
+      - ""
+      - "<#D1D5DB>Go to the previous page"
+      - "<#D1D5DB>of listed clans."
+      - ""
+      - "<#6EE7B7>▶ Click to continue"
+    else:
+      item:
+        material: BLACK_STAINED_GLASS_PANE
+        name: " "
+    sound: item.book.page_turn
+
+  # Next Page
+  next-page:
+    type: NEXT
+    slot: 52
+    is-permanent: true
+    view-requirement:
+      requirements:
+        - type: placeholder
+          placeholder: "%zmenu_player_page%"
+          action: LOWER
+          value: "%zmenu_player_max_page%"
+    item:
+      material: ARROW
+      name: "<#22C55E>Next Page →"
+      lore:
+      - ""
+      - "<#D1D5DB>Go to the next page"
+      - "<#D1D5DB>of listed clans."
+      - ""
+      - "<#6EE7B7>▶ Click to continue"
+    else:
+      item:
+        material: BLACK_STAINED_GLASS_PANE
+        name: " "
+    sound: item.book.page_turn
+
+  # Previous Menu
+  previous-menu:
+    slot: 49
+    is-permanent: true
+    type: HOME
+    item:
+      material: SPRUCE_DOOR
+      name: "<#FB7185>Return to Main Menu"
+      lore:
+      - ""
+      - "<#D1D5DB>Go back to the main"
+      - "<#D1D5DB>clan management menu."
+      - ""
+      - "<#6EE7B7>▶ Click to return"
+    sound: UI_BUTTON_CLICK
+
+  # Clan item
+  clan-item:
+    type: BYTECLANS_CLAN_LIST_ITEM
+    slots:
+    - 10-16
+    - 19-25
+    - 28-34
+    item:
+      material: OAK_SIGN
+      name: "%clan_display% <gray>(%clan_name%)</gray>"
+      lore:
+      - ""
+      - "<#D1D5DB>Created: <#6EE7B7>%clan_created_at%</#6EE7B7>"
+      - "<#D1D5DB>Members: <#60A5FA>%clan_members%</#60A5FA>"
+      - "<#D1D5DB>Kills: <#EF4444>%clan_statistics_kills%</#EF4444>"
+      - "<#D1D5DB>Deaths: <#9CA3AF>%clan_statistics_deaths%</#9CA3AF>"
+      - ""

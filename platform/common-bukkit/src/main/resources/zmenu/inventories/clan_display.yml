@@ -1,0 +1,357 @@
+size: 54
+name: "<#C084FC>Clan Display"
+
+patterns:
+  - "byteclans-decoration"
+
+items:
+
+  # Navigation
+  main-menu:
+    slot: 49
+    type: HOME
+    item:
+      material: SPRUCE_DOOR
+      name: "<#FB7185>Return to Main Menu"
+      lore:
+      - ""
+      - "<#D1D5DB>Go back to the main"
+      - "<#D1D5DB>clan management menu."
+      - ""
+      - "<#6EE7B7>▶ Click to return"
+    sound: UI_BUTTON_CLICK
+
+    # Presets
+  presets:
+    slot: 50
+    type: INVENTORY
+    inventory: "clan_display_presets"
+    item:
+      material: NETHER_STAR
+      name: "<gradient:#8B5CF6:#EC4899>Display Presets"
+      lore:
+      - ""
+      - "<#D1D5DB>Choose from a collection of"
+      - "<#D1D5DB>beautiful animated gradients,"
+      - "<#D1D5DB>bold styles and premium colors."
+      - ""
+      - "<#9CA3AF>Includes neon, galaxy, royal,"
+      - "<#9CA3AF>fire, ocean and more themes."
+      - ""
+      - "<#6EE7B7>▶ Click to browse presets"
+    sound: UI_BUTTON_CLICK
+
+  # White
+  white:
+    slot: 11
+    item:
+      material: WHITE_BED
+      name: "<white>%byteclans_clan_name%"
+      lore:
+      - ""
+      - "<gray>Classic clean white display."
+      - ""
+      - "<green>▶ Click to apply"
+    actions:
+      - type: close
+      - type: set-clan-display
+        display: "<white>%clan_name%</white>"
+      - type: message
+        messages:
+        - "<green>You changed your clan display to %byteclans_clan_display%"
+      - type: sound
+        sound: UI_BUTTON_CLICK
+
+  # Light Gray
+  light_gray:
+    slot: 12
+    item:
+      material: LIGHT_GRAY_BED
+      name: "<gray>%byteclans_clan_name%"
+      lore:
+      - ""
+      - "<gray>Minimal and elegant style."
+      - ""
+      - "<green>▶ Click to apply"
+    actions:
+      - type: close
+      - type: set-clan-display
+        display: "<gray>%clan_name%</gray>"
+      - type: message
+        messages:
+        - "<green>You changed your clan display to %byteclans_clan_display%"
+      - type: sound
+        sound: UI_BUTTON_CLICK
+
+  # Gray
+  gray:
+    slot: 13
+    item:
+      material: GRAY_BED
+      name: "<dark_gray>%byteclans_clan_name%"
+      lore:
+      - ""
+      - "<gray>Dark neutral display color."
+      - ""
+      - "<green>▶ Click to apply"
+    actions:
+      - type: close
+      - type: set-clan-display
+        display: "<dark_gray>%clan_name%</dark_gray>"
+      - type: message
+        messages:
+        - "<green>You changed your clan display to %byteclans_clan_display%"
+      - type: sound
+        sound: UI_BUTTON_CLICK
+
+  # Black
+  black:
+    slot: 14
+    item:
+      material: BLACK_BED
+      name: "<black>%byteclans_clan_name%"
+      lore:
+      - ""
+      - "<gray>Stealth and shadow themed."
+      - ""
+      - "<green>▶ Click to apply"
+    actions:
+      - type: close
+      - type: set-clan-display
+        display: "<black>%clan_name%</black>"
+      - type: message
+        messages:
+        - "<green>You changed your clan display to %byteclans_clan_display%"
+      - type: sound
+        sound: UI_BUTTON_CLICK
+
+  # Red
+  red:
+    slot: 15
+    item:
+      material: MANGROVE_BOAT
+      name: "<red>%byteclans_clan_name%"
+      lore:
+      - ""
+      - "<gray>Bold and aggressive display."
+      - ""
+      - "<green>▶ Click to apply"
+    actions:
+      - type: close
+      - type: set-clan-display
+        display: "<red>%clan_name%</red>"
+      - type: message
+        messages:
+        - "<green>You changed your clan display to %byteclans_clan_display%"
+      - type: sound
+        sound: UI_BUTTON_CLICK
+
+  # Dark Red
+  dark_red:
+    slot: 20
+    item:
+      material: RED_BED
+      name: "<dark_red>%byteclans_clan_name%"
+      lore:
+      - ""
+      - "<gray>Battle-ready crimson style."
+      - ""
+      - "<green>▶ Click to apply"
+    actions:
+      - type: close
+      - type: set-clan-display
+        display: "<dark_red>%clan_name%</dark_red>"
+      - type: message
+        messages:
+        - "<green>You changed your clan display to %byteclans_clan_display%"
+      - type: sound
+        sound: UI_BUTTON_CLICK
+
+  # Dark Green
+  dark_green:
+    slot: 21
+    item:
+      material: GREEN_BED
+      name: "<dark_green>%byteclans_clan_name%"
+      lore:
+      - ""
+      - "<gray>Nature and survival vibes."
+      - ""
+      - "<green>▶ Click to apply"
+    actions:
+      - type: close
+      - type: set-clan-display
+        display: "<dark_green>%clan_name%</dark_green>"
+      - type: message
+        messages:
+        - "<green>You changed your clan display to %byteclans_clan_display%"
+      - type: sound
+        sound: UI_BUTTON_CLICK
+
+  # Lime
+  lime:
+    slot: 22
+    item:
+      material: LIME_BED
+      name: "<green>%byteclans_clan_name%"
+      lore:
+      - ""
+      - "<gray>Bright energetic green."
+      - ""
+      - "<green>▶ Click to apply"
+    actions:
+      - type: close
+      - type: set-clan-display
+        display: "<green>%clan_name%</green>"
+      - type: message
+        messages:
+        - "<green>You changed your clan display to %byteclans_clan_display%"
+      - type: sound
+        sound: UI_BUTTON_CLICK
+
+  # Orange
+  orange:
+    slot: 23
+    item:
+      material: ORANGE_BED
+      name: "<gold>%byteclans_clan_name%"
+      lore:
+      - ""
+      - "<gray>Warm and vibrant appearance."
+      - ""
+      - "<green>▶ Click to apply"
+    actions:
+      - type: close
+      - type: set-clan-display
+        display: "<gold>%clan_name%</gold>"
+      - type: message
+        messages:
+        - "<green>You changed your clan display to %byteclans_clan_display%"
+      - type: sound
+        sound: UI_BUTTON_CLICK
+
+  # Yellow
+  yellow:
+    slot: 24
+    item:
+      material: YELLOW_BED
+      name: "<yellow>%byteclans_clan_name%"
+      lore:
+      - ""
+      - "<gray>Bright golden clan display."
+      - ""
+      - "<green>▶ Click to apply"
+    actions:
+      - type: close
+      - type: set-clan-display
+        display: "<yellow>%clan_name%</yellow>"
+      - type: message
+        messages:
+        - "<green>You changed your clan display to %byteclans_clan_display%"
+      - type: sound
+        sound: UI_BUTTON_CLICK
+
+  # Purple
+  purple:
+    slot: 29
+    item:
+      material: PURPLE_BED
+      name: "<dark_purple>%byteclans_clan_name%"
+      lore:
+      - ""
+      - "<gray>Royal and mystical style."
+      - ""
+      - "<green>▶ Click to apply"
+    actions:
+      - type: close
+      - type: set-clan-display
+        display: "<dark_purple>%clan_name%</dark_purple>"
+      - type: message
+        messages:
+        - "<green>You changed your clan display to %byteclans_clan_display%"
+      - type: sound
+        sound: UI_BUTTON_CLICK
+
+  # Pink
+  pink:
+    slot: 30
+    item:
+      material: PINK_BED
+      name: "<light_purple>%byteclans_clan_name%"
+      lore:
+      - ""
+      - "<gray>Soft but eye-catching display."
+      - ""
+      - "<green>▶ Click to apply"
+    actions:
+      - type: close
+      - type: set-clan-display
+        display: "<light_purple>%clan_name%</light_purple>"
+      - type: message
+        messages:
+        - "<green>You changed your clan display to %byteclans_clan_display%"
+      - type: sound
+        sound: UI_BUTTON_CLICK
+
+  # Blue
+  blue:
+    slot: 31
+    item:
+      material: BLUE_BED
+      name: "<blue>%byteclans_clan_name%"
+      lore:
+      - ""
+      - "<gray>Cool and calm blue theme."
+      - ""
+      - "<green>▶ Click to apply"
+    actions:
+      - type: close
+      - type: set-clan-display
+        display: "<blue>%clan_name%</blue>"
+      - type: message
+        messages:
+        - "<green>You changed your clan display to %byteclans_clan_display%"
+      - type: sound
+        sound: UI_BUTTON_CLICK
+
+  # Light Blue
+  light_blue:
+    slot: 32
+    item:
+      material: LIGHT_BLUE_BED
+      name: "<aqua>%byteclans_clan_name%"
+      lore:
+      - ""
+      - "<gray>Fresh and modern light blue."
+      - ""
+      - "<green>▶ Click to apply"
+    actions:
+      - type: close
+      - type: set-clan-display
+        display: "<aqua>%clan_name%</aqua>"
+      - type: message
+        messages:
+        - "<green>You changed your clan display to %byteclans_clan_display%"
+      - type: sound
+        sound: UI_BUTTON_CLICK
+
+  # Cyan
+  cyan:
+    slot: 33
+    item:
+      material: CYAN_BED
+      name: "<dark_aqua>%byteclans_clan_name%"
+      lore:
+      - ""
+      - "<gray>Ocean-inspired cyan display."
+      - ""
+      - "<green>▶ Click to apply"
+    actions:
+      - type: close
+      - type: set-clan-display
+        display: "<dark_aqua>%clan_name%</dark_aqua>"
+      - type: message
+        messages:
+        - "<green>You changed your clan display to %byteclans_clan_display%"
+      - type: sound
+        sound: UI_BUTTON_CLICK

@@ -1,6 +1,7 @@
 package team.bytephoria.byteclans.core;
 
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 import team.bytephoria.byteclans.api.ClanGlobalSettings;
 import team.bytephoria.byteclans.api.ClanInviteState;
 import team.bytephoria.byteclans.api.ClanPvPMode;
@@ -13,6 +14,7 @@ public final class DefaultClanGlobalSettings implements ClanGlobalSettings {
     private final ClanPvPMode defaultClanPvPMode;
     private final ClanInviteState defaultClanInviteState;
     private final Duration displayNameChangeCooldown;
+    private final Duration clanCreationTimeout;
 
     private final int minimumPoints;
     private final int maximumPoints;
@@ -31,6 +33,7 @@ public final class DefaultClanGlobalSettings implements ClanGlobalSettings {
             final @NotNull ClanPvPMode defaultClanPvPMode,
             final @NotNull ClanInviteState defaultClanInviteState,
             final @NotNull Duration displayNameChangeCooldown,
+            final @Nullable Duration clanCreationTimeout,
             final int minimumChars,
             final int maximumChars,
             final int maximumAllies,
@@ -45,6 +48,8 @@ public final class DefaultClanGlobalSettings implements ClanGlobalSettings {
         this.defaultClanPvPMode = defaultClanPvPMode;
         this.defaultClanInviteState = defaultClanInviteState;
         this.displayNameChangeCooldown = displayNameChangeCooldown;
+
+        this.clanCreationTimeout = clanCreationTimeout;
 
         this.minimumChars = minimumChars;
         this.maximumChars = maximumChars;
@@ -78,6 +83,11 @@ public final class DefaultClanGlobalSettings implements ClanGlobalSettings {
     @Override
     public Duration displayNameChangeCooldown() {
         return this.displayNameChangeCooldown;
+    }
+
+    @Override
+    public Duration clanCreationTimeout() {
+        return this.clanCreationTimeout == null ? Duration.ZERO : this.clanCreationTimeout;
     }
 
     @Override

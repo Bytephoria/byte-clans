@@ -22,6 +22,7 @@ repositories {
     }
 
     maven("https://jitpack.io")
+    maven("https://repo.groupez.dev/releases")
 }
 
 dependencies {
@@ -41,6 +42,7 @@ dependencies {
     api(project(":platform:common-bukkit"))
 
     compileOnly("org.spigotmc:spigot-api:1.21.11-R0.1-SNAPSHOT")
+    compileOnly("fr.maxlego08.menu:zmenu-api:1.1.1.4")
     compileOnly("me.clip:placeholderapi:2.12.2")
 
     implementation("com.alessiodp.libby:libby-bukkit:2.0.0-SNAPSHOT")
@@ -80,7 +82,7 @@ bukkit {
     generateLibrariesJson = true
     foliaSupported = true
 
-    softDepend = listOf("PlaceholderAPI")
+    softDepend = listOf("PlaceholderAPI", "zMenu")
 }
 
 tasks {

@@ -7,6 +7,9 @@ import team.bytephoria.byteclans.infrastructure.configuration.configuration.clan
 @ConfigSerializable
 public final class ClanSettings {
 
+    @Setting("creation")
+    private Creation creation = new Creation();
+
     @Setting("name")
     private Name name = new Name();
 
@@ -21,6 +24,10 @@ public final class ClanSettings {
 
     @Setting("chat")
     private Chat chat = new Chat();
+
+    public Creation creation() {
+        return this.creation;
+    }
 
     public Name name() {
         return this.name;
