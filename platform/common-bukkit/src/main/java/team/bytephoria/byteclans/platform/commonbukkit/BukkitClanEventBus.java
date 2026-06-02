@@ -200,7 +200,7 @@ public final class BukkitClanEventBus implements ClanEventBus {
             final @NotNull ClanMember executorMember,
             final @NotNull Clan targetClan
     ) {
-        return this.callEvent(new ClanllyAddEvent(executorMember, targetClan));
+        return this.callEvent(new ClanAllyAddEvent(executorMember, targetClan));
     }
 
     @Override

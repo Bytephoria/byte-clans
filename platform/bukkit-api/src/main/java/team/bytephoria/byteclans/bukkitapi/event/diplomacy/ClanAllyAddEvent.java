@@ -7,7 +7,7 @@ import org.jetbrains.annotations.NotNull;
 import team.bytephoria.byteclans.api.Clan;
 import team.bytephoria.byteclans.api.ClanMember;
 
-public final class ClanllyAddEvent extends Event implements Cancellable {
+public final class ClanAllyAddEvent extends Event implements Cancellable {
 
     private static final HandlerList HANDLER_LIST = new HandlerList();
 
@@ -16,7 +16,7 @@ public final class ClanllyAddEvent extends Event implements Cancellable {
 
     private boolean cancelled;
 
-    public ClanllyAddEvent(
+    public ClanAllyAddEvent(
             final @NotNull ClanMember executorMember,
             final @NotNull Clan targetClan
     ) {
