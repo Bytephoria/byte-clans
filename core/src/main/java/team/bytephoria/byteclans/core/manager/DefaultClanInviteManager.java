@@ -38,7 +38,7 @@ public final class DefaultClanInviteManager implements ClanInviteManager {
 
     @Override
     public ResponseContext<ClanInvitation, ClanInviteAcceptResult> accept(final @NotNull ClanPlayer clanPlayer) {
-        final ClanInvitation clanInvitation = this.clanInvitationCache.remove(clanPlayer.uniqueId());
+        final ClanInvitation clanInvitation = this.clanInvitationCache.get(clanPlayer);
         if (clanInvitation == null) {
             return ResponseContext.failure(ClanInviteAcceptResult.NO_PENDING_INVITE);
         }
@@ -48,14 +48,13 @@ public final class DefaultClanInviteManager implements ClanInviteManager {
             return ResponseContext.failure(ClanInviteAcceptResult.ALREADY_IN_CLAN);
         }
 
-        final Clan playerClan = this.clanCache.get(clanPlayer);
-        if (playerClan != null && playerClan.isMembersFull()) {
-            return ResponseContext.failure(ClanInviteAcceptResult.CLAN_FULL);
-        }
-
         final Clan targetClan = this.clanCache.get(clanInvitation.clanUniqueId());
         if (targetClan == null) {
             return ResponseContext.failure(ClanInviteAcceptResult.NOT_EXISTS);
+        }
+
+        if (targetClan.isMembersFull()) {
+            return ResponseContext.failure(ClanInviteAcceptResult.CLAN_FULL);
         }
 
         if (!this.clanEventBus.callPreInviteAccept(clanPlayer, clanInvitation, targetClan)) {
@@ -67,8 +66,16 @@ public final class DefaultClanInviteManager implements ClanInviteManager {
             return ResponseContext.failure(ClanInviteAcceptResult.CANCELLED);
         }
 
+        this.clanInvitationCache.remove(clanPlayer.uniqueId());
+
         final ClanMember joinedMember = joinResult.value();
-        this.clanEventBus.callPostInviteAccept(clanPlayer, clanInvitation, joinedMember, targetClan);
+        this.clanEventBus.callPostInviteAccept(
+                clanPlayer,
+                clanInvitation,
+                joinedMember,
+                targetClan
+        );
+
         return ResponseContext.success(clanInvitation, ClanInviteAcceptResult.SUCCESS);
     }
 

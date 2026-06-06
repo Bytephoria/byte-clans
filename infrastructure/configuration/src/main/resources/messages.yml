@@ -229,7 +229,7 @@ clan:
 invite:
   send:
     success: "<gradient:#00e676:#1de9b6>Invite sent to</gradient> <gold><bold>{target}</bold></gold>."
-    received: "<gold><bold>{player}</bold></gold> <yellow>invited you to join</yellow> <gold><bold>{clan}</bold></gold>. <green>/clan accept</green> <gray>|</gray> <red>/clan decline</red>"
+    received: "<gold><bold>{player}</bold></gold> <yellow>invited you to join</yellow> <gold><bold>{clan}</bold></gold>. <green>/clan invite accept <click:run_command:/clan invite accept><b>[CLICK HERE TO ACCEPT]</b></click></green> <gray>|</gray> <red>/clan invite decline <click:run_command:/clan invite decline><b>[CLICK HERE TO DECLINE]</b></red>"
     not-in-clan: "<red>You are not in a <bold>clan</bold>.</red>"
     already-in-clan: "<gold><bold>{target}</bold></gold> <red>is already in a clan.</red>"
     already-invited: "<gold><bold>{target}</bold></gold> <red>already has a pending invite.</red>"

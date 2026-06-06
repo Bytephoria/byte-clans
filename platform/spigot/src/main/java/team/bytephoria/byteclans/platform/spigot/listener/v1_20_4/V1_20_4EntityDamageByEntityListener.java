@@ -1,6 +1,7 @@
 package team.bytephoria.byteclans.platform.spigot.listener.v1_20_4;
 
 import org.bukkit.damage.DamageSource;
+import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
@@ -31,7 +32,9 @@ public final class V1_20_4EntityDamageByEntityListener implements Listener {
         }
 
         final DamageSource damageSource = entityEvent.getDamageSource();
-        if (!(damageSource.getCausingEntity() instanceof Player damagerPlayer)) {
+        final Entity causingEntity = damageSource.getCausingEntity();
+
+        if (!(causingEntity instanceof Player damagerPlayer) || causingEntity == damagedPlayer) {
             return;
         }
 

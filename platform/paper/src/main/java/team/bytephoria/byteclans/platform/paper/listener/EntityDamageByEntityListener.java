@@ -1,6 +1,7 @@
 package team.bytephoria.byteclans.platform.paper.listener;
 
 import org.bukkit.damage.DamageSource;
+import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
@@ -31,9 +32,12 @@ public final class EntityDamageByEntityListener implements Listener {
         }
 
         final DamageSource damageSource = entityEvent.getDamageSource();
-        if (!(damageSource.getCausingEntity() instanceof Player damagerPlayer)) {
+        final Entity causingEntity = damageSource.getCausingEntity();
+
+        if (!(causingEntity instanceof Player damagerPlayer) || causingEntity == damagedPlayer) {
             return;
         }
+
 
         final ClanMember damagedClanMember = this.clanMemberCache.get(damagedPlayer.getUniqueId());
         if (damagedClanMember == null) {

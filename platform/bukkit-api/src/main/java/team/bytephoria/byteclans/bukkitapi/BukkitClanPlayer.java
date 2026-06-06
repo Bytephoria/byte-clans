@@ -2,7 +2,6 @@ package team.bytephoria.byteclans.bukkitapi;
 
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
-import org.jspecify.annotations.NonNull;
 import team.bytephoria.byteclans.api.ClanPlayer;
 
 import java.util.UUID;
@@ -23,12 +22,12 @@ public final class BukkitClanPlayer implements ClanPlayer {
     }
 
     @Override
-    public @NonNull UUID uniqueId() {
+    public @NotNull UUID uniqueId() {
         return this.player.getUniqueId();
     }
 
     @Override
-    public @NonNull String name() {
+    public @NotNull String name() {
         return this.player.getName();
     }
 
