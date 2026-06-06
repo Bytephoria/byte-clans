@@ -47,6 +47,10 @@ public final class V1_20_3EntityDamageByEntityListener implements Listener {
             return;
         }
 
+        if (damagerPlayer == damager) {
+            return;
+        }
+
         final ClanMember damagedClanMember = this.clanMemberCache.get(damagedPlayer.getUniqueId());
         if (damagedClanMember == null) {
             return;
