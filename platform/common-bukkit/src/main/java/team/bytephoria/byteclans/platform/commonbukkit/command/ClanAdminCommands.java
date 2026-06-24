@@ -1,4 +1,4 @@
-package team.bytephoria.byteclans.platform.spigot.command;
+package team.bytephoria.byteclans.platform.commonbukkit.command;
 
 import org.bukkit.entity.Player;
 import org.incendo.cloud.annotations.Argument;
@@ -20,13 +20,13 @@ import team.bytephoria.byteclans.core.util.ClanNameUUID;
 import team.bytephoria.byteclans.core.util.IdentityCachedMap;
 import team.bytephoria.byteclans.platform.commonbukkit.concurrent.AsyncExecutor;
 import team.bytephoria.byteclans.platform.commonbukkit.messages.Messenger;
-import team.bytephoria.byteclans.platform.spigot.SpigotPlugin;
 
 import java.util.*;
+import java.util.concurrent.Executor;
 
 public final class ClanAdminCommands {
 
-    private final SpigotPlugin spigotPlugin;
+    private final Executor mainThreadExecutor;
 
     private final IdentityCachedMap<ClanMember> memberCache;
     private final IdentityCachedMap<Clan> clanCache;
@@ -38,7 +38,7 @@ public final class ClanAdminCommands {
     private final Messenger messenger;
 
     public ClanAdminCommands(
-            final @NotNull SpigotPlugin spigotPlugin,
+            final @NotNull Executor mainThreadExecutor,
             final @NotNull IdentityCachedMap<ClanMember> memberCache,
             final @NotNull IdentityCachedMap<Clan> clanCache,
             final @NotNull ClanManager clanManager,
@@ -47,7 +47,7 @@ public final class ClanAdminCommands {
             final @NotNull ClanRoleRegistry clanRoleRegistry,
             final @NotNull Messenger messenger
     ) {
-        this.spigotPlugin = spigotPlugin;
+        this.mainThreadExecutor = mainThreadExecutor;
         this.memberCache = memberCache;
         this.clanCache = clanCache;
         this.clanManager = clanManager;
@@ -68,10 +68,9 @@ public final class ClanAdminCommands {
             final ClanDisbandResult result = response.result();
             final String path = "clan.admin.disband." + this.resolveEnumName(result);
 
-            this.spigotPlugin.runMainThread(() -> {
+            this.mainThreadExecutor.execute(() -> {
                 switch (result) {
-                    case SUCCESS -> this.messenger.sendPathMessage(player, path, Map.of("clan", clanName));
-                    case NOT_EXISTS -> this.messenger.sendPathMessage(player, path, Map.of("clan", clanName));
+                    case SUCCESS, NOT_EXISTS -> this.messenger.sendPathMessage(player, path, Map.of("clan", clanName));
                 }
             });
         });
@@ -94,7 +93,7 @@ public final class ClanAdminCommands {
             final ClanTransferResult result = response.result();
             final String path = "clan.admin.transfer." + this.resolveEnumName(result);
 
-            this.spigotPlugin.runMainThread(() -> {
+            this.mainThreadExecutor.execute(() -> {
                 switch (result) {
                     case SUCCESS, NOT_FOUND, NOT_IN_CLAN, TARGET_IS_ALREADY_OWNER -> this.messenger.sendPathMessage(
                             player,
@@ -117,7 +116,7 @@ public final class ClanAdminCommands {
             final ClanKickResult result = response.result();
             final String path = "clan.admin.kick." + this.resolveEnumName(result);
 
-            this.spigotPlugin.runMainThread(() -> {
+            this.mainThreadExecutor.execute(() -> {
                 switch (result) {
                     case SUCCESS,
                          TARGET_NOT_IN_CLAN,
@@ -149,7 +148,7 @@ public final class ClanAdminCommands {
             final ClanRoleChangeResult result = response.result();
             final String path = "clan.admin.role." + this.resolveEnumName(result);
 
-            this.spigotPlugin.runMainThread(() -> {
+            this.mainThreadExecutor.execute(() -> {
                 switch (result) {
                     case SUCCESS -> this.messenger.sendPathMessage(
                             player,
@@ -181,7 +180,7 @@ public final class ClanAdminCommands {
             final ClanRenameDisplayResult result = response.result();
             final String path = "clan.admin.display." + this.resolveEnumName(result);
 
-            this.spigotPlugin.runMainThread(() -> {
+            this.mainThreadExecutor.execute(() -> {
                 switch (result) {
                     case SUCCESS -> this.messenger.sendPathMessage(
                             player,
@@ -221,7 +220,7 @@ public final class ClanAdminCommands {
             final ClanPvPModeChangeResult result = response.result();
             final String path = "clan.admin.pvp-mode." + this.resolveEnumName(result);
 
-            this.spigotPlugin.runMainThread(() -> {
+            this.mainThreadExecutor.execute(() -> {
                 switch (result) {
                     case SUCCESS -> this.messenger.sendPathMessage(
                             player,
@@ -260,7 +259,7 @@ public final class ClanAdminCommands {
             final ClanStatusChangeResult result = response.result();
             final String path = "clan.admin.invite-state." + this.resolveEnumName(result);
 
-            this.spigotPlugin.runMainThread(() -> {
+            this.mainThreadExecutor.execute(() -> {
                 switch (result) {
                     case SUCCESS -> this.messenger.sendPathMessage(
                             player,

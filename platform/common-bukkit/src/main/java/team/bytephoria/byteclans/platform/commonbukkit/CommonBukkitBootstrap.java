@@ -1,4 +1,4 @@
-package team.bytephoria.byteclans.platform.spigot;
+package team.bytephoria.byteclans.platform.commonbukkit;
 
 import com.zaxxer.hikari.HikariDataSource;
 import org.jetbrains.annotations.NotNull;
@@ -32,27 +32,32 @@ import java.util.concurrent.ExecutorService;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-public final class SpigotBootstrap implements PluginLifecycle {
+public final class CommonBukkitBootstrap implements PluginLifecycle {
 
-    private SpigotPlugin spigotPlugin;
+    private final Configuration configuration;
+    private final Logger logger;
+    private final BukkitClanEventBus eventBus;
+    private BootstrapContext bootstrapContext;
+
     private ClanGlobalSettings clanGlobalSettings;
-
     private StorageConnection storageConnection;
     private ClanStorage clanStorage;
     private ClanMemberStorage clanMemberStorage;
     private ClanAllyStorage clanAllyStorage;
     private ClanEnemyStorage clanEnemyStorage;
     private ClanDisplayNameValidator clanDisplayNameValidator;
-
     private TransactionManager transactionManager;
     private ApplicationFacade applicationFacade;
-    private BootstrapContext bootstrapContext;
 
-    public SpigotBootstrap(
-            final @NotNull SpigotPlugin spigotPlugin,
+    public CommonBukkitBootstrap(
+            final @NotNull Configuration configuration,
+            final @NotNull Logger logger,
+            final @NotNull BukkitClanEventBus eventBus,
             final @NotNull BootstrapContext bootstrapContext
     ) {
-        this.spigotPlugin = spigotPlugin;
+        this.configuration = configuration;
+        this.logger = logger;
+        this.eventBus = eventBus;
         this.bootstrapContext = bootstrapContext;
     }
 
@@ -62,34 +67,33 @@ public final class SpigotBootstrap implements PluginLifecycle {
 
     @Override
     public void enable() {
-        final Configuration configuration = this.spigotPlugin.configuration();
         this.clanGlobalSettings = new DefaultClanGlobalSettings(
-                configuration.clan().defaults().maxMembers(),
-                configuration.clan().defaults().pvpMode(),
-                configuration.clan().defaults().inviteState(),
-                configuration.clan().display().cooldown().toDuration(),
-                configuration.clan().creation().timeout().toDuration(),
-                configuration.clan().name().minimumChars(),
-                configuration.clan().name().maximumChars(),
-                configuration.clan().defaults().maxAllies(),
-                configuration.clan().defaults().maxEnemies(),
-                configuration.clan().points().limits().minimum(),
-                configuration.clan().points().limits().maximum(),
-                configuration.clan().points().actions().kills(),
-                configuration.clan().points().actions().deaths()
+                this.configuration.clan().defaults().maxMembers(),
+                this.configuration.clan().defaults().pvpMode(),
+                this.configuration.clan().defaults().inviteState(),
+                this.configuration.clan().display().cooldown().toDuration(),
+                this.configuration.clan().creation().timeout().toDuration(),
+                this.configuration.clan().name().minimumChars(),
+                this.configuration.clan().name().maximumChars(),
+                this.configuration.clan().defaults().maxAllies(),
+                this.configuration.clan().defaults().maxEnemies(),
+                this.configuration.clan().points().limits().minimum(),
+                this.configuration.clan().points().limits().maximum(),
+                this.configuration.clan().points().actions().kills(),
+                this.configuration.clan().points().actions().deaths()
         );
 
         try {
             this.initializeStorage();
         } catch (IllegalArgumentException exception) {
-            this.spigotPlugin.getLogger().info("An error has occurred while initializing storage: " + exception.getMessage());
+            this.logger.info("An error has occurred while initializing storage: " + exception.getMessage());
         }
 
         this.storageConnection.connect();
 
-        this.clanDisplayNameValidator = switch (configuration.settings().serializer().toLowerCase(Locale.ROOT)) {
+        this.clanDisplayNameValidator = switch (this.configuration.settings().serializer().toLowerCase(Locale.ROOT)) {
             case "mini_message" -> new MiniMessageClanDisplayNameValidator();
-            case "legacy_ampersand"  -> new LegacyAmpersandClanDisplayNameValidator();
+            case "legacy_ampersand" -> new LegacyAmpersandClanDisplayNameValidator();
             default -> new DefaultClanDisplayNameValidator();
         };
 
@@ -97,50 +101,32 @@ public final class SpigotBootstrap implements PluginLifecycle {
                 this.clanGlobalSettings,
                 this.clanStorage,
                 this.clanMemberStorage,
-                this.spigotPlugin.bukkitClanEventBuss(),
+                this.eventBus,
                 new ClanInvitationCache(
-                        configuration.invitations().ttl().amount(),
-                        configuration.invitations().ttl().unit()
+                        this.configuration.invitations().ttl().amount(),
+                        this.configuration.invitations().ttl().unit()
                 ),
                 this.transactionManager,
                 this.clanAllyStorage,
                 this.clanEnemyStorage,
                 this.clanDisplayNameValidator
         );
-
     }
 
     @Override
     public void disable() {
-        if (this.applicationFacade != null) {
-            this.applicationFacade = null;
-        }
-
-        if (this.transactionManager != null) {
-            this.transactionManager = null;
-        }
-
-        if (this.clanStorage != null) {
-            this.clanStorage = null;
-        }
-
-        if (this.clanMemberStorage != null) {
-            this.clanMemberStorage = null;
-        }
-
-        if (this.clanEnemyStorage != null) {
-            this.clanEnemyStorage = null;
-        }
-
-        if (this.clanAllyStorage != null) {
-            this.clanAllyStorage = null;
-        }
+        this.applicationFacade = null;
+        this.transactionManager = null;
+        this.clanStorage = null;
+        this.clanMemberStorage = null;
+        this.clanEnemyStorage = null;
+        this.clanAllyStorage = null;
 
         if (this.storageConnection != null) {
             try {
                 this.storageConnection.disconnect();
             } catch (final Exception exception) {
-                this.spigotPlugin.getLogger().log(Level.SEVERE, "Error while disconnecting storage", exception);
+                this.logger.log(Level.SEVERE, "Error while disconnecting storage", exception);
             }
         }
 
@@ -148,13 +134,10 @@ public final class SpigotBootstrap implements PluginLifecycle {
         this.storageConnection = null;
         this.clanGlobalSettings = null;
         this.bootstrapContext = null;
-        this.spigotPlugin = null;
     }
 
-    void initializeStorage() throws IllegalArgumentException {
-        final Configuration configuration = this.spigotPlugin.configuration();
-
-        final Storage storage = configuration.storage();
+    private void initializeStorage() throws IllegalArgumentException {
+        final Storage storage = this.configuration.storage();
         final Credentials credentials = storage.credentials();
         final Pool pool = storage.pool();
 
@@ -174,12 +157,11 @@ public final class SpigotBootstrap implements PluginLifecycle {
                 credentials.useSsl()
         );
 
-        final Logger logger = this.spigotPlugin.getLogger();
         final ExecutorService executorService = AsyncExecutor.getExecutor();
 
         switch (storage.type().toLowerCase(Locale.ROOT)) {
             case "h2" -> {
-                final String h2ResolvePath = configuration.storage().h2().file();
+                final String h2ResolvePath = this.configuration.storage().h2().file();
                 final File h2File = new File(this.bootstrapContext.dataDirectory().toFile(), h2ResolvePath);
 
                 final HikariDataSource dataSource = H2StorageConnectionData.builder()
@@ -191,11 +173,11 @@ public final class SpigotBootstrap implements PluginLifecycle {
                 final H2StorageConnection h2StorageConnection = new H2StorageConnection(dataSource);
 
                 this.storageConnection = h2StorageConnection;
-                this.clanStorage = new H2ClanStorage(h2StorageConnection, logger, executorService);
-                this.clanMemberStorage = new H2ClanMemberStorage(h2StorageConnection, logger, executorService);
+                this.clanStorage = new H2ClanStorage(h2StorageConnection, this.logger, executorService);
+                this.clanMemberStorage = new H2ClanMemberStorage(h2StorageConnection, this.logger, executorService);
                 this.transactionManager = new SQLTransactionManager(h2StorageConnection, executorService);
-                this.clanAllyStorage = new H2ClanAllyStorage(h2StorageConnection, logger, executorService);
-                this.clanEnemyStorage = new H2ClanEnemyStorage(h2StorageConnection, logger, executorService);
+                this.clanAllyStorage = new H2ClanAllyStorage(h2StorageConnection, this.logger, executorService);
+                this.clanEnemyStorage = new H2ClanEnemyStorage(h2StorageConnection, this.logger, executorService);
             }
 
             case "mysql" -> {
@@ -207,15 +189,14 @@ public final class SpigotBootstrap implements PluginLifecycle {
                 final MySQLStorageConnection mySQLStorageConnection = new MySQLStorageConnection(dataSource);
 
                 this.storageConnection = mySQLStorageConnection;
-                this.clanStorage = new MySQLClanStorage(mySQLStorageConnection, logger, executorService);
-                this.clanMemberStorage = new MySQLClanMemberStorage(mySQLStorageConnection, logger, executorService);
+                this.clanStorage = new MySQLClanStorage(mySQLStorageConnection, this.logger, executorService);
+                this.clanMemberStorage = new MySQLClanMemberStorage(mySQLStorageConnection, this.logger, executorService);
                 this.transactionManager = new SQLTransactionManager(mySQLStorageConnection, executorService);
-                this.clanAllyStorage = new MySQLClanAllyStorage(mySQLStorageConnection, logger, executorService);
-                this.clanEnemyStorage = new MySQLClanEnemyStorage(mySQLStorageConnection, logger, executorService);
+                this.clanAllyStorage = new MySQLClanAllyStorage(mySQLStorageConnection, this.logger, executorService);
+                this.clanEnemyStorage = new MySQLClanEnemyStorage(mySQLStorageConnection, this.logger, executorService);
             }
 
             case "mariadb" -> {
-
                 final HikariDataSource hikariDataSource = MariaDBStorageConnectionData.builder()
                         .jdbcCredentials(jdbcCredentials)
                         .jdbcPoolConfig(jdbcPoolConfig)
@@ -224,20 +205,15 @@ public final class SpigotBootstrap implements PluginLifecycle {
                 final MariaDBStorageConnection mariaDBStorageConnection = new MariaDBStorageConnection(hikariDataSource);
 
                 this.storageConnection = mariaDBStorageConnection;
-                this.clanStorage = new MariaDBClanStorage(mariaDBStorageConnection, logger, executorService);
-                this.clanMemberStorage = new MariaDBClanMemberStorage(mariaDBStorageConnection, logger, executorService);
+                this.clanStorage = new MariaDBClanStorage(mariaDBStorageConnection, this.logger, executorService);
+                this.clanMemberStorage = new MariaDBClanMemberStorage(mariaDBStorageConnection, this.logger, executorService);
                 this.transactionManager = new SQLTransactionManager(mariaDBStorageConnection, executorService);
-                this.clanAllyStorage = new MariaDBClanAllyStorage(mariaDBStorageConnection, logger, executorService);
-                this.clanEnemyStorage = new MariaDBClanEnemyStorage(mariaDBStorageConnection, logger, executorService);
+                this.clanAllyStorage = new MariaDBClanAllyStorage(mariaDBStorageConnection, this.logger, executorService);
+                this.clanEnemyStorage = new MariaDBClanEnemyStorage(mariaDBStorageConnection, this.logger, executorService);
             }
 
             default -> throw new IllegalArgumentException("Storage type not supported.");
         }
-
-    }
-
-    public SpigotPlugin paperPlugin() {
-        return this.spigotPlugin;
     }
 
     public ClanGlobalSettings clanGlobalSettings() {

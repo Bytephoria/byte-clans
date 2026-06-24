@@ -1,4 +1,4 @@
-package team.bytephoria.byteclans.platform.spigot.command;
+package team.bytephoria.byteclans.platform.commonbukkit.command;
 
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
@@ -20,20 +20,24 @@ import team.bytephoria.byteclans.api.util.response.context.ResponseContext;
 import team.bytephoria.byteclans.bukkitapi.BukkitClanPlayer;
 import team.bytephoria.byteclans.core.util.ClanNameUUID;
 import team.bytephoria.byteclans.core.util.IdentityCachedMap;
+import team.bytephoria.byteclans.infrastructure.configuration.configuration.Configuration;
 import team.bytephoria.byteclans.platform.commonbukkit.FeaturePermissions;
 import team.bytephoria.byteclans.platform.commonbukkit.concurrent.AsyncExecutor;
 import team.bytephoria.byteclans.platform.commonbukkit.messages.Messenger;
-import team.bytephoria.byteclans.platform.spigot.SpigotPlugin;
 
 import java.time.Duration;
 import java.time.ZoneId;
 import java.time.format.DateTimeFormatter;
 import java.util.*;
+import java.util.concurrent.Executor;
 import java.util.logging.Level;
+import java.util.logging.Logger;
 
 public final class ClanCommand {
 
-    private final SpigotPlugin spigotPlugin;
+    private final Executor mainThreadExecutor;
+    private final Logger logger;
+    private final Configuration configuration;
     private final Messenger messenger;
     private final ClanManager clanManager;
     private final ClanSettingsManager clanSettingsManager;
@@ -44,7 +48,9 @@ public final class ClanCommand {
     private final IdentityCachedMap<ClanMember> clanMemberCache;
 
     public ClanCommand(
-            final @NotNull SpigotPlugin spigotPlugin,
+            final @NotNull Executor mainThreadExecutor,
+            final @NotNull Logger logger,
+            final @NotNull Configuration configuration,
             final @NotNull Messenger messenger,
             final @NotNull ClanManager clanManager,
             final @NotNull ClanSettingsManager clanSettingsManager,
@@ -53,7 +59,9 @@ public final class ClanCommand {
             final @NotNull IdentityCachedMap<Clan> clanCache,
             final @NotNull IdentityCachedMap<ClanMember> clanMemberCache
     ) {
-        this.spigotPlugin = spigotPlugin;
+        this.mainThreadExecutor = mainThreadExecutor;
+        this.logger = logger;
+        this.configuration = configuration;
         this.messenger = messenger;
         this.clanManager = clanManager;
         this.clanSettingsManager = clanSettingsManager;
@@ -65,7 +73,7 @@ public final class ClanCommand {
     }
 
     @Command("clan create <name>")
-    @Permission("byteclans.command.create")
+    @Permission(FeaturePermissions.CREATE_CLAN)
     public void createClan(
             final @NotNull Player player,
             final @NotNull @Argument("name") String clanName
@@ -77,7 +85,7 @@ public final class ClanCommand {
             final ClanCreateResult result = context.result();
             final String path = "clan.create." + this.resolveEnumName(result);
 
-            this.spigotPlugin.runMainThread(() -> {
+            this.mainThreadExecutor.execute(() -> {
                 switch (result) {
                     case SUCCESS, NAME_TAKEN -> this.messenger.sendPathMessage(
                             player,
@@ -98,8 +106,7 @@ public final class ClanCommand {
                 }
             });
         }).exceptionally(throwable -> {
-            this.spigotPlugin.getLogger().log(Level.SEVERE, throwable.getMessage(), throwable);
-            //this.spigotPlugin.getLogger().info("An error has occurred while creating a clan: {}", throwable.getMessage(), throwable);
+            this.logger.log(Level.SEVERE, throwable.getMessage(), throwable);
             return null;
         });
 
@@ -273,7 +280,7 @@ public final class ClanCommand {
                         return;
                     }
 
-                    final Player memberBukkitPlayer =  Bukkit.getPlayer(member.uniqueId());
+                    final Player memberBukkitPlayer = Bukkit.getPlayer(member.uniqueId());
                     if (memberBukkitPlayer == null) {
                         return;
                     }
@@ -375,7 +382,7 @@ public final class ClanCommand {
             return;
         }
 
-        final Duration duration = this.spigotPlugin.configuration().clan().display().cooldown().toDuration();
+        final Duration duration = this.configuration.clan().display().cooldown().toDuration();
         final Response<ClanRenameDisplayResult> response = this.clanSettingsManager.renameDisplay(clanMember, display, duration);
         final ClanRenameDisplayResult result = response.result();
         final String path = "clan.display." + this.resolveEnumName(result);
@@ -490,6 +497,21 @@ public final class ClanCommand {
             case ALREADY_IN_MODE -> this.messenger.sendPathMessage(player, "clan.chat.already-in-mode");
             case INSUFFICIENT_ONLINE_MEMBERS -> this.messenger.sendPathMessage(player, "clan.chat.insufficient-online-members");
         }
+    }
+
+    @Command("clan info")
+    public void clanInfo(final @NotNull Player player) {
+        final ClanMember clanMember = this.clanMemberCache.get(player.getUniqueId());
+        if (clanMember == null || clanMember.clan() == null) {
+            this.messenger.sendPathMessage(player, "clan.info.not-in-clan");
+            return;
+        }
+
+        final Clan clan = clanMember.clan();
+        final Map<String, String> placeholders = this.clanPlaceholders(clan);
+        placeholders.put("role", clanMember.role().displayName());
+
+        this.messenger.sendListMessage(player, placeholders, "clan", "info", "success-own");
     }
 
     @Command("clan info <clan_name>")

@@ -8,7 +8,6 @@ import org.jetbrains.annotations.NotNull;
 import team.bytephoria.byteclans.api.Clan;
 import team.bytephoria.byteclans.api.ClanGlobalSettings;
 import team.bytephoria.byteclans.api.ClanMember;
-import team.bytephoria.byteclans.api.manager.ClanManager;
 import team.bytephoria.byteclans.api.manager.ClanStatisticManager;
 import team.bytephoria.byteclans.api.statistic.StatisticType;
 import team.bytephoria.byteclans.api.statistic.StatisticUpdate;
@@ -22,18 +21,15 @@ import java.util.List;
 public final class V1_20_3PlayerDeathListener implements Listener {
 
     private final IdentityCachedMap<ClanMember> clanMemberCache;
-    private final ClanManager clanManager;
     private final ClanStatisticManager clanStatisticManager;
     private final ClanGlobalSettings clanGlobalSettings;
 
     public V1_20_3PlayerDeathListener(
             final @NotNull IdentityCachedMap<ClanMember> clanMemberCache,
-            final @NotNull ClanManager clanManager,
             final @NotNull ClanStatisticManager clanStatisticManager,
             final @NotNull ClanGlobalSettings clanGlobalSettings
     ) {
         this.clanMemberCache = clanMemberCache;
-        this.clanManager = clanManager;
         this.clanStatisticManager = clanStatisticManager;
         this.clanGlobalSettings = clanGlobalSettings;
     }

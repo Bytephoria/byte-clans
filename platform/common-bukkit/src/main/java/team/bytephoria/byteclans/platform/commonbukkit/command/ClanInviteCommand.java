@@ -1,4 +1,4 @@
-package team.bytephoria.byteclans.platform.paper.command;
+package team.bytephoria.byteclans.platform.commonbukkit.command;
 
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
