@@ -250,12 +250,11 @@ public final class PaperPlugin extends JavaPlugin {
         if (this.getServer().getPluginManager().getPlugin("zMenu") != null) {
             this.getSLF4JLogger().info("ZMenu was detected! Initializing assets to hook...");
 
-            this.annotationParser.parse(new ClanMenuCommand(this.zMenuHook));
             this.commonBukkitFacade = new PaperCommonBukkitFacade(this);
             this.chatInput = new ChatInput(this, () -> new ChatInputListener(this.chatInput), this.paperBootstrap().clanGlobalSettings());
             this.zMenuHook = new ZMenuHook(this, this.commonBukkitFacade, this.messenger);
-
             this.zMenuHook.loadAll();
+            this.annotationParser.parse(new ClanMenuCommand(this.zMenuHook));
             this.getSLF4JLogger().info("ZMenu was loaded! Enjoy it!");
         }
 

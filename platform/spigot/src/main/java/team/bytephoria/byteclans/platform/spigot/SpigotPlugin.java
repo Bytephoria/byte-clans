@@ -284,12 +284,11 @@ public final class SpigotPlugin extends JavaPlugin {
         if (this.getServer().getPluginManager().getPlugin("zMenu") != null) {
             this.getLogger().info("ZMenu was detected! Initializing assets to hook...");
 
-            annotationParser.parse(new ClanMenuCommand(this.zMenuHook));
             this.commonBukkitFacade = new SpigotCommonBukkitFacade(this);
             this.chatInput = new ChatInput(this, () -> new ChatInputListener(this.chatInput), this.spigotBootstrap().clanGlobalSettings());
             this.zMenuHook = new ZMenuHook(this, this.commonBukkitFacade, this.messenger);
-
             this.zMenuHook.loadAll();
+            annotationParser.parse(new ClanMenuCommand(this.zMenuHook));
             this.getLogger().info("ZMenu was loaded! Enjoy it!");
         }
 
