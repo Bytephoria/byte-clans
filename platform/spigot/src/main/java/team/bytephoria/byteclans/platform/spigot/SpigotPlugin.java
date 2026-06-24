@@ -40,8 +40,9 @@ import team.bytephoria.byteclans.platform.commonbukkit.listener.ClanPostCreateAs
 import team.bytephoria.byteclans.platform.commonbukkit.listener.PlayerJoinListener;
 import team.bytephoria.byteclans.platform.commonbukkit.listener.PlayerQuitListener;
 import team.bytephoria.byteclans.platform.commonbukkit.messages.Messenger;
-import team.bytephoria.byteclans.platform.spigot.command.*;
-import team.bytephoria.byteclans.platform.spigot.hook.PlaceholderAPIHook;
+import team.bytephoria.byteclans.platform.commonbukkit.command.*;
+import team.bytephoria.byteclans.platform.commonbukkit.CommonBukkitBootstrap;
+import team.bytephoria.byteclans.platform.commonbukkit.hook.PlaceholderAPIHook;
 import team.bytephoria.byteclans.platform.spigot.listener.AsyncPlayerChatListener;
 import team.bytephoria.byteclans.platform.spigot.listener.ChatInputListener;
 import team.bytephoria.byteclans.platform.spigot.listener.v1_20_3.V1_20_3EntityDamageByEntityListener;
@@ -49,6 +50,8 @@ import team.bytephoria.byteclans.platform.spigot.listener.v1_20_3.V1_20_3PlayerD
 import team.bytephoria.byteclans.platform.spigot.listener.v1_20_4.V1_20_4EntityDamageByEntityListener;
 import team.bytephoria.byteclans.platform.spigot.listener.v1_20_4.V1_20_4PlayerDeathListener;
 import team.bytephoria.byteclans.platform.spigot.util.ServerVersion;
+
+import java.util.Locale;
 
 public final class SpigotPlugin extends JavaPlugin {
 
@@ -63,7 +66,7 @@ public final class SpigotPlugin extends JavaPlugin {
     private Messenger messenger;
 
     private BukkitClanEventBus bukkitClanEventBus;
-    private SpigotBootstrap spigotBootstrap;
+    private CommonBukkitBootstrap spigotBootstrap;
 
     private LegacyPaperCommandManager<Player> commandManager;
     private MinecraftHelp<Player> playerMinecraftHelp;
@@ -104,11 +107,16 @@ public final class SpigotPlugin extends JavaPlugin {
         this.spigotAudienceProvider = new SpigotAudienceProvider(this);
         this.serializerAdapter = ComponentSerializerFactory.create(this.configuration.settings().serializer());
         this.bukkitClanEventBus = new BukkitClanEventBus();
-        this.spigotBootstrap = new SpigotBootstrap(this, new BootstrapContext(this.getDataFolder().toPath()));
+        this.spigotBootstrap = new CommonBukkitBootstrap(this.configuration, this.getLogger(), this.bukkitClanEventBus, new BootstrapContext(this.getDataFolder().toPath()));
         this.spigotBootstrap.enable();
 
         if (this.getServer().getPluginManager().getPlugin("PlaceholderAPI") != null) {
-            new PlaceholderAPIHook(this).register();
+            new PlaceholderAPIHook(
+                    this.getDescription().getName().toLowerCase(Locale.ROOT).replace("-", ""),
+                    this.getDescription().getAuthors().getFirst(),
+                    this.getDescription().getVersion(),
+                    this.spigotBootstrap.applicationFacade()
+            ).register();
             this.getLogger().info("PlaceholderAPI has been hooked!");
         }
 
@@ -138,7 +146,6 @@ public final class SpigotPlugin extends JavaPlugin {
                     ),
                     new V1_20_4PlayerDeathListener(
                             applicationFacade.clanMemberCache(),
-                            applicationFacade.clanManager(),
                             applicationFacade.clanStatisticManager(),
                             applicationFacade.clanGlobalSettings()
                     )
@@ -153,7 +160,6 @@ public final class SpigotPlugin extends JavaPlugin {
                     ),
                     new V1_20_3PlayerDeathListener(
                             applicationFacade.clanMemberCache(),
-                            applicationFacade.clanManager(),
                             applicationFacade.clanStatisticManager(),
                             applicationFacade.clanGlobalSettings()
                     )
@@ -176,7 +182,9 @@ public final class SpigotPlugin extends JavaPlugin {
         final AnnotationParser<Player> annotationParser = new AnnotationParser<>(this.commandManager, Player.class);
 
         annotationParser.parse(new ClanCommand(
-                this,
+                this::runMainThread,
+                this.getLogger(),
+                this.configuration,
                 this.messenger,
                 applicationFacade.clanManager(),
                 applicationFacade.clanSettingsManager(),
@@ -195,7 +203,7 @@ public final class SpigotPlugin extends JavaPlugin {
 
         annotationParser.parse(
                 new ClanAdminCommands(
-                        this,
+                        this::runMainThread,
                         applicationFacade.clanMemberCache(),
                         applicationFacade.clanCache(),
                         applicationFacade.clanManager(),
@@ -213,7 +221,6 @@ public final class SpigotPlugin extends JavaPlugin {
                         applicationFacade.clanMemberCache(),
                         applicationFacade.clanRelationManager(),
                         applicationFacade.clanRelationAllyRequestManager()
-
                 )
         );
 
@@ -271,13 +278,13 @@ public final class SpigotPlugin extends JavaPlugin {
         ByteClansProvider.setInstance(byteClans);
 
         annotationParser.parse(
-                new ByteClansCommand(this.clanExtensionManager, this)
+                new ByteClansCommand(this.clanExtensionManager, this.spigotAudienceProvider)
         );
 
         if (this.getServer().getPluginManager().getPlugin("zMenu") != null) {
             this.getLogger().info("ZMenu was detected! Initializing assets to hook...");
 
-            annotationParser.parse(new ClanMenuCommand(this));
+            annotationParser.parse(new ClanMenuCommand(this.zMenuHook));
             this.commonBukkitFacade = new SpigotCommonBukkitFacade(this);
             this.chatInput = new ChatInput(this, () -> new ChatInputListener(this.chatInput), this.spigotBootstrap().clanGlobalSettings());
             this.zMenuHook = new ZMenuHook(this, this.commonBukkitFacade, this.messenger);
@@ -367,7 +374,7 @@ public final class SpigotPlugin extends JavaPlugin {
         return this.chatInput;
     }
 
-    public SpigotBootstrap spigotBootstrap() {
+    public CommonBukkitBootstrap spigotBootstrap() {
         return this.spigotBootstrap;
     }
 

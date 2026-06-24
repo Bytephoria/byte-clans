@@ -41,12 +41,15 @@ import team.bytephoria.byteclans.platform.commonbukkit.listener.ClanPostCreateAs
 import team.bytephoria.byteclans.platform.commonbukkit.listener.PlayerJoinListener;
 import team.bytephoria.byteclans.platform.commonbukkit.listener.PlayerQuitListener;
 import team.bytephoria.byteclans.platform.commonbukkit.messages.Messenger;
-import team.bytephoria.byteclans.platform.paper.command.*;
-import team.bytephoria.byteclans.platform.paper.hook.PlaceholderAPIHook;
+import team.bytephoria.byteclans.platform.commonbukkit.command.*;
+import team.bytephoria.byteclans.platform.commonbukkit.CommonBukkitBootstrap;
+import team.bytephoria.byteclans.platform.commonbukkit.hook.PlaceholderAPIHook;
 import team.bytephoria.byteclans.platform.paper.listener.AsyncChatEventListener;
 import team.bytephoria.byteclans.platform.paper.listener.ChatInputListener;
 import team.bytephoria.byteclans.platform.paper.listener.EntityDamageByEntityListener;
 import team.bytephoria.byteclans.platform.paper.listener.PlayerDeathListener;
+
+import java.util.Locale;
 
 import static org.incendo.cloud.parser.standard.StringParser.greedyStringParser;
 
@@ -60,7 +63,7 @@ public final class PaperPlugin extends JavaPlugin {
     private Messenger messenger;
 
     private BukkitClanEventBus bukkitClanEventBus;
-    private PaperBootstrap paperBootstrap;
+    private CommonBukkitBootstrap paperBootstrap;
 
     private LegacyPaperCommandManager<Player> commandManager;
     private AnnotationParser<Player> annotationParser;
@@ -94,11 +97,16 @@ public final class PaperPlugin extends JavaPlugin {
 
         this.serializerAdapter = ComponentSerializerFactory.create(this.configuration.settings().serializer());
         this.bukkitClanEventBus = new BukkitClanEventBus();
-        this.paperBootstrap = new PaperBootstrap(this, new BootstrapContext(this.getDataFolder().toPath()));
+        this.paperBootstrap = new CommonBukkitBootstrap(this.configuration, this.getLogger(), this.bukkitClanEventBus, new BootstrapContext(this.getDataFolder().toPath()));
         this.paperBootstrap.enable();
 
         if (this.getServer().getPluginManager().getPlugin("PlaceholderAPI") != null) {
-            new PlaceholderAPIHook(this).register();
+            new PlaceholderAPIHook(
+                    this.getPluginMeta().getName().toLowerCase(Locale.ROOT).replace("-", ""),
+                    this.getPluginMeta().getAuthors().getFirst(),
+                    this.getPluginMeta().getVersion(),
+                    this.paperBootstrap.applicationFacade()
+            ).register();
             this.getSLF4JLogger().info("[PlaceholderAPI] Placeholders registered.");
         }
 
@@ -122,7 +130,6 @@ public final class PaperPlugin extends JavaPlugin {
                 ),
                 new PlayerDeathListener(
                         applicationFacade.clanMemberCache(),
-                        applicationFacade.clanManager(),
                         applicationFacade.clanStatisticManager(),
                         applicationFacade.clanMemberStatisticManager(),
                         applicationFacade.clanGlobalSettings()
@@ -144,7 +151,9 @@ public final class PaperPlugin extends JavaPlugin {
         this.annotationParser = new AnnotationParser<>(this.commandManager, Player.class);
         this.annotationParser.parse(
                 new ClanCommand(
-                        this,
+                        this::runMainThread,
+                        this.getLogger(),
+                        this.configuration,
                         this.messenger,
                         applicationFacade.clanManager(),
                         applicationFacade.clanSettingsManager(),
@@ -166,7 +175,7 @@ public final class PaperPlugin extends JavaPlugin {
 
         this.annotationParser.parse(
                 new ClanAdminCommands(
-                        this,
+                        this::runMainThread,
                         applicationFacade.clanMemberCache(),
                         applicationFacade.clanCache(),
                         applicationFacade.clanManager(),
@@ -184,7 +193,6 @@ public final class PaperPlugin extends JavaPlugin {
                         applicationFacade.clanMemberCache(),
                         applicationFacade.clanRelationManager(),
                         applicationFacade.clanRelationAllyRequestManager()
-
                 )
         );
 
@@ -237,12 +245,12 @@ public final class PaperPlugin extends JavaPlugin {
 
         ByteClansProvider.setInstance(byteClans);
 
-        this.annotationParser.parse(new ByteClansCommand(this.clanExtensionManager));
+        this.annotationParser.parse(new ByteClansCommand(this.clanExtensionManager, PaperAudienceProvider.INSTANCE));
 
         if (this.getServer().getPluginManager().getPlugin("zMenu") != null) {
             this.getSLF4JLogger().info("ZMenu was detected! Initializing assets to hook...");
 
-            this.annotationParser.parse(new ClanMenuCommand(this));
+            this.annotationParser.parse(new ClanMenuCommand(this.zMenuHook));
             this.commonBukkitFacade = new PaperCommonBukkitFacade(this);
             this.chatInput = new ChatInput(this, () -> new ChatInputListener(this.chatInput), this.paperBootstrap().clanGlobalSettings());
             this.zMenuHook = new ZMenuHook(this, this.commonBukkitFacade, this.messenger);
@@ -337,7 +345,7 @@ public final class PaperPlugin extends JavaPlugin {
         return this.playerMinecraftHelp;
     }
 
-    public PaperBootstrap paperBootstrap() {
+    public CommonBukkitBootstrap paperBootstrap() {
         return this.paperBootstrap;
     }
 
