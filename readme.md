@@ -5,7 +5,10 @@
     <img src="https://img.shields.io/badge/Java-21+-blue" alt="Java"/>
   </a>
   <a href="https://papermc.io/">
-    <img src="https://img.shields.io/badge/PaperMC-1.19%2B-green" alt="PaperMC"/>
+    <img src="https://img.shields.io/badge/Paper-1.19%2B-green" alt="Paper"/>
+  </a>
+  <a href="https://www.spigotmc.org/">
+    <img src="https://img.shields.io/badge/Spigot-1.8.8%2B-orange" alt="Spigot"/>
   </a>
   <a href="license">
     <img src="https://img.shields.io/badge/License-MIT-yellow.svg" alt="License"/>
@@ -15,7 +18,7 @@
   </a>
 </p>
 
-**ByteClans** is a lightweight, extensible clan plugin for **PaperMC** servers.  
+**ByteClans** is a lightweight, extensible clan plugin for **Paper** and **Spigot** servers.  
 It provides a clean, minimal clan system out of the box — designed to be extended via addons and built with developers in mind.
 
 ---
@@ -23,7 +26,7 @@ It provides a clean, minimal clan system out of the box — designed to be exten
 ## Overview
 
 ByteClans focuses on doing one thing well: providing a solid clan foundation that server owners can configure and developers can build on top of.  
-The plugin ships with the essentials — clan creation, member management, invite system, chat modes, PvP settings and statistics — while staying lightweight and easy to extend.
+The plugin ships with the essentials — clan creation, member management, role system, invite system, diplomacy, chat modes, PvP settings and statistics — while staying lightweight and easy to extend.
 
 ---
 
@@ -42,13 +45,27 @@ The plugin ships with the essentials — clan creation, member management, invit
 - Create, disband, leave and manage clans.
 - Fully configurable role system via `roles.yml` — add as many roles as you want.
 - Invite system with configurable expiration time.
+- Ally and enemy diplomacy — send, accept, decline and remove alliances, and flag enemy clans.
 - PvP mode per clan: No Damage, Safe Damage, Friendly Fire.
 - Clan chat mode with per-player toggle.
-- Kill, death and streak statistics tracked per clan.
+- Kill, death, streak and KDR statistics tracked per clan and per member.
 - PlaceholderAPI support out of the box.
-- No external database required — works out of the box.
+- zMenu integration — open clan menus directly from GUI with built-in actions and buttons.
+- No external database required — ships with an embedded H2 database.
+- MySQL and MariaDB supported for production environments.
+- Folia compatible.
 - Performant and server-friendly by design.
 - Clean developer API with events, managers and lookups — ready for addons.
+- Extension system — load third-party addons at runtime without touching the core.
+
+---
+
+## Integrations
+
+| Plugin          | Required | Notes                                             |
+|-----------------|----------|---------------------------------------------------|
+| PlaceholderAPI  | No       | Provides placeholders for clan and member stats   |
+| zMenu           | No       | GUI menus with custom actions and buttons         |
 
 ---
 
@@ -56,7 +73,7 @@ The plugin ships with the essentials — clan creation, member management, invit
 
 1. Download the latest **ByteClans** release from the [releases page](https://github.com/Bytephoria/byte-clans/releases).
 2. Place the JAR inside your server's `plugins/` folder.
-3. Start your Paper server — config files will be generated automatically.
+3. Start your Paper or Spigot server — config files will be generated automatically.
 4. Configure `config.yml`, `messages.yml` and `roles.yml` to your liking.
 5. Restart.
 
@@ -76,12 +93,13 @@ Please follow the existing code style:
 
 ### Plugin Philosophy
 
-ByteClans is designed to be a **general-purpose**  clan plugin that works on any server, regardless of game mode.
+ByteClans is designed to be a **general-purpose** clan plugin that works on any server, regardless of game mode.
 Pull requests that push the plugin toward a specific game mode — such as clan homes, territory claiming, economy integration, or similar — will be automatically rejected.
 If you need those kinds of features, you have two supported paths:
 
 - **Create an addon** that depends on ByteClans. The plugin provides a stable API specifically for extending functionality without bloating the core.
 - **Fork the project** and adapt it to your needs if your use case requires tighter integration or custom behavior.
+
 ---
 
 ## License
