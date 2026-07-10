@@ -21,7 +21,7 @@ dependencies {
     compileOnly("me.clip:placeholderapi:2.12.2")
     compileOnly("com.zaxxer:HikariCP:7.0.2")
 
-    compileOnly("org.incendo:cloud-paper:2.0.0-beta.10")
+    compileOnly("org.incendo:cloud-paper:2.0.0-beta.17")
     compileOnly("org.incendo:cloud-annotations:2.0.0")
 
 }
