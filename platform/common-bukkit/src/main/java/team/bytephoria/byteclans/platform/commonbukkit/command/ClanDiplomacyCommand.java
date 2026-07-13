@@ -1,4 +1,4 @@
-package team.bytephoria.byteclans.platform.spigot.command;
+package team.bytephoria.byteclans.platform.commonbukkit.command;
 
 import org.bukkit.entity.Player;
 import org.incendo.cloud.annotations.Argument;

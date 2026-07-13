@@ -1,14 +1,12 @@
-package team.bytephoria.byteclans.platform.paper.hook;
+package team.bytephoria.byteclans.platform.commonbukkit.hook;
 
 import me.clip.placeholderapi.expansion.PlaceholderExpansion;
-import org.apache.commons.lang3.StringUtils;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
-import team.bytephoria.byteclans.api.ClanPermissions;
 import team.bytephoria.byteclans.api.Clan;
 import team.bytephoria.byteclans.api.ClanMember;
+import team.bytephoria.byteclans.api.ClanPermissions;
 import team.bytephoria.byteclans.core.ApplicationFacade;
-import team.bytephoria.byteclans.platform.paper.PaperPlugin;
 
 import java.time.ZoneId;
 import java.time.format.DateTimeFormatter;
@@ -21,26 +19,36 @@ public final class PlaceholderAPIHook extends PlaceholderExpansion {
     private static final DateTimeFormatter FORMATTER = DateTimeFormatter.ofPattern("dd/MM/yyyy", Locale.US);
     private static final DateTimeFormatter COMPLETE_FORMATTER = DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm:ss", Locale.ENGLISH);
 
-    private final PaperPlugin paperPlugin;
-    public PlaceholderAPIHook(final @NotNull PaperPlugin paperPlugin) {
-        this.paperPlugin = paperPlugin;
+    private final String identifier;
+    private final String author;
+    private final String version;
+    private final ApplicationFacade applicationFacade;
+
+    public PlaceholderAPIHook(
+            final @NotNull String identifier,
+            final @NotNull String author,
+            final @NotNull String version,
+            final @NotNull ApplicationFacade applicationFacade
+    ) {
+        this.identifier = identifier;
+        this.author = author;
+        this.version = version;
+        this.applicationFacade = applicationFacade;
     }
 
     @Override
     public @NotNull String getIdentifier() {
-        return this.paperPlugin.getPluginMeta().getName()
-                .toLowerCase(Locale.ROOT)
-                .replace("-", "");
+        return this.identifier;
     }
 
     @Override
     public @NotNull String getAuthor() {
-        return this.paperPlugin.getPluginMeta().getAuthors().getFirst();
+        return this.author;
     }
 
     @Override
     public @NotNull String getVersion() {
-        return this.paperPlugin.getPluginMeta().getVersion();
+        return this.version;
     }
 
     @Override
@@ -54,7 +62,7 @@ public final class PlaceholderAPIHook extends PlaceholderExpansion {
             return "";
         }
 
-        final String[] arguments = StringUtils.split(params, '_');
+        final String[] arguments = params.split("_");
         if (arguments.length < 2) {
             return "";
         }
@@ -70,60 +78,25 @@ public final class PlaceholderAPIHook extends PlaceholderExpansion {
 
     private @NotNull String handleClan(final @NotNull Player player, final @NotNull String param) {
         return switch (param) {
-            case "name" -> this.getClanOrEmpty(player, clan ->
-                    clan.data().name()
-            );
-
-            case "display" -> this.getClanOrEmpty(player, clan ->
-                    clan.data().displayName()
-            );
-
-            case "owner" -> this.getClanOrEmpty(player, clan ->
-                    clan.ownerData().name()
-            );
-
-            case "members" -> this.getClanOrEmpty(player, clan ->
-                    Integer.toString(clan.allMembers().size())
-            );
-
-            case "max-members" -> this.getClanOrEmpty(player, clan ->
-                    Integer.toString(clan.settings().maxMembers())
-            );
-
+            case "name" -> this.getClanOrEmpty(player, clan -> clan.data().name());
+            case "display" -> this.getClanOrEmpty(player, clan -> clan.data().displayName());
+            case "owner" -> this.getClanOrEmpty(player, clan -> clan.ownerData().name());
+            case "members" -> this.getClanOrEmpty(player, clan -> Integer.toString(clan.allMembers().size()));
+            case "max-members" -> this.getClanOrEmpty(player, clan -> Integer.toString(clan.settings().maxMembers()));
             case "max-allies" -> this.getClanOrEmpty(player, clan -> Integer.toString(clan.settings().maxAllies()));
             case "max-enemies" -> this.getClanOrEmpty(player, clan -> Integer.toString(clan.settings().maxEnemies()));
-
             case "points" -> this.getClanOrEmpty(player, clan -> clan.statistics().points().toString());
-            case "kills" -> this.getClanOrEmpty(player, clan ->
-                    clan.statistics().kills().toString()
-            );
-
-            case "deaths" -> this.getClanOrEmpty(player, clan ->
-                    clan.statistics().deaths().toString()
-            );
-
-            case "kdr" -> this.getClanOrEmpty(player, clan ->
-                    String.format("%.2f", clan.statistics().kdr())
-            );
-
-            case "kills-streak" -> this.getClanOrEmpty(player, clan ->
-                    clan.statistics().killsStreak().toString()
-            );
-
-            case "pvp-mode" -> this.getClanOrEmpty(player, clan ->
-                    clan.settings().pvpMode().name()
-            );
-
-            case "invite-state" -> this.getClanOrEmpty(player, clan ->
-                    clan.settings().inviteState().name()
-            );
-
+            case "kills" -> this.getClanOrEmpty(player, clan -> clan.statistics().kills().toString());
+            case "deaths" -> this.getClanOrEmpty(player, clan -> clan.statistics().deaths().toString());
+            case "kdr" -> this.getClanOrEmpty(player, clan -> String.format("%.2f", clan.statistics().kdr()));
+            case "kills-streak" -> this.getClanOrEmpty(player, clan -> clan.statistics().killsStreak().toString());
+            case "pvp-mode" -> this.getClanOrEmpty(player, clan -> clan.settings().pvpMode().name());
+            case "invite-state" -> this.getClanOrEmpty(player, clan -> clan.settings().inviteState().name());
             case "created-at" -> this.getClanOrEmpty(player, clan ->
                     DateTimeFormatter.ofPattern("dd/MM/yyyy")
                             .withZone(ZoneId.systemDefault())
                             .format(clan.data().createdAt())
             );
-
             case "display-cooldown" -> this.getClanOrEmpty(player, clan -> Boolean.toString(clan.data().isDisplayNameInCooldown()));
             default -> "";
         };
@@ -133,39 +106,21 @@ public final class PlaceholderAPIHook extends PlaceholderExpansion {
             final @NotNull Player player,
             final @NotNull String @NotNull [] arguments
     ) {
-
         final String param = arguments[1];
 
         return switch (param) {
-            case "role" -> this.getMemberOrEmpty(player, member ->
-                    member.role().id()
-            );
-
-            case "role-display" -> this.getMemberOrEmpty(player, member ->
-                    member.role().displayName()
-            );
-
-            case "kills" -> this.getMemberOrEmpty(player, clanMember -> clanMember.statistics().kills().toString());
-            case "deaths" -> this.getMemberOrEmpty(player, clanMember -> clanMember.statistics().deaths().toString());
-            case "kdr" ->
-                    this.getMemberOrEmpty(player, clanMember -> String.format("%.2f", clanMember.statistics().kdr()));
-
+            case "role" -> this.getMemberOrEmpty(player, member -> member.role().id());
+            case "role-display" -> this.getMemberOrEmpty(player, member -> member.role().displayName());
+            case "kills" -> this.getMemberOrEmpty(player, member -> member.statistics().kills().toString());
+            case "deaths" -> this.getMemberOrEmpty(player, member -> member.statistics().deaths().toString());
+            case "kdr" -> this.getMemberOrEmpty(player, member -> String.format("%.2f", member.statistics().kdr()));
             case "join-date" -> this.getMemberOrEmpty(player, member ->
-                    FORMATTER
-                            .withZone(ZoneId.systemDefault())
-                            .format(member.data().joinedAt())
+                    FORMATTER.withZone(ZoneId.systemDefault()).format(member.data().joinedAt())
             );
-
             case "last-seen" -> this.getMemberOrEmpty(player, member ->
-                    COMPLETE_FORMATTER
-                            .withZone(ZoneId.systemDefault())
-                            .format(member.data().lastSeenAt())
+                    COMPLETE_FORMATTER.withZone(ZoneId.systemDefault()).format(member.data().lastSeenAt())
             );
-
-            case "chat-mode" -> this.getMemberOrEmpty(player, member ->
-                    member.chatType().name()
-            );
-
+            case "chat-mode" -> this.getMemberOrEmpty(player, member -> member.chatType().name());
             case "has-permission" -> {
                 if (arguments.length < 3) {
                     yield "";
@@ -180,11 +135,8 @@ public final class PlaceholderAPIHook extends PlaceholderExpansion {
                     yield "false";
                 }
 
-                yield this.getMemberOrEmpty(player, member ->
-                        Boolean.toString(member.hasPermission(clanPermissions))
-                );
+                yield this.getMemberOrEmpty(player, member -> Boolean.toString(member.hasPermission(clanPermissions)));
             }
-
             default -> "";
         };
     }
@@ -193,8 +145,7 @@ public final class PlaceholderAPIHook extends PlaceholderExpansion {
             final @NotNull Player player,
             final @NotNull Function<ClanMember, String> function
     ) {
-        final ApplicationFacade applicationFacade = this.paperPlugin.paperBootstrap().applicationFacade();
-        final ClanMember clanMember = applicationFacade.clanMemberCache().get(player.getUniqueId());
+        final ClanMember clanMember = this.applicationFacade.clanMemberCache().get(player.getUniqueId());
         if (clanMember == null) {
             return "";
         }
@@ -206,9 +157,7 @@ public final class PlaceholderAPIHook extends PlaceholderExpansion {
             final @NotNull Player player,
             final @NotNull Function<Clan, String> function
     ) {
-
-        final ApplicationFacade applicationFacade = this.paperPlugin.paperBootstrap().applicationFacade();
-        final ClanMember clanMember = applicationFacade.clanMemberCache().get(player.getUniqueId());
+        final ClanMember clanMember = this.applicationFacade.clanMemberCache().get(player.getUniqueId());
         if (clanMember == null || clanMember.clan() == null) {
             return "";
         }
