@@ -62,7 +62,7 @@ paper {
     authors = listOf("Bytephoria", "iAmForyy_")
     website = "https://bytephoria.team"
     generateLibrariesJson = true
-    foliaSupported = true
+    foliaSupported = false // TODO: Re-enable once Folia compatibility is complete.
 
     serverDependencies {
         register("PlaceholderAPI") {
