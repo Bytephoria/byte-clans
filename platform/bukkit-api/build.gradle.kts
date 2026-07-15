@@ -4,6 +4,7 @@ repositories {
 
 dependencies {
     api(project(":api"))
+    api("com.github.Bytephoria.data-container:bukkit-serializers:v1.2.0")
 
     compileOnly("org.spigotmc:spigot-api:1.21.11-R0.1-SNAPSHOT")
 
