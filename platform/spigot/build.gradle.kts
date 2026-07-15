@@ -12,7 +12,6 @@ publishing {
 }
 
 repositories {
-    mavenCentral()
     maven("https://hub.spigotmc.org/nexus/content/groups/public/")
     maven("https://repo.extendedclip.com/releases/")
 
@@ -21,7 +20,6 @@ repositories {
         url = uri("https://repo.alessiodp.com/snapshots")
     }
 
-    maven("https://jitpack.io")
     maven("https://repo.groupez.dev/releases")
 }
 

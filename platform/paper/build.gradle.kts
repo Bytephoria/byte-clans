@@ -16,7 +16,6 @@ publishing {
 repositories {
     maven("https://repo.papermc.io/repository/maven-public/")
     maven("https://repo.extendedclip.com/releases/")
-    maven("https://jitpack.io")
     maven("https://repo.groupez.dev/releases")
 }
 
@@ -45,6 +44,7 @@ dependencies {
     paperLibrary("org.incendo:cloud-paper:2.0.0-beta.17")
     paperLibrary("org.incendo:cloud-annotations:2.0.0")
     paperLibrary("org.incendo:cloud-minecraft-extras:2.0.0-beta.17")
+
     paperLibrary("com.h2database:h2:2.4.240")
     paperLibrary("com.zaxxer:HikariCP:7.0.2")
     paperLibrary("org.mariadb.jdbc:mariadb-java-client:3.5.8")
