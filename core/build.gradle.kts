@@ -1,8 +1,3 @@
-repositories {
-    mavenCentral()
-    maven("https://jitpack.io")
-}
-
 dependencies {
     api(project(":api"))
     api(project(":spi"))
