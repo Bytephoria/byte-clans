@@ -41,9 +41,9 @@ dependencies {
     implementation("org.bstats:bstats-bukkit:3.2.1")
 
     paperLibrary("com.github.ben-manes.caffeine:caffeine:3.2.3")
-    paperLibrary("org.incendo:cloud-paper:2.0.0-beta.17")
+    paperLibrary("org.incendo:cloud-paper:2.0.0")
     paperLibrary("org.incendo:cloud-annotations:2.0.0")
-    paperLibrary("org.incendo:cloud-minecraft-extras:2.0.0-beta.17")
+    paperLibrary("org.incendo:cloud-minecraft-extras:2.0.0")
 
     paperLibrary("com.h2database:h2:2.4.240")
     paperLibrary("com.zaxxer:HikariCP:7.0.2")

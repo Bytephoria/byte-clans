@@ -16,7 +16,7 @@ dependencies {
 
     //
 
-    compileOnly("org.incendo:cloud-paper:2.0.0-beta.10")
+    compileOnly("org.incendo:cloud-paper:2.0.0")
     compileOnly("org.incendo:cloud-annotations:2.0.0")
 
 }
