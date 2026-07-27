@@ -64,6 +64,7 @@ dependencies {
     bukkitLibrary("com.zaxxer:HikariCP:7.1.0")
     bukkitLibrary("com.h2database:h2:2.4.240")
     bukkitLibrary("com.mysql:mysql-connector-j:9.6.0")
+    bukkitLibrary("org.mariadb.jdbc:mariadb-java-client:3.5.9")
 }
 
 val rootPackage = "${rootProject.group}.${rootProject.name.replace("-", "")}.platform.spigot"
