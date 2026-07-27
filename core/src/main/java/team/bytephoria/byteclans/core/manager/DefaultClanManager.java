@@ -174,7 +174,7 @@ public final class DefaultClanManager implements ClanManager {
             return ResponseContext.failure(ClanDisbandResult.CANCELLED);
         }
 
-        clan.allMembers().forEach(this.memberCache::remove);
+        clan.allOnlineMembers().forEach(this.memberCache::remove);
         this.clanCache.remove(clan);
         this.clanStorage.async().deleteByUniqueId(clan.uniqueId());
 
