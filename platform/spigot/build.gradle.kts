@@ -61,7 +61,7 @@ dependencies {
     bukkitLibrary("net.kyori:adventure-text-serializer-legacy:4.25.0")
     bukkitLibrary("net.kyori:adventure-text-serializer-plain:4.25.0")
 
-    bukkitLibrary("com.zaxxer:HikariCP:7.0.2")
+    bukkitLibrary("com.zaxxer:HikariCP:7.1.0")
     bukkitLibrary("com.h2database:h2:2.4.240")
     bukkitLibrary("com.mysql:mysql-connector-j:9.6.0")
 }

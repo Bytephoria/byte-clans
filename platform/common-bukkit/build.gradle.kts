@@ -19,7 +19,6 @@ dependencies {
     compileOnly("io.papermc.paper:paper-api:1.21.11-R0.1-SNAPSHOT")
     compileOnly("fr.maxlego08.menu:zmenu-api:1.1.1.4")
     compileOnly("me.clip:placeholderapi:2.12.2")
-    compileOnly("com.zaxxer:HikariCP:7.0.2")
 
     compileOnly("org.incendo:cloud-paper:2.0.0")
     compileOnly("org.incendo:cloud-annotations:2.0.0")
