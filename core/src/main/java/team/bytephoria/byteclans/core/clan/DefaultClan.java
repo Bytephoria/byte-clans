@@ -56,6 +56,11 @@ public final class DefaultClan implements Clan {
     }
 
     @Override
+    public @Nullable ClanMember ownerMemberOrNull() {
+        return this.owner;
+    }
+
+    @Override
     public @NotNull Optional<ClanMember> ownerMember() {
         return Optional.ofNullable(this.owner);
     }

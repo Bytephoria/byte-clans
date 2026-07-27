@@ -1,6 +1,7 @@
 package team.bytephoria.byteclans.api;
 
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 import org.jetbrains.annotations.UnmodifiableView;
 import team.bytephoria.byteclans.api.util.Identity;
 import team.bytephoria.datacontainer.api.DataContainer;
@@ -12,6 +13,8 @@ import java.util.UUID;
 public interface Clan extends Identity {
 
     @NotNull ClanOwnerData ownerData();
+
+    @Nullable ClanMember ownerMemberOrNull();
 
     @NotNull Optional<ClanMember> ownerMember();
 
