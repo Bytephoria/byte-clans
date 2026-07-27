@@ -47,7 +47,7 @@ dependencies {
 
     paperLibrary("com.h2database:h2:2.4.240")
     paperLibrary("com.zaxxer:HikariCP:7.1.0")
-    paperLibrary("com.mysql:mysql-connector-j:9.6.0")
+    paperLibrary("com.mysql:mysql-connector-j:9.7.0")
     paperLibrary("org.mariadb.jdbc:mariadb-java-client:3.5.9")
 
 }
